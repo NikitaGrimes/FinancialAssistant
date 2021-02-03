@@ -1,6 +1,7 @@
 package com.example.financialassistant.ui.main;
 
 import android.content.Context;
+import android.text.GetChars;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +21,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2,
     R.string.tab_text_3};
+    private final Context mContext;
 
-    public SectionsPagerAdapter(@NonNull FragmentManager fm) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
+        mContext = context;
     }
 
     @NonNull
@@ -38,7 +41,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 2 total pages.
         return 3;
     }
 
@@ -47,10 +49,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         String title = null;
         if (position == 0)
-            title = "MAIN";
+            title = mContext.getResources().getString(R.string.tab_text_1);
         else if (position == 1)
-            title = "ACCOUNTS";
-        else title = "CALCULATOR";
+            title = mContext.getResources().getString(R.string.tab_text_2);
+        else title = mContext.getResources().getString(R.string.tab_text_3);
         return title;
     }
 }

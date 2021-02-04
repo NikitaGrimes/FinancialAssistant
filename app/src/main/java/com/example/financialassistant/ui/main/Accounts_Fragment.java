@@ -3,12 +3,18 @@ package com.example.financialassistant.ui.main;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.financialassistant.R;
+import com.example.financialassistant.adapters.AccountsAdapter;
+import com.example.financialassistant.models.Accounts_View_Class;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +31,7 @@ public class Accounts_Fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    ArrayList<Accounts_View_Class> accounts_view_classes = new ArrayList<Accounts_View_Class>();
 
     public Accounts_Fragment() {
         // Required empty public constructor
@@ -61,6 +68,12 @@ public class Accounts_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accounts_, container, false);
+        View view = inflater.inflate(R.layout.fragment_accounts_, container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list_accounts);
+        AccountsAdapter adapter = new AccountsAdapter();
+        recyclerView.setAdapter(adapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        return view;
     }
 }

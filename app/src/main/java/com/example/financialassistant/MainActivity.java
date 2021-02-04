@@ -2,6 +2,8 @@ package com.example.financialassistant;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
+import com.example.financialassistant.data.Data;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;

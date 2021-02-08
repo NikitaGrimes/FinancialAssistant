@@ -1,6 +1,5 @@
 package com.example.financialassistant.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialassistant.R;
-import com.example.financialassistant.data.Data;
-import com.example.financialassistant.models.Accounts_View_Class;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import com.example.financialassistant.data.DataAccounts;
 
 public class AccountsAdapter extends RecyclerView.Adapter{
 
@@ -34,13 +28,13 @@ public class AccountsAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
-        return Data.names.length;
+        return DataAccounts.names.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView nameView;
-        private TextView valueView;
+        private final TextView nameView;
+        private final TextView valueView;
 
         ViewHolder(View view){
             super(view);
@@ -50,8 +44,8 @@ public class AccountsAdapter extends RecyclerView.Adapter{
         }
 
         public void bindView(int position){
-            nameView.setText(Data.names[position]);
-            valueView.setText(Data.values[position]);
+            nameView.setText(DataAccounts.names.get(position));
+            valueView.setText(DataAccounts.values.get(position));
         }
 
         public void onClick(View view){

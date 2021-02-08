@@ -12,16 +12,14 @@ import android.view.ViewGroup;
 
 import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.AccountsAdapter;
-import com.example.financialassistant.models.Accounts_View_Class;
-
-import java.util.ArrayList;
+import com.example.financialassistant.data.DataAccounts;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Accounts_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Accounts_Fragment extends Fragment {
+public class Accounts_Fragment extends Fragment{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,7 +29,6 @@ public class Accounts_Fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    ArrayList<Accounts_View_Class> accounts_view_classes = new ArrayList<Accounts_View_Class>();
 
     public Accounts_Fragment() {
         // Required empty public constructor
@@ -68,12 +65,12 @@ public class Accounts_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_accounts_, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list_accounts);
+        View view = inflater.inflate(R.layout.fragment_accounts, container, false);
+        DataAccounts.recyclerView = (RecyclerView) view.findViewById(R.id.list_accounts);
         AccountsAdapter adapter = new AccountsAdapter();
-        recyclerView.setAdapter(adapter);
+        DataAccounts.recyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        DataAccounts.recyclerView.setLayoutManager(layoutManager);
         return view;
     }
 }

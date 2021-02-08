@@ -1,9 +1,11 @@
 package com.example.financialassistant;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.financialassistant.data.Data;
+import com.example.financialassistant.adapters.AccountsAdapter;
+import com.example.financialassistant.data.DataAccounts;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -15,9 +17,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.financialassistant.ui.main.SectionsPagerAdapter;
+import com.example.financialassistant.adapters.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,20 +36,44 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
+        DataAccounts.names.add("qwe" + DataAccounts.names.size());
+        DataAccounts.values.add("qwe" + DataAccounts.values.size());
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                DataAccounts.names.add("qwe");
+                DataAccounts.values.add("qwe");
+                AccountsAdapter adapter = new AccountsAdapter();
+                DataAccounts.recyclerView.setAdapter(adapter);
             }
         });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_more_vert, menu);
         return true;
+    }
+
+    public void onClickNewActivityAccount(View view)
+    {
+        Intent intent = new Intent(MainActivity.this, AddAccountActivity.class);
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        TextView textView = (TextView) findViewById(R.id.test);
+        if (resultCode == RESULT_OK) {
+            String thiefname = data.getStringExtra("qwe");
+            textView.setText(thiefname);
+        }
     }
 
     @SuppressLint("NonConstantResourceId")

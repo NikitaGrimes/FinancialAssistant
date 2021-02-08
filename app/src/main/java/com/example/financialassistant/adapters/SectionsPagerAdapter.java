@@ -1,4 +1,4 @@
-package com.example.financialassistant.ui.main;
+package com.example.financialassistant.adapters;
 
 import android.content.Context;
 import android.text.GetChars;
@@ -11,6 +11,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.financialassistant.R;
+import com.example.financialassistant.ui.main.Accounts_Fragment;
+import com.example.financialassistant.ui.main.Calculator_Fragment;
+import com.example.financialassistant.ui.main.Main_Fragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

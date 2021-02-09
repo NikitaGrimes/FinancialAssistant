@@ -41,12 +41,14 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
+                /*Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 DataAccounts.names.add("qwe");
                 DataAccounts.values.add("qwe");
                 AccountsAdapter adapter = new AccountsAdapter();
-                DataAccounts.recyclerView.setAdapter(adapter);
+                DataAccounts.recyclerView.setAdapter(adapter);*/
+                Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
+                startActivityForResult(intent, 0);
             }
         });
     }

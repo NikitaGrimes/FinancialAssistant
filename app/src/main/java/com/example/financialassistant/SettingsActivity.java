@@ -7,16 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
-public class AddAccountActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setContentView(R.layout.activity_add_account);
+        setContentView(R.layout.activity_settings);
     }
 
     @Override
@@ -26,13 +25,5 @@ public class AddAccountActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onClickAddAccount(View view)
-    {
-        Intent answerIntent = new Intent();
-        answerIntent.putExtra("qwe", "Сраный пёсик");
-        setResult(RESULT_OK, answerIntent);
-        finish();
     }
 }

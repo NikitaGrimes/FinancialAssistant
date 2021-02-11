@@ -4,4 +4,7 @@
     <item android:id="@+id/settings"
         android:title="@string/menu_settings"
         app:showAsAction="never"/>
+    <item android:id="@+id/new_type_expenses"
+        android:title="@string/menu_new_type"
+        app:showAsAction="never"/>
 </menu>

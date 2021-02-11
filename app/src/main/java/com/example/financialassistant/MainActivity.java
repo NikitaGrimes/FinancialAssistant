@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -83,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivityForResult(intent, 0);
+        }
+        else if (item.getItemId() == R.id.new_type_expenses) {
+            Intent intent = new Intent(MainActivity.this, AddNewTypeExpensesActivity.class);
             startActivityForResult(intent, 0);
         }
         return super.onOptionsItemSelected(item);

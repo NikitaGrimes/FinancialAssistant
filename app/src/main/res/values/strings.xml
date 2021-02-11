@@ -4,5 +4,6 @@
     <string name="tab_text_2">Счета</string>
     <string name="tab_text_3">Калькулятор</string>
     <string name="menu_settings">Настройки</string>
+    <string name="menu_new_type">Добавить новый тип расходов</string>
     <string name="hello_blank_fragment">Привет из фрагмента!)</string>
 </resources>

@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinancialAssistant">
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".AddNewTypeExpensesActivity"></activity>
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".AddOperationActivity" />
         <activity android:name=".AddAccountActivity" />
         <activity

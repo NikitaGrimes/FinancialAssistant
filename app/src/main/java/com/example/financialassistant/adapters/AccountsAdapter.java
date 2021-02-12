@@ -28,24 +28,27 @@ public class AccountsAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
-        return DataAccounts.names.size();
+        return DataAccounts.types.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private final TextView nameView;
         private final TextView valueView;
+        private final TextView currencyView;
 
         ViewHolder(View view){
             super(view);
-            nameView = (TextView) view.findViewById(R.id.name_accounts);
-            valueView = (TextView) view.findViewById(R.id.value_accounts);
+            nameView = (TextView) view.findViewById(R.id.type_accounts);
+            valueView = (TextView) view.findViewById(R.id.name_accounts);
+            currencyView = (TextView) view.findViewById(R.id.currency_accounts);
             view.setOnClickListener(this);
         }
 
         public void bindView(int position){
-            nameView.setText(DataAccounts.names.get(position));
-            valueView.setText(DataAccounts.values.get(position));
+            nameView.setText(DataAccounts.types.get(position));
+            valueView.setText(DataAccounts.names.get(position));
+            currencyView.setText(DataAccounts.currency.get(position));
         }
 
         public void onClick(View view){

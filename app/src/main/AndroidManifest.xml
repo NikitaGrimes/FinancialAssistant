@@ -9,14 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinancialAssistant">
-        <activity android:name=".AddNewTypeExpensesActivity"></activity>
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".AddOperationActivity" />
-        <activity android:name=".AddAccountActivity" />
+        <activity
+            android:name=".AddNewTypeExpensesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".AddOperationActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".AddAccountActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.FinancialAssistant.NoActionBar">
+            android:theme="@style/Theme.FinancialAssistant.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -16,7 +16,9 @@
 
         <TextView
             android:gravity="center_vertical"
-            android:textSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="72sp"
             android:id="@+id/type_accounts"
             android:maxWidth="175dp"
             android:layout_width="175dp"
@@ -28,7 +30,9 @@
         <TextView
             android:textAlignment="textEnd"
             android:gravity="center_vertical"
-            android:textSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="72sp"
             android:id="@+id/currency_accounts"
             android:maxWidth="175dp"
             android:layout_width="175dp"
@@ -41,7 +45,9 @@
 
     <TextView
         android:gravity="center_vertical"
-        android:textSize="20sp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="72sp"
         android:id="@+id/name_accounts"
         android:maxWidth="370dp"
         android:layout_width="370dp"

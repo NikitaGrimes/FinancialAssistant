@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.financialassistant.adapters.SectionsPagerAdapter;
 
@@ -36,8 +33,24 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
+        DataAccounts.types.add("qwe" + DataAccounts.types.size());
         DataAccounts.names.add("qwe" + DataAccounts.names.size());
-        DataAccounts.values.add("qwe" + DataAccounts.values.size());
+        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
+        DataAccounts.types.add("qwe" + DataAccounts.types.size());
+        DataAccounts.names.add("qwe" + DataAccounts.names.size());
+        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
+        DataAccounts.types.add("qwe" + DataAccounts.types.size());
+        DataAccounts.names.add("qwe" + DataAccounts.names.size());
+        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
+        DataAccounts.types.add("qwe" + DataAccounts.types.size());
+        DataAccounts.names.add("qwe" + DataAccounts.names.size());
+        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
+        DataAccounts.types.add("qwe" + DataAccounts.types.size());
+        DataAccounts.names.add("qwe" + DataAccounts.names.size());
+        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
+        DataAccounts.types.add("qwe" + DataAccounts.types.size());
+        DataAccounts.names.add("qwe" + DataAccounts.names.size());
+        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

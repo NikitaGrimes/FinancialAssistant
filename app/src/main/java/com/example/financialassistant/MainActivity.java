@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataExpenses;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
@@ -27,30 +28,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        DataAccounts.currency.add("curr");
+        DataAccounts.names.add("name");
+        DataAccounts.types.add("type");
+        DataExpenses.names.add("name");
+        DataExpenses.values.add("value");
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
-        DataAccounts.types.add("qwe" + DataAccounts.types.size());
-        DataAccounts.names.add("qwe" + DataAccounts.names.size());
-        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
-        DataAccounts.types.add("qwe" + DataAccounts.types.size());
-        DataAccounts.names.add("qwe" + DataAccounts.names.size());
-        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
-        DataAccounts.types.add("qwe" + DataAccounts.types.size());
-        DataAccounts.names.add("qwe" + DataAccounts.names.size());
-        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
-        DataAccounts.types.add("qwe" + DataAccounts.types.size());
-        DataAccounts.names.add("qwe" + DataAccounts.names.size());
-        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
-        DataAccounts.types.add("qwe" + DataAccounts.types.size());
-        DataAccounts.names.add("qwe" + DataAccounts.names.size());
-        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
-        DataAccounts.types.add("qwe" + DataAccounts.types.size());
-        DataAccounts.names.add("qwe" + DataAccounts.names.size());
-        DataAccounts.currency.add("qwe" + DataAccounts.currency.size());
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        TextView textView = (TextView) findViewById(R.id.test);
+        /*TextView textView = (TextView) findViewById(R.id.test);
         if (resultCode == RESULT_OK) {
             String thiefname = data.getStringExtra("qwe");
             textView.setText(thiefname);
-        }
+        }*/
     }
 
     @SuppressLint("NonConstantResourceId")

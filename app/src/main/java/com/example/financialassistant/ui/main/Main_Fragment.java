@@ -3,12 +3,18 @@ package com.example.financialassistant.ui.main;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.financialassistant.R;
+import com.example.financialassistant.adapters.AccountsAdapter;
+import com.example.financialassistant.adapters.ExpensesAdapter;
+import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataExpenses;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +67,12 @@ public class Main_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        DataExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_expenses);
+        ExpensesAdapter adapter = new ExpensesAdapter();
+        DataExpenses.recyclerView.setAdapter(adapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        DataExpenses.recyclerView.setLayoutManager(layoutManager);
+        return view;
     }
 }

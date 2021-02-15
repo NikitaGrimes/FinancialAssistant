@@ -30,9 +30,9 @@ public class AddAccountActivity extends AppCompatActivity {
 
     public void onClickAddAccount(View view)
     {
-        Intent answerIntent = new Intent();
+        /*Intent answerIntent = new Intent();
         answerIntent.putExtra("qwe", "Сраный пёсик");
         setResult(RESULT_OK, answerIntent);
-        finish();
+        finish();*/
     }
 }

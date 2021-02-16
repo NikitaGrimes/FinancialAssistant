@@ -6,4 +6,10 @@
     <string name="menu_settings">Настройки</string>
     <string name="menu_new_type">Добавить новый тип расходов</string>
     <string name="hello_blank_fragment">Привет из фрагмента!)</string>
+    <string-array name="currency">
+        <item>BYN</item>
+        <item>EU</item>
+        <item>USD</item>
+        <item>RUB</item>
+    </string-array>
 </resources>

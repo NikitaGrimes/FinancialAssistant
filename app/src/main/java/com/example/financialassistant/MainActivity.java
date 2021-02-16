@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataExpenses;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,20 +39,31 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
+                Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 DataAccounts.names.add("qwe");
                 DataAccounts.values.add("qwe");
                 AccountsAdapter adapter = new AccountsAdapter();
-                DataAccounts.recyclerView.setAdapter(adapter);*/
+                DataAccounts.recyclerView.setAdapter(adapter);
                 Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
                 startActivityForResult(intent, 0);
             }
-        });
+        });*/
+    }
+
+    public void onClickNewOperation(View view) {
+        /*Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+        DataAccounts.names.add("qwe");
+        DataAccounts.values.add("qwe");
+        AccountsAdapter adapter = new AccountsAdapter();
+        DataAccounts.recyclerView.setAdapter(adapter);*/
+        Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
+        startActivityForResult(intent, 0);
     }
 
     @Override
@@ -70,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        DataAccounts.names.add("qwe");
+        DataAccounts.types.add("qwe");
+        DataAccounts.currency.add("qwe");
+        AccountsAdapter adapter = new AccountsAdapter();
+        DataAccounts.recyclerView.setAdapter(adapter);
         /*TextView textView = (TextView) findViewById(R.id.test);
         if (resultCode == RESULT_OK) {
             String thiefname = data.getStringExtra("qwe");

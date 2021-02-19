@@ -24,4 +24,11 @@
     <string name="calc_0">0</string>
     <string name="calc_.">.</string>
     <string name="backSpace">⌫</string>
+    <string name="addAccountType">Тип счета</string>
+    <string name="addAccountAddButton">Добавить</string>
+    <string name="addAccountRadioTextCash">Наличные</string>
+    <string name="addAccountRadioTextCard">Карта</string>
+    <string name="addAccountRadioTextElectronic">Электронные</string>
+    <string name="addAccountEnterNameAccount">Название счета</string>
+    <string name="addAccountEnterValue">Начальный размер счета</string>
 </resources>

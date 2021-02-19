@@ -4,11 +4,95 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddAccountActivity">
+    tools:context=".AddAccountActivity"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/addAccountTypeView"
+        android:text="@string/addAccountType"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-    <Button
+    <RadioGroup
+        android:id="@+id/addAccountRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints"
-        android:onClick="onClickAddAccount"/>
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addAccountTypeView"
+        android:layout_marginTop="10dp">
+
+        <RadioButton
+            android:id="@+id/cash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/addAccountRadioTextCash"
+            android:textSize="22sp"/>
+
+        <RadioButton
+            android:id="@+id/card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/addAccountRadioTextCard"
+            android:textSize="22sp"/>
+
+        <RadioButton
+            android:id="@+id/electronic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/addAccountRadioTextElectronic"
+            android:textSize="22sp"/>
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/addAccountNameAcc"
+        android:inputType="text"
+        android:hint="@string/addAccountEnterNameAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addAccountRadioGroup"
+        android:layout_marginTop="10dp"
+        android:textSize="22sp"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/addAccountValueAcc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:hint="@string/addAccountEnterValue"
+        android:importantForAutofill="no"
+        android:textSize="22sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/addAccountEnterCurrency"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addAccountNameAcc" />
+
+    <Spinner
+        android:id="@+id/addAccountEnterCurrency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/currency"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:scrollbarSize="22sp"
+        app:layout_constraintTop_toBottomOf="@+id/addAccountNameAcc" />
+
+    <Button
+        android:id="@+id/addAccountAddButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickAddAccount"
+        android:text="@string/addAccountAddButton"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addAccountValueAcc" />
 </androidx.constraintlayout.widget.ConstraintLayout>

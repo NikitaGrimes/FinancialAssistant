@@ -31,4 +31,6 @@
     <string name="addAccountRadioTextElectronic">Электронные</string>
     <string name="addAccountEnterNameAccount">Название счета</string>
     <string name="addAccountEnterValue">Начальный размер счета</string>
+    <string name="addNewTypeExpensesName">Название расходов</string>
+    <string name="addNewTypeExpensesButtonAdd">Добавить</string>
 </resources>

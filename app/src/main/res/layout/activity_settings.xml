@@ -1,9 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsActivity">
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/isNullifyDBSwitchCompat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="22sp"
+        android:text="@string/settingsNullifyDB"
+        android:layout_margin="10dp"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/isNullifyDBSwitchCompat">
+
+        <RadioButton
+            android:id="@+id/everyMonthRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settingsNullifyEveryMonth"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/everyMonthDayNullifyDBSpinner"
+            android:layout_width="153dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:entries="@array/days31"
+            android:scrollbarSize="22sp" />
+
+        <RadioButton
+            android:id="@+id/everyDayOfWeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settingsNullifyEveryDayOfWeek"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/everyWeekNullifyDBSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:entries="@array/daysOfWeek"
+            android:scrollbarSize="22sp" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/nullifyDBButton"
+        android:text="@string/settingsNullifyDBNowButton"
+        android:textSize="16sp"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

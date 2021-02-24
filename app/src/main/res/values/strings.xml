@@ -37,6 +37,16 @@
     <string name="settingsNullifyEveryMonth">Раз в месяц следующего числа</string>
     <string name="settingsNullifyEveryDayOfWeek">Раз в неделю следующего дня</string>
     <string name="settingsNullifyDBNowButton">Обнулить данные о расходах</string>
+    <string name="addOperationIncomeRB">Доходы</string>
+    <string name="addOperationIncomeValueHint">Размер дохода</string>
+    <string name="addOperationCostsRB">Расходы</string>
+    <string name="addOperationCostsValueHint">Размер расхода</string>
+    <string name="addOperationAccExChangeRB">Со счета на счет</string>
+    <string name="addOperationFromAcc">Со счета</string>
+    <string name="addOperationToAcc">На счет</string>
+    <string name="addOperationExChangeValueFromAcc">Размер перевода</string>
+    <string name="addOperationExchangeRates">По курсу</string>
+    <string name="addOperationExchangeRatesHint">Курс валюты</string>
     <string-array name="days31">
         <item>1</item>
         <item>2</item>

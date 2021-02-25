@@ -1,27 +1,46 @@
 package com.example.financialassistant;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataExpenses;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.example.financialassistant.adapters.SectionsPagerAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static String url = "https://www.nbrb.by/api/exrates/rates?periodicity=1";
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        GetData getData = new GetData();
+        getData.execute();
+
         /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +84,11 @@ public class MainActivity extends AppCompatActivity {
         DataAccounts.names.add("qwe");
         DataAccounts.values.add("qwe");
         AccountsAdapter adapter = new AccountsAdapter();
-        DataAccounts.recyclerView.setAdapter(adapter);*/
+        DataAccounts.recyclerView.setAdapter(adapter);
+        boolean isCon = isOnline(this);
+        if(isCon)
+            Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();*/
         Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
         startActivityForResult(intent, 0);
     }
@@ -82,12 +109,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        DataAccounts.names.add("qwe");
+        /*DataAccounts.names.add("qwe");
         DataAccounts.types.add("qwe");
         DataAccounts.currency.add("qwe");
         AccountsAdapter adapter = new AccountsAdapter();
         DataAccounts.recyclerView.setAdapter(adapter);
-        /*TextView textView = (TextView) findViewById(R.id.test);
+        TextView textView = (TextView) findViewById(R.id.test);
         if (resultCode == RESULT_OK) {
             String thiefname = data.getStringExtra("qwe");
             textView.setText(thiefname);
@@ -106,5 +133,53 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 0);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static boolean isOnline(Context context)
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public class GetData extends AsyncTask<String, String, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String current = "";
+            try {
+                URL Url;
+                HttpURLConnection urlConnection = null;
+                try {
+                    Url = new URL(url);
+                    urlConnection = (HttpURLConnection) Url.openConnection();
+                    InputStream is = urlConnection.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(is);
+                    int data = isr.read();
+                    while (data != -1) {
+                        current += (char) data;
+                        data = isr.read();
+                    }
+                    return current;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return current;
+        }
     }
 }

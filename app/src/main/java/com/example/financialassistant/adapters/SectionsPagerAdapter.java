@@ -1,7 +1,6 @@
 package com.example.financialassistant.adapters;
 
 import android.content.Context;
-import android.text.GetChars;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +11,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.financialassistant.R;
 import com.example.financialassistant.ui.main.Accounts_Fragment;
-import com.example.financialassistant.ui.main.Calculator_Fragment;
+import com.example.financialassistant.ui.main.Converter_Fragment;
 import com.example.financialassistant.ui.main.Main_Fragment;
 
 /**
@@ -37,7 +36,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position){
             case 0: return new Main_Fragment();
             case 1: return new Accounts_Fragment();
-            case 2: return new Calculator_Fragment();
+            case 2: return new Converter_Fragment();
             default: return new Main_Fragment();
         }
     }

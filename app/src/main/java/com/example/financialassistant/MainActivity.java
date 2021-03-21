@@ -3,12 +3,14 @@ package com.example.financialassistant;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.models.Currents;
 import com.google.android.material.tabs.TabLayout;
@@ -21,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.financialassistant.adapters.SectionsPagerAdapter;
@@ -38,14 +41,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String JSON_URL_1 = "https://www.nbrb.by/api/exrates/rates?periodicity=1";
-    private static String JSON_URL_0 = "https://www.nbrb.by/api/exrates/rates?periodicity=0";
-
-    List<Currents> currentsList;
+    private static String JSON_URL = "https://www.floatrates.com/daily/usd.json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,47 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        AssetManager am = getAssets();
+        InputStream is = null;
+        StringBuilder s = new StringBuilder();
+        try {
+            is = am.open("currents.json");
+            InputStreamReader isr = new InputStreamReader(is);
+            int data = isr.read();
+            while (data != -1) {
+                s.append((char) data);
+                data = isr.read();
+            }
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String res = s.toString();
+        try {
+            JSONObject jsonObjects = new JSONObject(res);
+            Iterator<String> keys = jsonObjects.keys();
+            DataCurrents.currentList.clear();
+            Currents uSCurrent = new Currents();
+            uSCurrent.setCur_ID("1");
+            uSCurrent.setCur_Abbreviation("USD");
+            uSCurrent.setCur_Name("U.S. Dollar");
+            uSCurrent.setCur_OfficialRate(1);
+            uSCurrent.setLastDate(new Date());
+            DataCurrents.currentList.add(uSCurrent);
+            while(keys.hasNext()) {
+                String key = keys.next();
+                JSONObject jsonObject = jsonObjects.getJSONObject(key);
+                Currents current = new Currents();
+                current.setCur_ID(jsonObject.getString("numericCode"));
+                current.setCur_Abbreviation(jsonObject.getString("alphaCode"));
+                current.setCur_Name(jsonObject.getString("name"));
+                current.setCur_OfficialRate(jsonObject.getDouble("rate"));
+                current.setLastDate(new Date());
+                DataCurrents.currentList.add(current);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         DataAccounts.currency.add("curr");
         DataAccounts.names.add("name");
         DataAccounts.types.add("type");
@@ -63,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        currentsList = new ArrayList<>();
         if (isOnline(this)) {
             GetData getData = new GetData();
             getData.execute();
@@ -166,27 +207,13 @@ public class MainActivity extends AppCompatActivity {
                 URL Url;
                 HttpURLConnection urlConnection = null;
                 try {
-                    Url = new URL(JSON_URL_1);
+                    Url = new URL(JSON_URL);
                     urlConnection = (HttpURLConnection) Url.openConnection();
                     InputStream is = urlConnection.getInputStream();
                     InputStreamReader isr = new InputStreamReader(is);
                     int data = isr.read();
                     while (data != -1) {
-                        if ((char) data == ']')
-                            current.append(',');
-                        else
-                            current.append((char) data);
-                        data = isr.read();
-                    }
-                    urlConnection.disconnect();
-                    Url = new URL(JSON_URL_0);
-                    urlConnection = (HttpURLConnection) Url.openConnection();
-                    is = urlConnection.getInputStream();
-                    isr = new InputStreamReader(is);
-                    data = isr.read();
-                    while (data != -1) {
-                        if ((char) data != '[')
-                            current.append((char) data);
+                        current.append((char) data);
                         data = isr.read();
                     }
                     return current.toString();
@@ -207,17 +234,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             try {
-                JSONArray jsonArray = new JSONArray(s);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                JSONObject jsonObjects = new JSONObject(s);
+                Iterator<String> keys = jsonObjects.keys();
+                DataCurrents.currentList.clear();
+                Currents uSCurrent = new Currents();
+                uSCurrent.setCur_ID("1");
+                uSCurrent.setCur_Abbreviation("USD");
+                uSCurrent.setCur_Name("U.S. Dollar");
+                uSCurrent.setCur_OfficialRate(1);
+                uSCurrent.setLastDate(new Date());
+                DataCurrents.currentList.add(uSCurrent);
+                while(keys.hasNext()) {
+                    String key = keys.next();
+                    JSONObject jsonObject = jsonObjects.getJSONObject(key);
                     Currents current = new Currents();
-                    current.setCur_ID(jsonObject.getInt("Cur_ID"));
-                    current.setCur_Abbreviation(jsonObject.getString("Cur_Abbreviation"));
-                    current.setCur_Scale(jsonObject.getInt("Cur_Scale"));
-                    current.setCur_Name(jsonObject.getString("Cur_Name"));
-                    current.setCur_OfficialRate(jsonObject.getDouble("Cur_OfficialRate"));
+                    current.setCur_ID(jsonObject.getString("numericCode"));
+                    current.setCur_Abbreviation(jsonObject.getString("alphaCode"));
+                    current.setCur_Name(jsonObject.getString("name"));
+                    current.setCur_OfficialRate(jsonObject.getDouble("rate"));
                     current.setLastDate(new Date());
-                    currentsList.add(current);
+                    DataCurrents.currentList.add(current);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

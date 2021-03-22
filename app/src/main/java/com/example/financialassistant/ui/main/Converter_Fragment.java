@@ -18,6 +18,11 @@ import com.example.financialassistant.R;
 import com.example.financialassistant.data.DataCurrents;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -97,6 +102,18 @@ public class Converter_Fragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.change_currency_button:
+                String temp = DataCurrents.fromCurrency;
+                fromSpinner.setText(DataCurrents.toCurrency);
+                toSpinner.setText(DataCurrents.fromCurrency);
+                DataCurrents.fromCurrency = DataCurrents.toCurrency;
+                DataCurrents.toCurrency = temp;
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("from", new JSONObject().put("currency", DataCurrents.fromCurrency));
+                    object.put("to", new JSONObject().put("currency", DataCurrents.toCurrency));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
         }
     }
 }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.financialassistant.R;
 import com.example.financialassistant.data.DataExpenses;
 
-public class ExpensesAdapter  extends RecyclerView.Adapter{
+public class ExpensesAdapter extends RecyclerView.Adapter{
 
     @NonNull
     @Override

@@ -47,6 +47,7 @@
     <string name="addOperationExChangeValueFromAcc">Размер перевода</string>
     <string name="addOperationExchangeRates">По курсу</string>
     <string name="addOperationExchangeRatesHint">Курс валюты</string>
+    <string name="searchCurrency">Введите название валюты</string>
     <string-array name="days31">
         <item>1</item>
         <item>2</item>

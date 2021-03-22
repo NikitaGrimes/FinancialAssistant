@@ -1,5 +1,6 @@
 package com.example.financialassistant.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +12,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.financialassistant.Currencies;
+import com.example.financialassistant.MainActivity;
 import com.example.financialassistant.R;
+import com.example.financialassistant.data.DataCurrents;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
@@ -29,6 +33,8 @@ public class Converter_Fragment extends Fragment implements View.OnClickListener
     private static final String ARG_PARAM2 = "param2";
     TextView fromConvert;
     TextView toConvert;
+    Button fromSpinner;
+    Button toSpinner;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -69,9 +75,12 @@ public class Converter_Fragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fromConvert = (TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.firstEditTextNumberDecimal);
-        toConvert = (TextView)getActivity().findViewById(R.id.secondEditTextNumberDecimal);
+
         View rootView =  inflater.inflate(R.layout.fragment_converter, container, false);
+        fromConvert = (TextView) rootView.findViewById(R.id.firstEditTextNumberDecimal);
+        toConvert = (TextView)rootView.findViewById(R.id.secondEditTextNumberDecimal);
+        fromSpinner = (Button) rootView.findViewById(R.id.first_spinner_calculator);
+        toSpinner = (Button) rootView.findViewById(R.id.second_spinner_calculator);
         int[] buttonsID = { R.id.change_currency_button, R.id.calc_0_button, R.id.calc_1_button,
                 R.id.calc_2_button, R.id.calc_3_button, R.id.calc_4_button, R.id.calc_5_button,
                 R.id.calc_6_button, R.id.calc_7_button, R.id.calc_8_button, R.id.calc_9_button,
@@ -79,6 +88,8 @@ public class Converter_Fragment extends Fragment implements View.OnClickListener
         for (int id : buttonsID) {
             rootView.findViewById(id).setOnClickListener((View.OnClickListener) this);
         };
+        fromSpinner.setText(DataCurrents.fromCurrency);
+        toSpinner.setText(DataCurrents.toCurrency);
         return rootView;
     }
 
@@ -86,7 +97,6 @@ public class Converter_Fragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.change_currency_button:
-
         }
     }
 }

@@ -54,6 +54,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        AssetManager assetManager = getAssets();
+        InputStream inputStream = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            inputStream = assetManager.open("selectedСurrencies.json");
+            InputStreamReader isr = new InputStreamReader(inputStream);
+            int data = isr.read();
+            while (data != -1) {
+                stringBuilder.append((char) data);
+                data = isr.read();
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String res = stringBuilder.toString();
+        try {
+            JSONObject jsonObject = new JSONObject(res);
+            JSONObject firstObject = jsonObject.getJSONObject("from");
+            DataCurrents.fromCurrency = firstObject.getString("currency");
+            JSONObject secondObject = jsonObject.getJSONObject("to");
+            DataCurrents.toCurrency = secondObject.getString("currency");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         AssetManager am = getAssets();
         InputStream is = null;
         StringBuilder s = new StringBuilder();
@@ -69,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String res = s.toString();
+        res = s.toString();
         try {
             JSONObject jsonObjects = new JSONObject(res);
             Iterator<String> keys = jsonObjects.keys();
@@ -154,6 +179,20 @@ public class MainActivity extends AppCompatActivity {
     public void onClickNewActivityAccount(View view)
     {
         Intent intent = new Intent(MainActivity.this, AddAccountActivity.class);
+        startActivityForResult(intent, 0);
+    }
+
+    public void onClickChooseCurrencyFirst(View view)
+    {
+        Intent intent = new Intent(MainActivity.this, Currencies.class);
+        intent.putExtra("Who", 1);
+        startActivityForResult(intent, 0);
+    }
+
+    public void onClickChooseCurrencySecond(View view)
+    {
+        Intent intent = new Intent(MainActivity.this, Currencies.class);
+        intent.putExtra("Who", 2);
         startActivityForResult(intent, 0);
     }
 

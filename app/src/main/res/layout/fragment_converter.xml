@@ -32,7 +32,9 @@
                     app:layout_constraintEnd_toStartOf="@+id/second_spinner_calculator"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginEnd="20dp"/>
+                    android:layout_marginEnd="20dp"
+                    android:textSize="20sp"
+                    android:onClick="onClickChooseCurrencyFirst"/>
 
                 <Button
                     android:id="@+id/second_spinner_calculator"
@@ -41,7 +43,9 @@
                     app:layout_constraintStart_toEndOf="@+id/first_spinner_calculator"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="20dp"/>
+                    android:layout_marginStart="20dp"
+                    android:textSize="20sp"
+                    android:onClick="onClickChooseCurrencySecond"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

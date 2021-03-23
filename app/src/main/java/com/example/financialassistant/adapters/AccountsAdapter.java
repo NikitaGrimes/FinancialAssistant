@@ -52,6 +52,7 @@ public class AccountsAdapter extends RecyclerView.Adapter{
         }
 
         public void onClick(View view){
+
         }
     }
 }

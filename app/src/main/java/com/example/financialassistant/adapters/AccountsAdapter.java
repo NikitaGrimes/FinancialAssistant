@@ -1,5 +1,6 @@
 package com.example.financialassistant.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialassistant.R;
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.models.Accounts;
 
 public class AccountsAdapter extends RecyclerView.Adapter{
 
@@ -28,10 +30,10 @@ public class AccountsAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
-        return DataAccounts.types.size();
+        return DataAccounts.accounts.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView nameView;
         private final TextView valueView;
@@ -42,17 +44,14 @@ public class AccountsAdapter extends RecyclerView.Adapter{
             nameView = (TextView) view.findViewById(R.id.type_accounts);
             valueView = (TextView) view.findViewById(R.id.name_accounts);
             currencyView = (TextView) view.findViewById(R.id.currency_accounts);
-            view.setOnClickListener(this);
         }
 
+        @SuppressLint("SetTextI18n")
         public void bindView(int position){
-            nameView.setText(DataAccounts.types.get(position));
-            valueView.setText(DataAccounts.names.get(position));
-            currencyView.setText(DataAccounts.currency.get(position));
-        }
-
-        public void onClick(View view){
-
+            Accounts account = DataAccounts.accounts.get(position);
+            nameView.setText(account.getType());
+            valueView.setText(account.getName());
+            currencyView.setText(account.getValue() + " " + account.getCurrency());
         }
     }
 }

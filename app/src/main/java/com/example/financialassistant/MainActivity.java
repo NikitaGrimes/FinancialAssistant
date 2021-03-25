@@ -13,7 +13,9 @@ import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Currents;
+import com.example.financialassistant.models.Expenses;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -121,11 +123,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        DataAccounts.currency.add("35 BYN");
-        DataAccounts.names.add("Family");
-        DataAccounts.types.add("Карта");
-        DataExpenses.names.add("name");
-        DataExpenses.values.add("value");
+        Accounts account = new Accounts("Family", "Карта", "35", "BYN");
+        DataAccounts.accounts.add(account);
+        Expenses expense = new Expenses("Всякое", "10", "BYN");
+        DataExpenses.expenses.add(expense);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);

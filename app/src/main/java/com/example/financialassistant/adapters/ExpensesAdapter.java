@@ -1,5 +1,6 @@
 package com.example.financialassistant.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialassistant.R;
 import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.models.Expenses;
 
 public class ExpensesAdapter extends RecyclerView.Adapter{
 
@@ -28,10 +30,10 @@ public class ExpensesAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
-        return DataExpenses.names.size();
+        return DataExpenses.expenses.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView nameView;
         private final TextView valueView;
@@ -40,15 +42,13 @@ public class ExpensesAdapter extends RecyclerView.Adapter{
             super(view);
             nameView = (TextView) view.findViewById(R.id.name_expense);
             valueView = (TextView) view.findViewById(R.id.value_expense);
-            view.setOnClickListener(this);
         }
 
+        @SuppressLint("SetTextI18n")
         public void bindView(int position){
-            nameView.setText(DataExpenses.names.get(position));
-            valueView.setText(DataExpenses.values.get(position));
-        }
-
-        public void onClick(View view){
+            Expenses expense = DataExpenses.expenses.get(position);
+            nameView.setText(expense.getName());
+            valueView.setText(expense.getValue() + " " + expense.getCurrency());
         }
     }
 }

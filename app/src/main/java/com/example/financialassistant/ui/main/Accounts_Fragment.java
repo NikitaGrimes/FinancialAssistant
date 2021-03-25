@@ -1,5 +1,6 @@
 package com.example.financialassistant.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.financialassistant.AddAccountActivity;
 import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.models.RecyclerItemClickListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,6 +74,23 @@ public class Accounts_Fragment extends Fragment{
         DataAccounts.recyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         DataAccounts.recyclerView.setLayoutManager(layoutManager);
+        DataAccounts.recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(view.getContext(), DataAccounts.recyclerView ,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getActivity(), AddAccountActivity.class);
+                        intent.putExtra("Action", "Remake");
+                        intent.putExtra("Num", position);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                })
+        );
         return view;
     }
 }

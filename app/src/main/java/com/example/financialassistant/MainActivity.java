@@ -26,12 +26,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.financialassistant.adapters.SectionsPagerAdapter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,13 +37,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //Парсинг последних валют
         AssetManager assetManager = getAssets();
         InputStream inputStream = null;
         StringBuilder stringBuilder = new StringBuilder();
@@ -82,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //Парсинг курса валют
         AssetManager am = getAssets();
         InputStream is = null;
         StringBuilder s = new StringBuilder();
@@ -123,10 +119,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //Ввод начальных значений
         Accounts account = new Accounts("Family", "Карта", "35", "BYN");
         DataAccounts.accounts.add(account);
         Expenses expense = new Expenses("Всякое", "10", "BYN");
         DataExpenses.expenses.add(expense);
+        //Создание адаптера секций
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -156,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         });*/
     }
 
+    //Создание новой операции расходов или доходов
     public void onClickNewOperation(View view) {
         /*Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
@@ -178,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Создание нового счета
     public void onClickNewActivityAccount(View view)
     {
         Intent intent = new Intent(MainActivity.this, AddAccountActivity.class);
@@ -185,16 +185,18 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
+    //Выбор валоюты для конвертера "из валюты"
     public void onClickChooseCurrencyFirst(View view)
     {
-        Intent intent = new Intent(MainActivity.this, Currencies.class);
+        Intent intent = new Intent(MainActivity.this, CurrenciesActivity.class);
         intent.putExtra("Who", 1);
         startActivityForResult(intent, 0);
     }
 
+    //Выбор валоюты для конвертера "в валюту"
     public void onClickChooseCurrencySecond(View view)
     {
-        Intent intent = new Intent(MainActivity.this, Currencies.class);
+        Intent intent = new Intent(MainActivity.this, CurrenciesActivity.class);
         intent.putExtra("Who", 2);
         startActivityForResult(intent, 0);
     }
@@ -304,6 +306,8 @@ public class MainActivity extends AppCompatActivity {
                     current.setLastDate(new Date());
                     DataCurrents.currentList.add(current);
                 }
+                Toast.makeText(getApplicationContext(), "Курс валют обновлен",
+                        Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

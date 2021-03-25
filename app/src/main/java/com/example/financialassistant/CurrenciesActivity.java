@@ -19,7 +19,7 @@ import com.example.financialassistant.models.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
-public class Currencies extends AppCompatActivity {
+public class CurrenciesActivity extends AppCompatActivity {
 
     ArrayList<Currents> currents;
     int who;

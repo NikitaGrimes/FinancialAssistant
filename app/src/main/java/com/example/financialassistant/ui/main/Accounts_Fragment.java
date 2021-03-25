@@ -67,7 +67,7 @@ public class Accounts_Fragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Привязка RecyclerView
         View view = inflater.inflate(R.layout.fragment_accounts, container, false);
         DataAccounts.recyclerView = (RecyclerView) view.findViewById(R.id.list_accounts);
         AccountsAdapter adapter = new AccountsAdapter();
@@ -82,7 +82,7 @@ public class Accounts_Fragment extends Fragment{
                         Intent intent = new Intent(getActivity(), AddAccountActivity.class);
                         intent.putExtra("Action", "Remake");
                         intent.putExtra("Num", position);
-                        startActivity(intent);
+                        startActivityForResult(intent, 0);
                     }
 
                     @Override

@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.financialassistant.data.DataAccounts;
@@ -90,7 +89,7 @@ public class AddAccountActivity extends AppCompatActivity {
 
     public void onClickChooseCurrency(View view)
     {
-        Intent intent = new Intent(AddAccountActivity.this, Currencies.class);
+        Intent intent = new Intent(AddAccountActivity.this, CurrenciesActivity.class);
         intent.putExtra("Who", 3);
         startActivityForResult(intent, 0);
     }
@@ -116,7 +115,7 @@ public class AddAccountActivity extends AppCompatActivity {
     @SuppressLint("DefaultLocale")
     public void onClickAddAccount(View view)
     {
-        if (action.equals("Create")) {
+        if (action.equals("Create") || (action.equals("Remake") && isChanged())) {
             int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
             if (checkedRadioButtonId == -1) {
                 Toast.makeText(this, "Пожалуйста, заполните поле 'Тип счета'",
@@ -129,6 +128,8 @@ public class AddAccountActivity extends AppCompatActivity {
             String nameAccount = nameText.getText().toString();
             Accounts account;
             for (int i = 0; i < DataAccounts.accounts.size(); i++) {
+                if (action.equals("Remake") && i == num)
+                    continue;
                 account = DataAccounts.accounts.get(i);
                 if (nameAccount.toLowerCase().equals(account.getName().toLowerCase())) {
                     Toast.makeText(this, "Название счета должно быть индивидуальным",
@@ -138,22 +139,16 @@ public class AddAccountActivity extends AppCompatActivity {
             }
             double tempDouble = Double.parseDouble(valueAccount);
             valueAccount = String.format("%.2f", tempDouble);
-            account = new Accounts(nameAccount, typeAccount, valueAccount, chooseCurrency.getText().toString());
-            DataAccounts.accounts.add(account);
+            account = new Accounts(nameAccount, typeAccount, valueAccount,
+                    chooseCurrency.getText().toString());
+            if (action.equals("Create"))
+                DataAccounts.accounts.add(account);
+            else if (action.equals("Remake"))
+                DataAccounts.accounts.set(num, account);
             Intent answerIntent = new Intent();
             answerIntent.putExtra("Action", "UpdateAccounts");
             setResult(RESULT_OK, answerIntent);
             finish();
-        }
-        else if (action.equals("Remake")) {
-            if (isChanged()) {
-                int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-                if (checkedRadioButtonId == -1) {
-                    Toast.makeText(this, "Пожалуйста, заполните поле 'Тип счета'",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
         }
     }
 }

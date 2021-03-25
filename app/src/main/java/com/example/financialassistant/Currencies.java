@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -63,13 +64,20 @@ public class Currencies extends AppCompatActivity {
                 new RecyclerItemClickListener(getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         String curName = currents.get(position).getCur_Abbreviation();
+                        if (who == 3) {
+                            Intent answerIntent = new Intent();
+                            answerIntent.putExtra("Currency", curName);
+                            setResult(RESULT_OK, answerIntent);
+                            finish();
+                        }
                         if (who == 1) {
                             DataCurrents.fromCurrency = curName;
+                            finish();
                         }
-                        else {
+                        else if (who == 2) {
                             DataCurrents.toCurrency = curName;
+                            finish();
                         }
-                        finish();
                     }
 
                     @Override public void onLongItemClick(View view, int position) {

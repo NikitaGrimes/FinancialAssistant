@@ -109,14 +109,14 @@ public class Converter_Fragment extends Fragment implements View.OnLongClickList
             fromSpinner.setText(DataCurrents.fromCurrency);
             toSpinner.setText(DataCurrents.toCurrency);
         }
+        if (fromConvert != null && fromConvert.getText() != "") {
+            String res = Convert_Currency(enteredValue);
+            toConvert.setText(res);
+        }
         if (fromConvert != null && fromConvert.getText() == "") {
             enteredValue = "0";
             fromConvert.setText(enteredValue);
             toConvert.setText("0");
-        }
-        if (fromConvert != null && fromConvert.getText() != "") {
-            String res = Convert_Currency(enteredValue);
-            toConvert.setText(res);
         }
     }
 

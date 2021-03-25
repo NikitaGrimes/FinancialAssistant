@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataExpenses;
@@ -120,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        DataAccounts.currency.add("curr");
-        DataAccounts.names.add("name");
-        DataAccounts.types.add("type");
+        DataAccounts.currency.add("35 BYN");
+        DataAccounts.names.add("Family");
+        DataAccounts.types.add("Карта");
         DataExpenses.names.add("name");
         DataExpenses.values.add("value");
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -179,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClickNewActivityAccount(View view)
     {
         Intent intent = new Intent(MainActivity.this, AddAccountActivity.class);
+        intent.putExtra("Action", "Create");
         startActivityForResult(intent, 0);
     }
 
@@ -199,6 +201,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String action = data.getStringExtra("Action");
+            if (action.equals("UpdateAccounts")) {
+                AccountsAdapter adapter = new AccountsAdapter();
+                DataAccounts.recyclerView.setAdapter(adapter);
+            }
+        }
         /*DataAccounts.names.add("qwe");
         DataAccounts.types.add("qwe");
         DataAccounts.currency.add("qwe");

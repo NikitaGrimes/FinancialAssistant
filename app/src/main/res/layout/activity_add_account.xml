@@ -74,15 +74,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addAccountNameAcc" />
 
-    <Spinner
+    <Button
         android:id="@+id/addAccountEnterCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:entries="@array/currency"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
-        android:scrollbarSize="22sp"
-        app:layout_constraintTop_toBottomOf="@+id/addAccountNameAcc" />
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/addAccountNameAcc"
+        android:onClick="onClickChooseCurrency"/>
 
     <Button
         android:id="@+id/addAccountAddButton"

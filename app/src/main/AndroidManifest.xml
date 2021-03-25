@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinancialAssistant">
-        <activity android:name=".Currencies"></activity>
+        <activity android:name=".Currencies"
+            android:screenOrientation="portrait" ></activity>
         <activity
             android:name=".AddNewTypeExpensesActivity"
             android:screenOrientation="portrait" />

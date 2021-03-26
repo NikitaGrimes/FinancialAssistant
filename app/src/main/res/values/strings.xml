@@ -32,7 +32,7 @@
     <string name="addAccountEnterNameAccount">Название счета</string>
     <string name="addAccountEnterValue">Начальный размер счета</string>
     <string name="addNewTypeExpensesName">Название расходов</string>
-    <string name="addNewTypeExpensesButtonAdd">Добавить</string>
+    <string name="addNewTypeExpensesButtonAdd">Сохранить</string>
     <string name="settingsNullifyDB">Обнулять данные о расходах</string>
     <string name="settingsNullifyEveryMonth">Раз в месяц следующего числа</string>
     <string name="settingsNullifyEveryDayOfWeek">Раз в неделю следующего дня</string>

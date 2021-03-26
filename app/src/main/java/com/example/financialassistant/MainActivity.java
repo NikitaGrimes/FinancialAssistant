@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.financialassistant.adapters.AccountsAdapter;
+import com.example.financialassistant.adapters.ExpensesAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataExpenses;
@@ -210,6 +211,10 @@ public class MainActivity extends AppCompatActivity {
                 AccountsAdapter adapter = new AccountsAdapter();
                 DataAccounts.recyclerView.setAdapter(adapter);
             }
+            else if (action.equals("UpdateExpenses")) {
+                ExpensesAdapter adapter = new ExpensesAdapter();
+                DataExpenses.recyclerView.setAdapter(adapter);
+            }
         }
         /*DataAccounts.names.add("qwe");
         DataAccounts.types.add("qwe");
@@ -223,15 +228,17 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
+    //Создание кнопок "Меню"
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
+        if (item.getItemId() == R.id.settings) { //Нажатие на Настройки
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivityForResult(intent, 0);
         }
-        else if (item.getItemId() == R.id.new_type_expenses) {
+        else if (item.getItemId() == R.id.new_type_expenses) { //Нажатие на Добваить новый тип расходов
             Intent intent = new Intent(MainActivity.this, AddNewTypeExpensesActivity.class);
+            intent.putExtra("Action", "Create");
             startActivityForResult(intent, 0);
         }
         return super.onOptionsItemSelected(item);

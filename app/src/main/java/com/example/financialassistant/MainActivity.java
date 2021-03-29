@@ -123,7 +123,15 @@ public class MainActivity extends AppCompatActivity {
         //Ввод начальных значений
         Accounts account = new Accounts("Family", "Карта", "35", "BYN");
         DataAccounts.accounts.add(account);
+        account = new Accounts("Nata", "Электронные", "20", "EUR");
+        DataAccounts.accounts.add(account);
+        account = new Accounts("MySelf", "Наличные", "30", "USD");
+        DataAccounts.accounts.add(account);
         Expenses expense = new Expenses("Всякое", "10", "BYN");
+        DataExpenses.expenses.add(expense);
+        expense = new Expenses("Подарки", "15", "BYN");
+        DataExpenses.expenses.add(expense);
+        expense = new Expenses("ФастФуд", "8", "BYN");
         DataExpenses.expenses.add(expense);
         //Создание адаптера секций
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -214,6 +222,12 @@ public class MainActivity extends AppCompatActivity {
             else if (action.equals("UpdateExpenses")) {
                 ExpensesAdapter adapter = new ExpensesAdapter();
                 DataExpenses.recyclerView.setAdapter(adapter);
+            }
+            else if (action.equals("UpdateExpensesAndAccounts")) {
+                AccountsAdapter adapter0 = new AccountsAdapter();
+                DataAccounts.recyclerView.setAdapter(adapter0);
+                ExpensesAdapter adapter1 = new ExpensesAdapter();
+                DataExpenses.recyclerView.setAdapter(adapter1);
             }
         }
         /*DataAccounts.names.add("qwe");

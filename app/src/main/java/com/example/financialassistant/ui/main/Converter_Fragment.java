@@ -114,6 +114,9 @@ public class Converter_Fragment extends Fragment implements View.OnLongClickList
         double tempDouble = Double.parseDouble(fromCur);
         String fromCurName = DataCurrents.fromCurrency;
         String toCurName = DataCurrents.toCurrency;
+        if (fromCurName.equals(toCurName)) {
+            return "1";
+        }
         double firstValue = 1, secondValue = 1;
         for (int i = 0, k = 0; k != 2; i++){ //Поиск курсов валют к одной валюте
             String temp = DataCurrents.currentList.get(i).getCur_Abbreviation();

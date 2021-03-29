@@ -28,22 +28,22 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/addOperationIncomeRB"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:onClick="onClickInCome"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutIncome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:visibility="gone">
+                android:layout_marginHorizontal="10dp">
 
                 <Spinner
                     android:id="@+id/incomeAccountSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:entries="@array/daysOfWeek"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:spinnerMode="dialog"/>
 
                 <EditText
                     android:id="@+id/incomeEnterValue"
@@ -64,30 +64,30 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/addOperationCostsRB"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:onClick="onClickOutCome"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutCosts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:visibility="gone">
+                android:layout_marginHorizontal="10dp">
 
                 <Spinner
                     android:id="@+id/costsAccountSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:entries="@array/daysOfWeek"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:spinnerMode="dialog"/>
 
                 <Spinner
                     android:id="@+id/costsExpensesSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:entries="@array/daysOfWeek"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:spinnerMode="dialog"
                     app:layout_constraintTop_toBottomOf="@id/costsAccountSpinner" />
 
                 <EditText
@@ -109,41 +109,59 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/addOperationAccExChangeRB"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:onClick="onClickExChange"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutAccExChange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:visibility="gone">
+                android:layout_marginHorizontal="10dp">
+
+                <TextView
+                    android:id="@+id/textViewFromAcc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/fromAccExChange"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <Spinner
                     android:id="@+id/fromAccountSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:entries="@array/daysOfWeek"
                     android:prompt="@string/addOperationFromAcc"
                     android:spinnerMode="dialog"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintStart_toEndOf="@+id/textViewFromAcc"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewToAcc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/toAccExChange"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewFromAcc"/>
 
                 <Spinner
                     android:id="@+id/toAccountSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:entries="@array/daysOfWeek"
                     android:prompt="@string/addOperationToAcc"
                     android:spinnerMode="dialog"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintStart_toEndOf="@+id/textViewToAcc"
                     app:layout_constraintTop_toBottomOf="@id/fromAccountSpinner" />
 
                 <TextView
                     android:id="@+id/currencyOfFirstAccTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="USD"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -189,7 +207,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="BYN"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -208,6 +225,15 @@
                     app:layout_constraintTop_toBottomOf="@id/currencyOfSecondAccTextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/saveOperation"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal"
+                android:onClick="onClickSaveOperation"/>
 
         </RadioGroup>
     </ScrollView>

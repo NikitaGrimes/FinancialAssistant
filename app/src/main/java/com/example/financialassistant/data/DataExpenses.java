@@ -7,7 +7,7 @@ import com.example.financialassistant.models.Expenses;
 import java.util.ArrayList;
 
 public class DataExpenses {
-    public static ArrayList<Expenses> Expenses = new ArrayList<>();
+    public static ArrayList<Expenses> expenses = new ArrayList<>();
     public static RecyclerView recyclerView;
 }
 

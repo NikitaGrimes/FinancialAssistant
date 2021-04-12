@@ -137,18 +137,14 @@ public class MainActivity extends AppCompatActivity {
         DataTypesExpenses.typesOfExpenses.add(expense);
         expense = new TypeOfExpenses("ФастФуд", 800, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);
-        Expenses expenses = new Expenses("Всякое", 200, "BYN",
-                new GregorianCalendar(2021, Calendar.FEBRUARY, 6, 18, 19, 20));
-        DataExpenses.Expenses.add(expenses);
-        expenses = new Expenses("Подарки", 1000, "BYN",
-                new GregorianCalendar(2021, Calendar.FEBRUARY, 7, 18, 19, 20));
-        DataExpenses.Expenses.add(expenses);
-        expenses = new Expenses("ФастФуд", 200, "BYN",
-                new GregorianCalendar(2021, Calendar.FEBRUARY, 8, 18, 19, 20));
-        DataExpenses.Expenses.add(expenses);
-        expenses = new Expenses("Всякое", 200, "BYN",
-                new GregorianCalendar(2021, Calendar.FEBRUARY, 13, 18, 19, 20));
-        DataExpenses.Expenses.add(expenses);
+        Expenses expenses = new Expenses("Всякое", 200, "BYN");
+        DataExpenses.expenses.add(expenses);
+        expenses = new Expenses("Подарки", 1000, "BYN");
+        DataExpenses.expenses.add(expenses);
+        expenses = new Expenses("ФастФуд", 200, "BYN");
+        DataExpenses.expenses.add(expenses);
+        expenses = new Expenses("Всякое", 200, "BYN");
+        DataExpenses.expenses.add(expenses);
         //Создание адаптера секций
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);

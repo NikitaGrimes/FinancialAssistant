@@ -1,6 +1,7 @@
 package com.example.financialassistant.models;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Expenses {
@@ -8,20 +9,20 @@ public class Expenses {
     private String name;
     private int value;
     private String currency;
-    private Calendar date;
+    private Date date;
 
     public Expenses(){
-        date = new GregorianCalendar();
+        date = new Date();
     }
 
     public Expenses(String _name, int _value, String _currency){
         this.name = _name;
         this.value = _value;
         this.currency = _currency;
-        this.date = new GregorianCalendar();
+        this.date = new Date();
     }
 
-    public Expenses(String _name, int _value, String _currency, Calendar _date){
+    public Expenses(String _name, int _value, String _currency, Date _date){
         this.name = _name;
         this.value = _value;
         this.currency = _currency;
@@ -52,11 +53,11 @@ public class Expenses {
         this.currency = currency;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

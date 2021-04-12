@@ -10,13 +10,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.financialassistant.adapters.AccountsAdapter;
-import com.example.financialassistant.adapters.ExpensesAdapter;
+import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Currents;
 import com.example.financialassistant.models.Expenses;
+import com.example.financialassistant.models.TypeOfExpenses;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -39,7 +41,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity {
@@ -121,18 +125,30 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         //Ввод начальных значений
-        Accounts account = new Accounts("Family", "Карта", "35", "BYN");
+        Accounts account = new Accounts("Family", "Карта", 3500, "BYN");
         DataAccounts.accounts.add(account);
-        account = new Accounts("Nata", "Электронные", "20", "EUR");
+        account = new Accounts("Nata", "Электронные", 2000, "EUR");
         DataAccounts.accounts.add(account);
-        account = new Accounts("MySelf", "Наличные", "30", "USD");
+        account = new Accounts("MySelf", "Наличные", 3000, "USD");
         DataAccounts.accounts.add(account);
-        Expenses expense = new Expenses("Всякое", "10", "BYN");
-        DataExpenses.expenses.add(expense);
-        expense = new Expenses("Подарки", "15", "BYN");
-        DataExpenses.expenses.add(expense);
-        expense = new Expenses("ФастФуд", "8", "BYN");
-        DataExpenses.expenses.add(expense);
+        TypeOfExpenses expense = new TypeOfExpenses("Всякое", 1000, "BYN");
+        DataTypesExpenses.typesOfExpenses.add(expense);
+        expense = new TypeOfExpenses("Подарки", 1500, "BYN");
+        DataTypesExpenses.typesOfExpenses.add(expense);
+        expense = new TypeOfExpenses("ФастФуд", 800, "BYN");
+        DataTypesExpenses.typesOfExpenses.add(expense);
+        Expenses expenses = new Expenses("Всякое", 200, "BYN",
+                new GregorianCalendar(2021, Calendar.FEBRUARY, 6, 18, 19, 20));
+        DataExpenses.Expenses.add(expenses);
+        expenses = new Expenses("Подарки", 1000, "BYN",
+                new GregorianCalendar(2021, Calendar.FEBRUARY, 7, 18, 19, 20));
+        DataExpenses.Expenses.add(expenses);
+        expenses = new Expenses("ФастФуд", 200, "BYN",
+                new GregorianCalendar(2021, Calendar.FEBRUARY, 8, 18, 19, 20));
+        DataExpenses.Expenses.add(expenses);
+        expenses = new Expenses("Всякое", 200, "BYN",
+                new GregorianCalendar(2021, Calendar.FEBRUARY, 13, 18, 19, 20));
+        DataExpenses.Expenses.add(expenses);
         //Создание адаптера секций
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -220,14 +236,14 @@ public class MainActivity extends AppCompatActivity {
                 DataAccounts.recyclerView.setAdapter(adapter);
             }
             else if (action.equals("UpdateExpenses")) {
-                ExpensesAdapter adapter = new ExpensesAdapter();
-                DataExpenses.recyclerView.setAdapter(adapter);
+                TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
+                DataTypesExpenses.recyclerView.setAdapter(adapter);
             }
             else if (action.equals("UpdateExpensesAndAccounts")) {
                 AccountsAdapter adapter0 = new AccountsAdapter();
                 DataAccounts.recyclerView.setAdapter(adapter0);
-                ExpensesAdapter adapter1 = new ExpensesAdapter();
-                DataExpenses.recyclerView.setAdapter(adapter1);
+                TypesOfExpensesAdapter adapter1 = new TypesOfExpensesAdapter();
+                DataTypesExpenses.recyclerView.setAdapter(adapter1);
             }
         }
         /*DataAccounts.names.add("qwe");

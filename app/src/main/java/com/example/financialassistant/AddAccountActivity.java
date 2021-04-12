@@ -23,7 +23,8 @@ public class AddAccountActivity extends AppCompatActivity {
     String action;
 
     String name;
-    String value;
+    int value;
+    String value_String;
     String currency;
     String type;
     int num;
@@ -34,6 +35,7 @@ public class AddAccountActivity extends AppCompatActivity {
     EditText valueText;
     RadioGroup radioGroup;
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,8 @@ public class AddAccountActivity extends AppCompatActivity {
             currency = account.getCurrency();
             type = account.getType();
             nameText.setText(name);
-            valueText.setText(value);
+            value_String = String.format("%.2f", value/100.);
+            valueText.setText(value_String);
             chooseCurrency.setText(currency);
             if (type.equals(getResources()
                     .getString(R.string.addAccountRadioTextCash))) {
@@ -98,7 +101,7 @@ public class AddAccountActivity extends AppCompatActivity {
         int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
         RadioButton myRadioButton = (RadioButton) findViewById(checkedRadioButtonId);
         return !(name.toLowerCase().equals(nameText.getText().toString().toLowerCase()) &&
-                value.equals(valueText.getText().toString()) &&
+                value_String.equals(valueText.getText().toString()) &&
                 type.equals(myRadioButton.getText().toString()) &&
                 currency.equals(chooseCurrency.getText().toString()));
     }
@@ -138,8 +141,8 @@ public class AddAccountActivity extends AppCompatActivity {
                 }
             }
             double tempDouble = Double.parseDouble(valueAccount);
-            valueAccount = String.format("%.2f", tempDouble);
-            account = new Accounts(nameAccount, typeAccount, valueAccount,
+            int valueAccInt = (int) (tempDouble * 100);
+            account = new Accounts(nameAccount, typeAccount, valueAccInt,
                     chooseCurrency.getText().toString());
             if (action.equals("Create"))
                 DataAccounts.accounts.add(account);

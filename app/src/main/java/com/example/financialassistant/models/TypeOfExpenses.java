@@ -1,20 +1,22 @@
 package com.example.financialassistant.models;
 
-public class Accounts {
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class TypeOfExpenses {
+
     private String name;
-    private String type;
     private int value;
     private String currency;
 
-    public Accounts () {
+    public TypeOfExpenses() {
 
     }
 
-    public Accounts (String _name, String _type, int _value, String _currency) {
+    public TypeOfExpenses(String _name, int _value, String _cur) {
         this.name = _name;
-        this.type = _type;
         this.value = _value;
-        this.currency = _currency;
+        this.currency = _cur;
     }
 
     public String getName() {
@@ -23,14 +25,6 @@ public class Accounts {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public int getValue() {
@@ -48,4 +42,5 @@ public class Accounts {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
+
 }

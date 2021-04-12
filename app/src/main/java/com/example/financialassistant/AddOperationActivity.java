@@ -4,10 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.media.RouteDiscoveryPreference;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,15 +17,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.financialassistant.adapters.CurrenciesAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataCurrents;
-import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
-import com.example.financialassistant.models.Expenses;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.financialassistant.models.TypeOfExpenses;
 
 public class AddOperationActivity extends AppCompatActivity {
 
@@ -79,7 +73,7 @@ public class AddOperationActivity extends AppCompatActivity {
         exChangeCL.setVisibility(View.GONE);
 
         String[] dataAcc = new String[DataAccounts.accounts.size()];
-        String[] dataExp = new String[DataExpenses.expenses.size()];
+        String[] dataExp = new String[DataTypesExpenses.typesOfExpenses.size()];
         int i = 0;
         for (Accounts account : DataAccounts.accounts) {
             dataAcc[i] = account.getName();
@@ -87,7 +81,7 @@ public class AddOperationActivity extends AppCompatActivity {
         }
 
         i = 0;
-        for (Expenses expense : DataExpenses.expenses) {
+        for (TypeOfExpenses expense : DataTypesExpenses.typesOfExpenses) {
             dataExp[i] = expense.getName();
             i++;
         }
@@ -258,17 +252,15 @@ public class AddOperationActivity extends AppCompatActivity {
         if (mode == 1) {
             int pos = inComeSpinnerAcc.getSelectedItemPosition();
             Accounts account = DataAccounts.accounts.get(pos);
-            double value = Double.parseDouble(account.getValue());
+            int value = account.getValue();
             EditText editText = (EditText) findViewById(R.id.incomeEnterValue);
             String str = editText.getText().toString();
-
             if (!str.equals("")) {
                 if (str.charAt(0) == '.') {
                     str = "0" + str;
                 }
-                value += Double.parseDouble(str);
-                str = String.format("%.2f", value);
-                account.setValue(str);
+                value += Double.parseDouble(str) * 100;
+                account.setValue(value);
                 DataAccounts.accounts.set(pos, account);
 
                 Intent answerIntent = new Intent();
@@ -287,20 +279,18 @@ public class AddOperationActivity extends AppCompatActivity {
                     str = "0" + str;
                 }
                 Accounts account = DataAccounts.accounts.get(posAcc);
-                Expenses expense = DataExpenses.expenses.get(posExp);
-                double value = Double.parseDouble(str);
-                double valueAcc = Double.parseDouble(account.getValue());
-                double valueExp = Double.parseDouble(expense.getValue());
+                TypeOfExpenses expense = DataTypesExpenses.typesOfExpenses.get(posExp);
+                int value = (int) (Double.parseDouble(str) * 100);
+                int valueAcc = account.getValue();
+                int valueExp = expense.getValue();
 
                 if (valueAcc >= value) {
                     valueAcc -= value;
                     valueExp += value;
-                    str = String.format("%.2f", valueAcc);
-                    account.setValue(str);
+                    account.setValue(valueAcc);
                     DataAccounts.accounts.set(posAcc, account);
-                    str = String.format("%.2f", valueExp);
-                    expense.setValue(str);
-                    DataExpenses.expenses.set(posExp, expense);
+                    expense.setValue(valueExp);
+                    DataTypesExpenses.typesOfExpenses.set(posExp, expense);
 
                     Intent answerIntent = new Intent();
                     answerIntent.putExtra("Action", "UpdateExpensesAndAccounts");
@@ -316,25 +306,25 @@ public class AddOperationActivity extends AppCompatActivity {
             String toValue = toValueCur.getText().toString();
             if (posFrom != posTo && !fromValue.equals("") && !toValue.equals("")) {
                 Accounts account = DataAccounts.accounts.get(posFrom);
-                double fromAccValue = Double.parseDouble(account.getValue());
+                int fromAccValue = account.getValue();
+
                 if (fromValue.charAt(0) == '.') {
                     fromValue = "0" + fromValue;
                 }
-                double fromValueDouble = Double.parseDouble(fromValue);
+                int fromValueDouble = (int)(Double.parseDouble(fromValue) * 100);
                 if (fromAccValue >= fromValueDouble) {
                     fromAccValue -= fromValueDouble;
-                    fromValue = String.format("%.2f", fromAccValue);
-                    account.setValue(fromValue);
+                    account.setValue(fromAccValue);
+                    DataAccounts.accounts.set(posFrom, account);
+
                     if (toValue.charAt(0) == '.') {
                         toValue = "0" + toValue;
                     }
-                    double toValueDouble = Double.parseDouble(toValue);
-                    DataAccounts.accounts.set(posFrom, account);
+                    int toValueDouble = (int)(Double.parseDouble(toValue) * 100);
                     account = DataAccounts.accounts.get(posTo);
-                    double toAccValue = Double.parseDouble(account.getValue());
+                    int toAccValue = account.getValue();
                     toAccValue += toValueDouble;
-                    toValue = String.format("%.2f", toAccValue);
-                    account.setValue(toValue);
+                    account.setValue(toAccValue);
                     DataAccounts.accounts.set(posTo, account);
 
                     Intent answerIntent = new Intent();

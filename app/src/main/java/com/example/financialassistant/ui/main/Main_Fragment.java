@@ -11,13 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.financialassistant.AddAccountActivity;
 import com.example.financialassistant.AddNewTypeExpensesActivity;
 import com.example.financialassistant.R;
-import com.example.financialassistant.adapters.AccountsAdapter;
-import com.example.financialassistant.adapters.ExpensesAdapter;
-import com.example.financialassistant.data.DataAccounts;
-import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
+import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
 
 /**
@@ -72,13 +69,13 @@ public class Main_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        DataExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_expenses);
-        ExpensesAdapter adapter = new ExpensesAdapter();
-        DataExpenses.recyclerView.setAdapter(adapter);
+        DataTypesExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_types_of_expenses);
+        TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
+        DataTypesExpenses.recyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        DataExpenses.recyclerView.setLayoutManager(layoutManager);
-        DataExpenses.recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(view.getContext(), DataExpenses.recyclerView ,
+        DataTypesExpenses.recyclerView.setLayoutManager(layoutManager);
+        DataTypesExpenses.recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(view.getContext(), DataTypesExpenses.recyclerView ,
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {

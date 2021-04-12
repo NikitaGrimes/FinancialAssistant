@@ -10,27 +10,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialassistant.R;
-import com.example.financialassistant.data.DataExpenses;
-import com.example.financialassistant.models.Expenses;
+import com.example.financialassistant.data.DataTypesExpenses;
+import com.example.financialassistant.models.TypeOfExpenses;
 
-public class ExpensesAdapter extends RecyclerView.Adapter{
+public class TypesOfExpensesAdapter extends RecyclerView.Adapter{
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_expenses, parent,
                 false);
-        return new ExpensesAdapter.ViewHolder(view);
+        return new TypesOfExpensesAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ExpensesAdapter.ViewHolder) holder).bindView(position);
+        ((TypesOfExpensesAdapter.ViewHolder) holder).bindView(position);
     }
 
     @Override
     public int getItemCount() {
-        return DataExpenses.expenses.size();
+        return DataTypesExpenses.typesOfExpenses.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -46,9 +46,11 @@ public class ExpensesAdapter extends RecyclerView.Adapter{
 
         @SuppressLint("SetTextI18n")
         public void bindView(int position){
-            Expenses expense = DataExpenses.expenses.get(position);
+            TypeOfExpenses expense = DataTypesExpenses.typesOfExpenses.get(position);
             nameView.setText(expense.getName());
-            valueView.setText(expense.getValue() + " " + expense.getCurrency());
+            double tempD = expense.getValue() / 100.;
+            @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
+            valueView.setText(res + " " + expense.getCurrency());
         }
     }
 }

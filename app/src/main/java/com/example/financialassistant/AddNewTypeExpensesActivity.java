@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.financialassistant.adapters.NewExpensesTypeAdapter;
-import com.example.financialassistant.data.DataExpenses;
-import com.example.financialassistant.models.Expenses;
+import com.example.financialassistant.data.DataTypesExpenses;
+import com.example.financialassistant.models.TypeOfExpenses;
 
 import java.util.ArrayList;
 
@@ -32,7 +32,7 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_type_expenses);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.lise_expenses_type);
         ArrayList<String> types = new ArrayList<>();
-        for (Expenses expense : DataExpenses.expenses) {
+        for (TypeOfExpenses expense : DataTypesExpenses.typesOfExpenses) {
             types.add(expense.getName());
         }
         NewExpensesTypeAdapter adapter = new NewExpensesTypeAdapter(this, types);
@@ -40,7 +40,7 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
         if (action.equals("Remake")) {
             num = arguments.getInt("Num");
             EditText editText = (EditText) findViewById(R.id.newNameForExpense);
-            editText.setText(DataExpenses.expenses.get(num).getName());
+            editText.setText(DataTypesExpenses.typesOfExpenses.get(num).getName());
         }
     }
 
@@ -57,29 +57,29 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
         if (action.equals("Create") || action.equals("Remake")) {
             EditText editText = (EditText) findViewById(R.id.newNameForExpense);
             String name = editText.getText().toString();
-            Expenses newExpense = null;
+            TypeOfExpenses newExpense = null;
             if (action.equals("Create")) {
-                for (Expenses expense : DataExpenses.expenses) {
+                for (TypeOfExpenses expense : DataTypesExpenses.typesOfExpenses) {
                     if (expense.getName().toLowerCase().equals(name.toLowerCase())) {
                         Toast.makeText(this, "Название должно быть индивидуальным",
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
-                newExpense = new Expenses(name, "0", "BYN");
-                DataExpenses.expenses.add(newExpense);
+                newExpense = new TypeOfExpenses(name, 0, "BYN");
+                DataTypesExpenses.typesOfExpenses.add(newExpense);
             }
             else if (action.equals("Remake")) {
-                for (int i = 0; i < DataExpenses.expenses.size(); i++) {
-                    if (DataExpenses.expenses.get(i).getName().toLowerCase().equals(name.toLowerCase()) && num != i) {
+                for (int i = 0; i < DataTypesExpenses.typesOfExpenses.size(); i++) {
+                    if (DataTypesExpenses.typesOfExpenses.get(i).getName().toLowerCase().equals(name.toLowerCase()) && num != i) {
                         Toast.makeText(this, "Название должно быть индивидуальным",
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
-                newExpense = new Expenses(name, DataExpenses.expenses.get(num).getValue(),
-                        DataExpenses.expenses.get(num).getCurrency());
-                DataExpenses.expenses.set(num, newExpense);
+                newExpense = new TypeOfExpenses(name, DataTypesExpenses.typesOfExpenses.get(num).getValue(),
+                        DataTypesExpenses.typesOfExpenses.get(num).getCurrency());
+                DataTypesExpenses.typesOfExpenses.set(num, newExpense);
             }
             Intent answerIntent = new Intent();
             answerIntent.putExtra("Action", "UpdateExpenses");

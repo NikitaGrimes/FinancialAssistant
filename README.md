@@ -18,7 +18,7 @@
 - виджет.
 
 ![alt text](README1.jpg "Скрин")​
-![alt text](README1.jpg "Скрин")​
-![alt text](README1.jpg "Скрин")​
-![alt text](README1.jpg "Скрин")​
-![alt text](README1.jpg "Скрин")​
+![alt text](README2.jpg "Скрин")​
+![alt text](README3.jpg "Скрин")​
+![alt text](README4.jpg "Скрин")​
+![alt text](README5.jpg "Скрин")​

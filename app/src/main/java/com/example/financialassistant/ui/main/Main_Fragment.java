@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 
 import com.example.financialassistant.AddNewTypeExpensesActivity;
 import com.example.financialassistant.R;
+import com.example.financialassistant.adapters.DebtsAdapter;
 import com.example.financialassistant.adapters.ExpensesAdapter;
 import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
+import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
@@ -96,6 +98,9 @@ public class Main_Fragment extends Fragment {
         DataExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_last_expenses);
         ExpensesAdapter expensesAdapter = new ExpensesAdapter();
         DataExpenses.recyclerView.setAdapter(expensesAdapter);
+        DataDebts.recyclerView = (RecyclerView) view.findViewById(R.id.list_debts);
+        DebtsAdapter debtsAdapter = new DebtsAdapter();
+        DataDebts.recyclerView.setAdapter(debtsAdapter);
         return view;
     }
 }

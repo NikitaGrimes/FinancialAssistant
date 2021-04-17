@@ -4,29 +4,33 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class Expenses {
+public class Debts {
 
     private String name;
     private int value;
     private String currency;
-    private GregorianCalendar date;
+    private GregorianCalendar deadLine;
+    private boolean isDebtor;
 
-    public Expenses(){
-        date = new GregorianCalendar();
+    public Debts() {
+
     }
 
-    public Expenses(String _name, int _value, String _currency){
+    public Debts(String _name, int _value, String _currency, boolean _isDebtor) {
         this.name = _name;
         this.value = _value;
         this.currency = _currency;
-        this.date = new GregorianCalendar();
+        this.isDebtor = _isDebtor;
+        deadLine = new GregorianCalendar();
+        deadLine.add(Calendar.MONTH, 1);
     }
 
-    public Expenses(String _name, int _value, String _currency, GregorianCalendar _date){
+    public Debts(String _name, int _value, String _currency, GregorianCalendar _date, boolean _isDebtor) {
         this.name = _name;
         this.value = _value;
         this.currency = _currency;
-        this.date = _date;
+        this.isDebtor = _isDebtor;
+        deadLine = _date;
     }
 
     public String getName() {
@@ -53,12 +57,19 @@ public class Expenses {
         this.currency = currency;
     }
 
-    public GregorianCalendar getDate() {
-        return date;
+    public GregorianCalendar getDeadLine() {
+        return deadLine;
     }
 
-    public void setDate(GregorianCalendar date) {
-        this.date = date;
+    public void setDeadLine(GregorianCalendar deadLine) {
+        this.deadLine = deadLine;
     }
 
+    public boolean isDebtor() {
+        return isDebtor;
+    }
+
+    public void setDebtor(boolean debtor) {
+        isDebtor = debtor;
+    }
 }

@@ -13,10 +13,12 @@ import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataCurrents;
+import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Currents;
+import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.TypeOfExpenses;
 import com.google.android.material.tabs.TabLayout;
@@ -131,12 +133,14 @@ public class MainActivity extends AppCompatActivity {
         DataAccounts.accounts.add(account);
         account = new Accounts("MySelf", "Наличные", 3000, "USD");
         DataAccounts.accounts.add(account);
+
         TypeOfExpenses expense = new TypeOfExpenses("Всякое", 1000, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);
         expense = new TypeOfExpenses("Подарки", 1500, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);
         expense = new TypeOfExpenses("ФастФуд", 800, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);
+
         Expenses expenses = new Expenses("Всякое", 200, "BYN");
         DataExpenses.expenses.add(expenses);
         expenses = new Expenses("Подарки", 1000, "BYN");
@@ -145,6 +149,14 @@ public class MainActivity extends AppCompatActivity {
         DataExpenses.expenses.add(expenses);
         expenses = new Expenses("Всякое", 200, "BYN");
         DataExpenses.expenses.add(expenses);
+
+        Debts debts = new Debts("Паше", 4000, "BYN", true);
+        DataDebts.debts.add(debts);
+        debts = new Debts("Лере", 1000, "BYN", true);
+        DataDebts.debts.add(debts);
+        debts = new Debts("Нате", 500, "BYN", false);
+        DataDebts.debts.add(debts);
+
         //Создание адаптера секций
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);

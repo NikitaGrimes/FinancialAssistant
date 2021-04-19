@@ -240,21 +240,29 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             String action = data.getStringExtra("Action");
-            if (action.equals("UpdateAccounts")) {
-                AccountsAdapter adapter = new AccountsAdapter();
-                DataAccounts.recyclerView.setAdapter(adapter);
-            }
-            else if (action.equals("UpdateExpenses")) {
-                TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
-                DataTypesExpenses.recyclerView.setAdapter(adapter);
-            }
-            else if (action.equals("UpdateExpensesAndAccounts")) {
-                AccountsAdapter adapter0 = new AccountsAdapter();
-                DataAccounts.recyclerView.setAdapter(adapter0);
-                TypesOfExpensesAdapter adapter1 = new TypesOfExpensesAdapter();
-                DataTypesExpenses.recyclerView.setAdapter(adapter1);
-                ExpensesAdapter adapter2 = new ExpensesAdapter();
-                DataExpenses.recyclerView.setAdapter(adapter2);
+            switch (action) {
+                case "UpdateAccounts":
+                    //AccountsAdapter adapter = new AccountsAdapter();
+                    //DataAccounts.recyclerView.setAdapter(adapter);
+                    DataAccounts.adapter.notifyDataSetChanged();
+                    break;
+                case "UpdateExpenses":
+                    //TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
+                    //DataTypesExpenses.recyclerView.setAdapter(adapter);
+                    DataTypesExpenses.adapter.notifyDataSetChanged();
+                    DataExpenses.adapter.notifyDataSetChanged();
+                    break;
+                case "UpdateExpensesAndAccounts":
+                    //AccountsAdapter adapter0 = new AccountsAdapter();
+                    //DataAccounts.recyclerView.setAdapter(adapter0);
+                    DataAccounts.adapter.notifyDataSetChanged();
+                    //TypesOfExpensesAdapter adapter1 = new TypesOfExpensesAdapter();
+                    //DataTypesExpenses.recyclerView.setAdapter(adapter1);
+                    DataTypesExpenses.adapter.notifyDataSetChanged();
+                    //ExpensesAdapter adapter2 = new ExpensesAdapter();
+                    //DataExpenses.recyclerView.setAdapter(adapter2);
+                    DataExpenses.adapter.notifyDataSetChanged();
+                    break;
             }
         }
         /*DataAccounts.names.add("qwe");

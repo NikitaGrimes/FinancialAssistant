@@ -4,8 +4,9 @@
     <string name="tab_text_2">Счета</string>
     <string name="tab_text_3">Конвертер</string>
     <string name="menu_settings">Настройки</string>
-    <string name="menu_new_type">Добавить новый тип расходов</string>
+    <string name="menu_new_type">Управление типами расходов</string>
     <string name="hello_blank_fragment">Привет из фрагмента!)</string>
+    <string name="enter_new_name_of_type_exp">Введите новое название</string>
     <string-array name="currency">
         <item>BYN</item>
         <item>EU</item>

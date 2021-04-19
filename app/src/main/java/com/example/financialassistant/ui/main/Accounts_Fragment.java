@@ -72,6 +72,7 @@ public class Accounts_Fragment extends Fragment{
         DataAccounts.recyclerView = (RecyclerView) view.findViewById(R.id.list_accounts);
         AccountsAdapter adapter = new AccountsAdapter();
         DataAccounts.recyclerView.setAdapter(adapter);
+        DataAccounts.adapter = adapter;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         DataAccounts.recyclerView.setLayoutManager(layoutManager);
         DataAccounts.recyclerView.addOnItemTouchListener(

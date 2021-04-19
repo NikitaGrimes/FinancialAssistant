@@ -76,6 +76,7 @@ public class Main_Fragment extends Fragment {
         DataTypesExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_types_of_expenses);
         TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
         DataTypesExpenses.recyclerView.setAdapter(adapter);
+        DataTypesExpenses.adapter = adapter;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         DataTypesExpenses.recyclerView.setLayoutManager(layoutManager);
         DataTypesExpenses.recyclerView.addOnItemTouchListener(
@@ -83,10 +84,10 @@ public class Main_Fragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Intent intent = new Intent(getActivity(), AddNewTypeExpensesActivity.class);
-                                intent.putExtra("Action", "Remake");
-                                intent.putExtra("Num", position);
-                                startActivityForResult(intent, 0);
+                                //Intent intent = new Intent(getActivity(), AddNewTypeExpensesActivity.class);
+                                //intent.putExtra("Action", "Remake");
+                                //intent.putExtra("Num", position);
+                                //startActivityForResult(intent, 0);
                             }
 
                             @Override
@@ -98,9 +99,11 @@ public class Main_Fragment extends Fragment {
         DataExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_last_expenses);
         ExpensesAdapter expensesAdapter = new ExpensesAdapter();
         DataExpenses.recyclerView.setAdapter(expensesAdapter);
+        DataExpenses.adapter = expensesAdapter;
         DataDebts.recyclerView = (RecyclerView) view.findViewById(R.id.list_debts);
         DebtsAdapter debtsAdapter = new DebtsAdapter();
         DataDebts.recyclerView.setAdapter(debtsAdapter);
+        DataDebts.adapter = debtsAdapter;
         return view;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.financialassistant.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialassistant.R;
@@ -43,9 +45,11 @@ public class DebtsAdapter  extends RecyclerView.Adapter{
         private final TextView nameView;
         private final TextView valueView;
         private final TextView dateView;
+        Context context;
 
         ViewHolder(View view){
             super(view);
+            context = view.getContext();
             nameView = (TextView) view.findViewById(R.id.name_expense);
             valueView = (TextView) view.findViewById(R.id.value_expense);
             dateView = (TextView) view.findViewById(R.id.date_expense);
@@ -56,7 +60,10 @@ public class DebtsAdapter  extends RecyclerView.Adapter{
             Debts debt = DataDebts.debts.get(position);
             nameView.setText(debt.getName());
             if (debt.isDebtor()) {
-                nameView.setTextColor(R.color.purple_500);
+                nameView.setTextColor(ContextCompat.getColor(context, R.color.red));
+            }
+            else {
+                nameView.setTextColor(ContextCompat.getColor(context, R.color.green));
             }
             double tempD = debt.getValue() / 100.;
             @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);

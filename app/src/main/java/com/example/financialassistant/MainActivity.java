@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.financialassistant.adapters.AccountsAdapter;
+import com.example.financialassistant.adapters.ExpensesAdapter;
 import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataCurrents;
@@ -141,13 +142,13 @@ public class MainActivity extends AppCompatActivity {
         expense = new TypeOfExpenses("ФастФуд", 800, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);
 
-        Expenses expenses = new Expenses("Всякое", 200, "BYN");
+        Expenses expenses = new Expenses("Всякое", -200, "BYN");
         DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("Подарки", 1000, "BYN");
+        expenses = new Expenses("Подарки", -1000, "BYN");
         DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("ФастФуд", 200, "BYN");
+        expenses = new Expenses("ФастФуд", -200, "BYN");
         DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("Всякое", 200, "BYN");
+        expenses = new Expenses("Всякое", -200, "BYN");
         DataExpenses.expenses.add(expenses);
 
         Debts debts = new Debts("Паше", 4000, "BYN", true);
@@ -252,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
                 DataAccounts.recyclerView.setAdapter(adapter0);
                 TypesOfExpensesAdapter adapter1 = new TypesOfExpensesAdapter();
                 DataTypesExpenses.recyclerView.setAdapter(adapter1);
+                ExpensesAdapter adapter2 = new ExpensesAdapter();
+                DataExpenses.recyclerView.setAdapter(adapter2);
             }
         }
         /*DataAccounts.names.add("qwe");

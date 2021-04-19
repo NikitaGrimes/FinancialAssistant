@@ -62,7 +62,7 @@ public class DebtsAdapter  extends RecyclerView.Adapter{
             @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
             valueView.setText(res + " " + debt.getCurrency());
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat("dd.MM.yyyy hh:mm");
+                    new SimpleDateFormat("dd.MM.yyyy");
             dateView.setText(simpleDateFormat.format(debt.getDeadLine().getTime()));
         }
     }

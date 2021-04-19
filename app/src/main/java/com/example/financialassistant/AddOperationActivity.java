@@ -19,9 +19,13 @@ import android.widget.TextView;
 
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataCurrents;
+import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
+import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.TypeOfExpenses;
+
+import java.util.GregorianCalendar;
 
 public class AddOperationActivity extends AppCompatActivity {
 
@@ -259,12 +263,19 @@ public class AddOperationActivity extends AppCompatActivity {
                 if (str.charAt(0) == '.') {
                     str = "0" + str;
                 }
-                value += Double.parseDouble(str) * 100;
+                int addValue = (int) (Double.parseDouble(str) * 100);
+                value += addValue;
                 account.setValue(value);
                 DataAccounts.accounts.set(pos, account);
 
+                Expenses newExp = new Expenses("Доход", addValue, account.getCurrency());
+                DataExpenses.expenses.add(0, newExp);
+                if (DataExpenses.expenses.size() >= 20) {
+                    DataExpenses.expenses.remove(20);
+                }
+
                 Intent answerIntent = new Intent();
-                answerIntent.putExtra("Action", "UpdateAccounts");
+                answerIntent.putExtra("Action", "UpdateExpensesAndAccounts");
                 setResult(RESULT_OK, answerIntent);
                 finish();
             }
@@ -283,14 +294,24 @@ public class AddOperationActivity extends AppCompatActivity {
                 int value = (int) (Double.parseDouble(str) * 100);
                 int valueAcc = account.getValue();
                 int valueExp = expense.getValue();
+                int realValueExp = value;
+                if (!account.getCurrency().equals(expense.getCurrency())){
+                    realValueExp = Convert_Currency(value, account.getCurrency(), expense.getCurrency());
+                }
 
                 if (valueAcc >= value) {
                     valueAcc -= value;
-                    valueExp += value;
+                    valueExp += realValueExp;
                     account.setValue(valueAcc);
                     DataAccounts.accounts.set(posAcc, account);
                     expense.setValue(valueExp);
                     DataTypesExpenses.typesOfExpenses.set(posExp, expense);
+
+                    Expenses newExp = new Expenses(expense.getName(), -1 * value, account.getCurrency());
+                    DataExpenses.expenses.add(0, newExp);
+                    if(DataExpenses.expenses.size() >= 20) {
+                        DataExpenses.expenses.remove(20);
+                    }
 
                     Intent answerIntent = new Intent();
                     answerIntent.putExtra("Action", "UpdateExpensesAndAccounts");
@@ -305,34 +326,76 @@ public class AddOperationActivity extends AppCompatActivity {
             String fromValue = fromValueCur.getText().toString();
             String toValue = toValueCur.getText().toString();
             if (posFrom != posTo && !fromValue.equals("") && !toValue.equals("")) {
+                GregorianCalendar gregorianCalendar = new GregorianCalendar();
+                Expenses fromExp = new Expenses();
+                Expenses toExp = new Expenses();
+                fromExp.setDate(gregorianCalendar);
+                toExp.setDate(gregorianCalendar);
+                fromExp.setName("Перевод");
+                toExp.setName("Перевод");
+
                 Accounts account = DataAccounts.accounts.get(posFrom);
                 int fromAccValue = account.getValue();
 
                 if (fromValue.charAt(0) == '.') {
                     fromValue = "0" + fromValue;
                 }
-                int fromValueDouble = (int)(Double.parseDouble(fromValue) * 100);
-                if (fromAccValue >= fromValueDouble) {
-                    fromAccValue -= fromValueDouble;
+                int fromValueInt = (int)(Double.parseDouble(fromValue) * 100);
+                if (fromAccValue >= fromValueInt) {
+                    fromAccValue -= fromValueInt;
                     account.setValue(fromAccValue);
                     DataAccounts.accounts.set(posFrom, account);
+                    fromExp.setValue(-1 * fromValueInt);
+                    fromExp.setCurrency(account.getCurrency());
+                    DataExpenses.expenses.add(0, fromExp);
+                    if (DataExpenses.expenses.size() >= 20) {
+                        DataExpenses.expenses.remove(20);
+                    }
 
                     if (toValue.charAt(0) == '.') {
                         toValue = "0" + toValue;
                     }
-                    int toValueDouble = (int)(Double.parseDouble(toValue) * 100);
+                    int toValueInt = (int)(Double.parseDouble(toValue) * 100);
                     account = DataAccounts.accounts.get(posTo);
                     int toAccValue = account.getValue();
-                    toAccValue += toValueDouble;
+                    toAccValue += toValueInt;
                     account.setValue(toAccValue);
                     DataAccounts.accounts.set(posTo, account);
+                    toExp.setValue(toValueInt);
+                    toExp.setCurrency(account.getCurrency());
+                    DataExpenses.expenses.add(0, toExp);
+                    if (DataExpenses.expenses.size() >= 20) {
+                        DataExpenses.expenses.remove(20);
+                    }
 
                     Intent answerIntent = new Intent();
-                    answerIntent.putExtra("Action", "UpdateAccounts");
+                    answerIntent.putExtra("Action", "UpdateExpensesAndAccounts");
                     setResult(RESULT_OK, answerIntent);
                     finish();
                 }
             }
         }
+    }
+
+    public int Convert_Currency(int fromCur, String fromCurName, String toCurName) {
+        double tempDouble = fromCur / 100.;
+        if (fromCurName.equals(toCurName)) {
+            return (int) (tempDouble * 100);
+        }
+        double firstValue = 1, secondValue = 1;
+        for (int i = 0, k = 0; k != 2; i++){ //Поиск курсов валют к одной валюте
+            String temp = DataCurrents.currentList.get(i).getCur_Abbreviation();
+            if (fromCurName.equals(temp)){
+                firstValue = DataCurrents.currentList.get(i).getCur_OfficialRate();
+                k++;
+            }
+            else if (toCurName.equals(temp)){
+                secondValue = DataCurrents.currentList.get(i).getCur_OfficialRate();
+                k++;
+            }
+        }
+        double rate = secondValue / firstValue; //Расчет курса первой валюты ко второй
+        double resRate = tempDouble * rate;
+        return (int) (resRate * 100);
     }
 }

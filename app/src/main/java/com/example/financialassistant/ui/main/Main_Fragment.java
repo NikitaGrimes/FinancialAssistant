@@ -1,9 +1,12 @@
 package com.example.financialassistant.ui.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.financialassistant.AddNewTypeExpensesActivity;
+import com.example.financialassistant.MainActivity;
 import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.DebtsAdapter;
 import com.example.financialassistant.adapters.ExpensesAdapter;
@@ -19,7 +23,12 @@ import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
 import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
+import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,6 +113,37 @@ public class Main_Fragment extends Fragment {
         DebtsAdapter debtsAdapter = new DebtsAdapter();
         DataDebts.recyclerView.setAdapter(debtsAdapter);
         DataDebts.adapter = debtsAdapter;
+        ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NotNull RecyclerView recyclerView,
+                                  @NotNull RecyclerView.ViewHolder viewHolder,
+                                  @NotNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (!DataExpenses.expenses.isEmpty()) {
+                    Expenses expense = DataExpenses.expenses.get(viewHolder.getAdapterPosition());
+                    new AlertDialog.Builder(view.getContext())
+                            .setMessage("Удалить запись?")
+                            .setPositiveButton("Удалить", (dialogInterface, i) -> {
+                            DataExpenses.expenses.remove(expense);
+                            DataExpenses.adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                            })
+                            .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Objects.requireNonNull(DataExpenses.adapter).notifyItemChanged(viewHolder.getAdapterPosition());
+                                }
+                            })
+                            .setCancelable(false)
+                            .create().show();
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(DataExpenses.recyclerView);
         return view;
     }
 }

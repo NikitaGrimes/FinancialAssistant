@@ -46,6 +46,12 @@ public class AddOperationActivity extends AppCompatActivity {
     TextView fromCur;
     TextView toCur;
 
+    private final int OPERATION_INCOME = 1;
+    private final int OPERATION_OUTCOME = 2;
+    private final int OPERATION_EXCHANGE = 3;
+
+    Expenses oldExp;
+
     int mode;
 
     @Override
@@ -194,6 +200,15 @@ public class AddOperationActivity extends AppCompatActivity {
 
             }
         });
+
+        Bundle arguments = getIntent().getExtras();
+        try {
+            int pos = Integer.parseInt(arguments.get("Num").toString());
+            oldExp = DataExpenses.expenses.get(pos);
+        }
+        catch (Exception e) {
+            oldExp = null;
+        }
     }
 
     public String trueRate(String fromCur, String toCur) {
@@ -231,7 +246,7 @@ public class AddOperationActivity extends AppCompatActivity {
         inComeCL.setVisibility(View.VISIBLE);
         outComeCL.setVisibility(View.GONE);
         exChangeCL.setVisibility(View.GONE);
-        mode = 1;
+        mode = OPERATION_INCOME;
     }
 
     public void onClickOutCome(View view)
@@ -239,7 +254,7 @@ public class AddOperationActivity extends AppCompatActivity {
         inComeCL.setVisibility(View.GONE);
         outComeCL.setVisibility(View.VISIBLE);
         exChangeCL.setVisibility(View.GONE);
-        mode = 2;
+        mode = OPERATION_OUTCOME;
     }
 
     public void onClickExChange(View view)
@@ -247,13 +262,13 @@ public class AddOperationActivity extends AppCompatActivity {
         inComeCL.setVisibility(View.GONE);
         outComeCL.setVisibility(View.GONE);
         exChangeCL.setVisibility(View.VISIBLE);
-        mode = 3;
+        mode = OPERATION_EXCHANGE;
     }
 
     @SuppressLint("DefaultLocale")
     public void onClickSaveOperation(View view)
     {
-        if (mode == 1) {
+        if (mode == OPERATION_INCOME) {
             int pos = inComeSpinnerAcc.getSelectedItemPosition();
             Accounts account = DataAccounts.accounts.get(pos);
             int value = account.getValue();
@@ -268,7 +283,7 @@ public class AddOperationActivity extends AppCompatActivity {
                 account.setValue(value);
                 DataAccounts.accounts.set(pos, account);
 
-                Expenses newExp = new Expenses("Доход", addValue, account.getCurrency());
+                Expenses newExp = new Expenses("Доход", addValue, account.getCurrency(), account.getName());
                 DataExpenses.expenses.add(0, newExp);
                 if (DataExpenses.expenses.size() >= 20) {
                     DataExpenses.expenses.remove(20);
@@ -280,7 +295,7 @@ public class AddOperationActivity extends AppCompatActivity {
                 finish();
             }
         }
-        else if (mode == 2) {
+        else if (mode == OPERATION_OUTCOME) {
             int posAcc = costSpinnerAcc.getSelectedItemPosition();
             int posExp = costSpinnerExpense.getSelectedItemPosition();
             EditText editText = (EditText) findViewById(R.id.costsEnterValue);
@@ -307,7 +322,8 @@ public class AddOperationActivity extends AppCompatActivity {
                     expense.setValue(valueExp);
                     DataTypesExpenses.typesOfExpenses.set(posExp, expense);
 
-                    Expenses newExp = new Expenses(expense.getName(), -1 * value, account.getCurrency());
+                    Expenses newExp = new Expenses(expense.getName(), -1 * value, account.getCurrency(), account.getName());
+                    newExp.setRealValue(realValueExp);
                     DataExpenses.expenses.add(0, newExp);
                     if(DataExpenses.expenses.size() >= 20) {
                         DataExpenses.expenses.remove(20);
@@ -320,7 +336,7 @@ public class AddOperationActivity extends AppCompatActivity {
                 }
             }
         }
-        else if (mode == 3) {
+        else if (mode == OPERATION_EXCHANGE) {
             int posFrom = fromSpinnerAcc.getSelectedItemPosition();
             int posTo = toSpinnerAcc.getSelectedItemPosition();
             String fromValue = fromValueCur.getText().toString();
@@ -347,10 +363,7 @@ public class AddOperationActivity extends AppCompatActivity {
                     DataAccounts.accounts.set(posFrom, account);
                     fromExp.setValue(-1 * fromValueInt);
                     fromExp.setCurrency(account.getCurrency());
-                    DataExpenses.expenses.add(0, fromExp);
-                    if (DataExpenses.expenses.size() >= 20) {
-                        DataExpenses.expenses.remove(20);
-                    }
+                    String nameFromAcc = account.getName();
 
                     if (toValue.charAt(0) == '.') {
                         toValue = "0" + toValue;
@@ -363,6 +376,15 @@ public class AddOperationActivity extends AppCompatActivity {
                     DataAccounts.accounts.set(posTo, account);
                     toExp.setValue(toValueInt);
                     toExp.setCurrency(account.getCurrency());
+                    String nameToAcc = account.getName();
+
+                    fromExp.setFromAcc(nameFromAcc);
+                    toExp.setFromAcc(nameToAcc);
+
+                    DataExpenses.expenses.add(0, fromExp);
+                    if (DataExpenses.expenses.size() >= 20) {
+                        DataExpenses.expenses.remove(20);
+                    }
                     DataExpenses.expenses.add(0, toExp);
                     if (DataExpenses.expenses.size() >= 20) {
                         DataExpenses.expenses.remove(20);

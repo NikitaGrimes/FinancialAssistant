@@ -13,18 +13,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.financialassistant.AddNewTypeExpensesActivity;
+import com.example.financialassistant.AddOperationActivity;
 import com.example.financialassistant.MainActivity;
 import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.DebtsAdapter;
 import com.example.financialassistant.adapters.ExpensesAdapter;
 import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
+import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
+import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
+import com.example.financialassistant.models.TypeOfExpenses;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -109,6 +114,22 @@ public class Main_Fragment extends Fragment {
         ExpensesAdapter expensesAdapter = new ExpensesAdapter();
         DataExpenses.recyclerView.setAdapter(expensesAdapter);
         DataExpenses.adapter = expensesAdapter;
+        DataExpenses.recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(view.getContext(), DataTypesExpenses.recyclerView ,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Intent intent = new Intent(getActivity(), AddOperationActivity.class);
+                                intent.putExtra("Num", position);
+                                startActivityForResult(intent, 0);
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+                        })
+        );
         DataDebts.recyclerView = (RecyclerView) view.findViewById(R.id.list_debts);
         DebtsAdapter debtsAdapter = new DebtsAdapter();
         DataDebts.recyclerView.setAdapter(debtsAdapter);
@@ -130,6 +151,22 @@ public class Main_Fragment extends Fragment {
                             .setPositiveButton("Удалить", (dialogInterface, i) -> {
                             DataExpenses.expenses.remove(expense);
                             DataExpenses.adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                            if (expense.getValue() < 0) {
+                                for (TypeOfExpenses typeOfExpense : DataTypesExpenses.typesOfExpenses) {
+                                    if (typeOfExpense.getName().equals(expense.getName())) {
+                                        typeOfExpense.setValue(typeOfExpense.getValue() + expense.getRealValue());
+                                        break;
+                                    }
+                                }
+                                DataTypesExpenses.adapter.notifyDataSetChanged();
+                            }
+                            for (Accounts account : DataAccounts.accounts) {
+                                if (account.getName().equals(expense.getFromAcc())) {
+                                    account.setValue(account.getValue() - expense.getValue());
+                                    break;
+                                }
+                            }
+                            DataAccounts.adapter.notifyDataSetChanged();
                             })
                             .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
                                 @Override

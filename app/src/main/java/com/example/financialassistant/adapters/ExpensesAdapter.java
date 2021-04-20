@@ -62,13 +62,15 @@ public class ExpensesAdapter extends RecyclerView.Adapter{
             if (tempD < 0) {
                 nameView.setTextColor(ContextCompat.getColor(context, R.color.red));
                 valueView.setTextColor(ContextCompat.getColor(context, R.color.red));
+                @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
+                valueView.setText(res + " " + expense.getCurrency() + " <--- " + expense.getFromAcc());
             }
             else {
                 nameView.setTextColor(ContextCompat.getColor(context, R.color.green));
                 valueView.setTextColor(ContextCompat.getColor(context, R.color.green));
+                @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
+                valueView.setText(res + " " + expense.getCurrency() + " ---> " + expense.getFromAcc());
             }
-            @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
-            valueView.setText(res + " " + expense.getCurrency());
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
                     new SimpleDateFormat("dd.MM.yyyy hh:mm");
             dateView.setText(simpleDateFormat.format(expense.getDate().getTime()));

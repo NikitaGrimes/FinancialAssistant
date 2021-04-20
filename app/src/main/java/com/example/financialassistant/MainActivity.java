@@ -142,13 +142,13 @@ public class MainActivity extends AppCompatActivity {
         expense = new TypeOfExpenses("ФастФуд", 800, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);
 
-        Expenses expenses = new Expenses("Всякое", -200, "BYN");
+        Expenses expenses = new Expenses("Всякое", -200, "BYN", "Family");
         DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("Подарки", -1000, "BYN");
+        expenses = new Expenses("Подарки", -1000, "BYN", "Family");
         DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("ФастФуд", -200, "BYN");
+        expenses = new Expenses("ФастФуд", -200, "BYN", "Family");
         DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("Всякое", -200, "BYN");
+        expenses = new Expenses("Всякое", -200, "BYN", "Family");
         DataExpenses.expenses.add(expenses);
 
         Debts debts = new Debts("Паше", 4000, "BYN", true);

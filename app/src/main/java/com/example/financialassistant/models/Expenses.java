@@ -8,25 +8,29 @@ public class Expenses {
 
     private String name;
     private int value;
+    private int realValue;
     private String currency;
+    private String fromAcc;
     private GregorianCalendar date;
 
     public Expenses(){
         date = new GregorianCalendar();
     }
 
-    public Expenses(String _name, int _value, String _currency){
+    public Expenses(String _name, int _value, String _currency, String _fromAcc){
         this.name = _name;
-        this.value = _value;
+        this.realValue = this.value = _value;
         this.currency = _currency;
         this.date = new GregorianCalendar();
+        this.fromAcc = _fromAcc;
     }
 
-    public Expenses(String _name, int _value, String _currency, GregorianCalendar _date){
+    public Expenses(String _name, int _value, String _currency, GregorianCalendar _date, String _fromAcc){
         this.name = _name;
-        this.value = _value;
+        this.realValue = this.value = _value;
         this.currency = _currency;
         this.date = _date;
+        this.fromAcc = _fromAcc;
     }
 
     public String getName() {
@@ -61,4 +65,19 @@ public class Expenses {
         this.date = date;
     }
 
+    public String getFromAcc() {
+        return fromAcc;
+    }
+
+    public void setFromAcc(String fromAcc) {
+        this.fromAcc = fromAcc;
+    }
+
+    public int getRealValue() {
+        return realValue;
+    }
+
+    public void setRealValue(int realValue) {
+        this.realValue = realValue;
+    }
 }

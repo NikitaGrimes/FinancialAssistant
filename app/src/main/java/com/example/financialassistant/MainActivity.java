@@ -12,11 +12,14 @@ import android.os.Bundle;
 import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.adapters.ExpensesAdapter;
 import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
+import com.example.financialassistant.dao.CurrentsDao;
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
+import com.example.financialassistant.database.DataBase;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Currents;
 import com.example.financialassistant.models.Debts;
@@ -25,6 +28,7 @@ import com.example.financialassistant.models.TypeOfExpenses;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -48,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,73 +64,94 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        DataBaseApp.dataBase = Room.databaseBuilder(getApplicationContext(), DataBase.class, "FinancialDB").allowMainThreadQueries().build();
         //Парсинг последних валют
-        AssetManager assetManager = getAssets();
-        InputStream inputStream = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            inputStream = assetManager.open("selectedСurrencies.json");
-            InputStreamReader isr = new InputStreamReader(inputStream);
-            int data = isr.read();
-            while (data != -1) {
-                stringBuilder.append((char) data);
-                data = isr.read();
-            }
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (DataBaseApp.dataBase.currentsDao().getById(1) != null && !isOnline(this)) {
+            Toast.makeText(this, "Отсутствует подключение к Интернету", Toast.LENGTH_LONG).show();
+            List<Currents> currentsList = DataBaseApp.dataBase.currentsDao().getAll();
+            DataCurrents.currentList.addAll(currentsList);
+            DataCurrents.fromCurrency = "USD";
+            DataCurrents.toCurrency = "BYN";
         }
-        String res = stringBuilder.toString();
-        try {
-            JSONObject jsonObject = new JSONObject(res);
-            JSONObject firstObject = jsonObject.getJSONObject("from");
-            DataCurrents.fromCurrency = firstObject.getString("currency");
-            JSONObject secondObject = jsonObject.getJSONObject("to");
-            DataCurrents.toCurrency = secondObject.getString("currency");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        else if (isOnline(this)) {
+            GetData getData = new GetData();
+            getData.execute();
+            DataCurrents.fromCurrency = "USD";
+            DataCurrents.toCurrency = "BYN";
         }
-        //Парсинг курса валют
-        AssetManager am = getAssets();
-        InputStream is = null;
-        StringBuilder s = new StringBuilder();
-        try {
-            is = am.open("currents.json");
-            InputStreamReader isr = new InputStreamReader(is);
-            int data = isr.read();
-            while (data != -1) {
-                s.append((char) data);
-                data = isr.read();
+        else {
+            Toast.makeText(this, "Отсутствует подключение к Интернету", Toast.LENGTH_LONG).show();
+            AssetManager assetManager = getAssets();
+            InputStream inputStream = null;
+            StringBuilder stringBuilder = new StringBuilder();
+            try {
+                inputStream = assetManager.open("selectedСurrencies.json");
+                InputStreamReader isr = new InputStreamReader(inputStream);
+                int data = isr.read();
+                while (data != -1) {
+                    stringBuilder.append((char) data);
+                    data = isr.read();
+                }
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        res = s.toString();
-        try {
-            JSONObject jsonObjects = new JSONObject(res);
-            Iterator<String> keys = jsonObjects.keys();
-            DataCurrents.currentList.clear();
-            Currents uSCurrent = new Currents();
-            uSCurrent.setCur_ID("1");
-            uSCurrent.setCur_Abbreviation("USD");
-            uSCurrent.setCur_Name("U.S. Dollar");
-            uSCurrent.setCur_OfficialRate(1);
-            uSCurrent.setLastDate(new Date());
-            DataCurrents.currentList.add(uSCurrent);
-            while(keys.hasNext()) {
-                String key = keys.next();
-                JSONObject jsonObject = jsonObjects.getJSONObject(key);
-                Currents current = new Currents();
-                current.setCur_ID(jsonObject.getString("numericCode"));
-                current.setCur_Abbreviation(jsonObject.getString("alphaCode"));
-                current.setCur_Name(jsonObject.getString("name"));
-                current.setCur_OfficialRate(jsonObject.getDouble("rate"));
-                current.setLastDate(new Date());
-                DataCurrents.currentList.add(current);
+            String res = stringBuilder.toString();
+            try {
+                JSONObject jsonObject = new JSONObject(res);
+                JSONObject firstObject = jsonObject.getJSONObject("from");
+                DataCurrents.fromCurrency = firstObject.getString("currency");
+                JSONObject secondObject = jsonObject.getJSONObject("to");
+                DataCurrents.toCurrency = secondObject.getString("currency");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            //Парсинг курса валют
+            AssetManager am = getAssets();
+            InputStream is = null;
+            StringBuilder s = new StringBuilder();
+            try {
+                is = am.open("currents.json");
+                InputStreamReader isr = new InputStreamReader(is);
+                int data = isr.read();
+                while (data != -1) {
+                    s.append((char) data);
+                    data = isr.read();
+                }
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            res = s.toString();
+            try {
+                CurrentsDao currentsDao = DataBaseApp.dataBase.currentsDao();
+                currentsDao.deleteAll();
+                JSONObject jsonObjects = new JSONObject(res);
+                Iterator<String> keys = jsonObjects.keys();
+                DataCurrents.currentList.clear();
+                Currents uSCurrent = new Currents();
+                uSCurrent.setCur_ID("1");
+                uSCurrent.setCur_Abbreviation("USD");
+                uSCurrent.setCur_Name("U.S. Dollar");
+                uSCurrent.setCur_OfficialRate(1);
+                uSCurrent.setLastDate(new Date());
+                DataCurrents.currentList.add(uSCurrent);
+                currentsDao.insert(uSCurrent);
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    JSONObject jsonObject = jsonObjects.getJSONObject(key);
+                    Currents current = new Currents();
+                    current.setCur_ID(jsonObject.getString("numericCode"));
+                    current.setCur_Abbreviation(jsonObject.getString("alphaCode"));
+                    current.setCur_Name(jsonObject.getString("name"));
+                    current.setCur_OfficialRate(jsonObject.getDouble("rate"));
+                    current.setLastDate(new Date());
+                    DataCurrents.currentList.add(current);
+                    currentsDao.insert(current);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         //Ввод начальных значений
         Accounts account = new Accounts("Family", "Карта", 3500, "BYN");
@@ -164,13 +190,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        if (isOnline(this)) {
-            GetData getData = new GetData();
-            getData.execute();
-        }
-        else {
-            Toast.makeText(this, "Отсутствует подключение к Интернету", Toast.LENGTH_LONG).show();
-        }
 
         /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -341,6 +360,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             try {
+                CurrentsDao currentsDao = DataBaseApp.dataBase.currentsDao();
+                currentsDao.deleteAll();
                 JSONObject jsonObjects = new JSONObject(s);
                 Iterator<String> keys = jsonObjects.keys();
                 DataCurrents.currentList.clear();
@@ -351,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
                 uSCurrent.setCur_OfficialRate(1);
                 uSCurrent.setLastDate(new Date());
                 DataCurrents.currentList.add(uSCurrent);
+                currentsDao.insert(uSCurrent);
                 while(keys.hasNext()) {
                     String key = keys.next();
                     JSONObject jsonObject = jsonObjects.getJSONObject(key);
@@ -361,6 +383,7 @@ public class MainActivity extends AppCompatActivity {
                     current.setCur_OfficialRate(jsonObject.getDouble("rate"));
                     current.setLastDate(new Date());
                     DataCurrents.currentList.add(current);
+                    currentsDao.insert(current);
                 }
                 Toast.makeText(getApplicationContext(), "Курс валют обновлен",
                         Toast.LENGTH_LONG).show();

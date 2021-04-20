@@ -92,6 +92,7 @@ public class Converter_Fragment extends Fragment implements View.OnLongClickList
         return rootView;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
         super.onResume();
@@ -106,7 +107,7 @@ public class Converter_Fragment extends Fragment implements View.OnLongClickList
         if (fromConvert != null && fromConvert.getText() == "") {
             enteredValue = "0";
             fromConvert.setText(enteredValue);
-            toConvert.setText("0");
+            toConvert.setText("0.00");
         }
     }
 
@@ -118,7 +119,7 @@ public class Converter_Fragment extends Fragment implements View.OnLongClickList
             return "1";
         }
         double firstValue = 1, secondValue = 1;
-        for (int i = 0, k = 0; k != 2; i++){ //Поиск курсов валют к одной валюте
+        for (int i = 0, k = 0; k != 2 && i < DataCurrents.currentList.size(); i++){ //Поиск курсов валют к одной валюте
             String temp = DataCurrents.currentList.get(i).getCur_Abbreviation();
             if (fromCurName.equals(temp)){
                 firstValue = DataCurrents.currentList.get(i).getCur_OfficialRate();

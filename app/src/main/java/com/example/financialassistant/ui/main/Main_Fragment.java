@@ -168,12 +168,7 @@ public class Main_Fragment extends Fragment {
                             }
                             DataAccounts.adapter.notifyDataSetChanged();
                             })
-                            .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Objects.requireNonNull(DataExpenses.adapter).notifyItemChanged(viewHolder.getAdapterPosition());
-                                }
-                            })
+                            .setNegativeButton("Отмена", (dialogInterface, i) -> Objects.requireNonNull(DataExpenses.adapter).notifyItemChanged(viewHolder.getAdapterPosition()))
                             .setCancelable(false)
                             .create().show();
                 }

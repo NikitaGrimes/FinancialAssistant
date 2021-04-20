@@ -1,11 +1,21 @@
 package com.example.financialassistant.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
-
+@Entity
 public class Currents {
-    private String Cur_ID;
+
+    @PrimaryKey(autoGenerate = true)
+    private int Cur_ID;
+
+
     private Date LastDate;
     private String Cur_Abbreviation;
     private String Cur_Name;
@@ -16,19 +26,23 @@ public class Currents {
     }
 
     public Currents(String cur_ID, Date date, String cur_Abbreviation, String cur_Name, double cur_OfficialRate){
-        Cur_ID = cur_ID;
+        Cur_ID = Integer.parseInt(cur_ID);
         LastDate = date;
         Cur_Abbreviation = cur_Abbreviation;
         Cur_Name = cur_Name;
         Cur_OfficialRate = cur_OfficialRate;
     }
 
-    public String getCur_ID(){
+    public int getCur_ID(){
         return Cur_ID;
     }
 
-    public void setCur_ID(String cur_ID) {
+    public void setCur_ID(int cur_ID) {
         Cur_ID = cur_ID;
+    }
+
+    public void setCur_ID(String cur_ID) {
+        Cur_ID = Integer.parseInt(cur_ID);
     }
 
     public Date getLastDate(){

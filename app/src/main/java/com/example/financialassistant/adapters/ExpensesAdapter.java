@@ -15,9 +15,7 @@ import com.example.financialassistant.R;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.models.Expenses;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class ExpensesAdapter extends RecyclerView.Adapter{
 
@@ -63,17 +61,17 @@ public class ExpensesAdapter extends RecyclerView.Adapter{
                 nameView.setTextColor(ContextCompat.getColor(context, R.color.red));
                 valueView.setTextColor(ContextCompat.getColor(context, R.color.red));
                 @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
-                valueView.setText(res + " " + expense.getCurrency() + " <--- " + expense.getFromAcc());
+                valueView.setText(res + " " + expense.getCur_Abbreviation() + " <--- " + expense.getName_acc());
             }
             else {
                 nameView.setTextColor(ContextCompat.getColor(context, R.color.green));
                 valueView.setTextColor(ContextCompat.getColor(context, R.color.green));
                 @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
-                valueView.setText(res + " " + expense.getCurrency() + " ---> " + expense.getFromAcc());
+                valueView.setText(res + " " + expense.getCur_Abbreviation() + " ---> " + expense.getName_acc());
             }
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
                     new SimpleDateFormat("dd.MM.yyyy hh:mm");
-            dateView.setText(simpleDateFormat.format(expense.getDate().getTime()));
+            dateView.setText(simpleDateFormat.format(expense.getDate_operation().getTime()));
         }
     }
 }

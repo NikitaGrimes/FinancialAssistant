@@ -1,28 +1,38 @@
 package com.example.financialassistant.models;
 
 public class Accounts {
-    private String name;
+
+    public long id;
+    private String name_acc;
     private String type;
     private int value;
-    private String currency;
+    private String Cur_Abbreviation;
 
     public Accounts () {
 
     }
 
     public Accounts (String _name, String _type, int _value, String _currency) {
-        this.name = _name;
+        this.name_acc = _name;
         this.type = _type;
         this.value = _value;
-        this.currency = _currency;
+        this.Cur_Abbreviation = _currency;
     }
 
-    public String getName() {
-        return name;
+    public Accounts (int _id, String _name, String _type, int _value, String _currency) {
+        this.id = _id;
+        this.name_acc = _name;
+        this.type = _type;
+        this.value = _value;
+        this.Cur_Abbreviation = _currency;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName_acc() {
+        return name_acc;
+    }
+
+    public void setName_acc(String name_acc) {
+        this.name_acc = name_acc;
     }
 
     public String getType() {
@@ -41,11 +51,11 @@ public class Accounts {
         this.value = value;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getCur_Abbreviation() {
+        return Cur_Abbreviation;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setCur_Abbreviation(String cur_Abbreviation) {
+        this.Cur_Abbreviation = cur_Abbreviation;
     }
 }

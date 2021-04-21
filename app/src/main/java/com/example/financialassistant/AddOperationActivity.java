@@ -86,7 +86,7 @@ public class AddOperationActivity extends AppCompatActivity {
         String[] dataExp = new String[DataTypesExpenses.typesOfExpenses.size()];
         int i = 0;
         for (Accounts account : DataAccounts.accounts) {
-            dataAcc[i] = account.getName();
+            dataAcc[i] = account.getName_acc();
             i++;
         }
 
@@ -108,12 +108,12 @@ public class AddOperationActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, dataExp);
         adapterExp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         costSpinnerExpense.setAdapter(adapterExp);
-        fromCur.setText(DataAccounts.accounts.get(0).getCurrency());
-        toCur.setText(DataAccounts.accounts.get(0).getCurrency());
+        fromCur.setText(DataAccounts.accounts.get(0).getCur_Abbreviation());
+        toCur.setText(DataAccounts.accounts.get(0).getCur_Abbreviation());
         fromSpinnerAcc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View itemSelected,
                                        int selectedItemPosition, long selectedId) {
-                fromCur.setText(DataAccounts.accounts.get(selectedItemPosition).getCurrency());
+                fromCur.setText(DataAccounts.accounts.get(selectedItemPosition).getCur_Abbreviation());
                 rateEditText.setText(trueRate(fromCur.getText().toString(), toCur.getText().toString()));
                 String str = fromValueCur.getText().toString();
                 if(str.length() > 0) {
@@ -137,7 +137,7 @@ public class AddOperationActivity extends AppCompatActivity {
         toSpinnerAcc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View itemSelected,
                                        int selectedItemPosition, long selectedId) {
-                toCur.setText(DataAccounts.accounts.get(selectedItemPosition).getCurrency());
+                toCur.setText(DataAccounts.accounts.get(selectedItemPosition).getCur_Abbreviation());
                 rateEditText.setText(trueRate(fromCur.getText().toString(), toCur.getText().toString()));
                 String str = fromValueCur.getText().toString();
                 if(str.length() > 0) {
@@ -283,7 +283,7 @@ public class AddOperationActivity extends AppCompatActivity {
                 account.setValue(value);
                 DataAccounts.accounts.set(pos, account);
 
-                Expenses newExp = new Expenses("Доход", addValue, account.getCurrency(), account.getName());
+                Expenses newExp = new Expenses("Доход", addValue, account.getCur_Abbreviation(), account.getName_acc());
                 DataExpenses.expenses.add(0, newExp);
                 if (DataExpenses.expenses.size() >= 20) {
                     DataExpenses.expenses.remove(20);
@@ -310,8 +310,8 @@ public class AddOperationActivity extends AppCompatActivity {
                 int valueAcc = account.getValue();
                 int valueExp = expense.getValue();
                 int realValueExp = value;
-                if (!account.getCurrency().equals(expense.getCurrency())){
-                    realValueExp = Convert_Currency(value, account.getCurrency(), expense.getCurrency());
+                if (!account.getCur_Abbreviation().equals(expense.getCur_Abbreviation())){
+                    realValueExp = Convert_Currency(value, account.getCur_Abbreviation(), expense.getCur_Abbreviation());
                 }
 
                 if (valueAcc >= value) {
@@ -322,7 +322,7 @@ public class AddOperationActivity extends AppCompatActivity {
                     expense.setValue(valueExp);
                     DataTypesExpenses.typesOfExpenses.set(posExp, expense);
 
-                    Expenses newExp = new Expenses(expense.getName(), -1 * value, account.getCurrency(), account.getName());
+                    Expenses newExp = new Expenses(expense.getName(), -1 * value, account.getCur_Abbreviation(), account.getName_acc());
                     newExp.setRealValue(realValueExp);
                     DataExpenses.expenses.add(0, newExp);
                     if(DataExpenses.expenses.size() >= 20) {
@@ -345,8 +345,8 @@ public class AddOperationActivity extends AppCompatActivity {
                 GregorianCalendar gregorianCalendar = new GregorianCalendar();
                 Expenses fromExp = new Expenses();
                 Expenses toExp = new Expenses();
-                fromExp.setDate(gregorianCalendar);
-                toExp.setDate(gregorianCalendar);
+                fromExp.setDate_operation(gregorianCalendar);
+                toExp.setDate_operation(gregorianCalendar);
                 fromExp.setName("Перевод");
                 toExp.setName("Перевод");
 
@@ -362,8 +362,8 @@ public class AddOperationActivity extends AppCompatActivity {
                     account.setValue(fromAccValue);
                     DataAccounts.accounts.set(posFrom, account);
                     fromExp.setValue(-1 * fromValueInt);
-                    fromExp.setCurrency(account.getCurrency());
-                    String nameFromAcc = account.getName();
+                    fromExp.setCur_Abbreviation(account.getCur_Abbreviation());
+                    String nameFromAcc = account.getName_acc();
 
                     if (toValue.charAt(0) == '.') {
                         toValue = "0" + toValue;
@@ -375,11 +375,11 @@ public class AddOperationActivity extends AppCompatActivity {
                     account.setValue(toAccValue);
                     DataAccounts.accounts.set(posTo, account);
                     toExp.setValue(toValueInt);
-                    toExp.setCurrency(account.getCurrency());
-                    String nameToAcc = account.getName();
+                    toExp.setCur_Abbreviation(account.getCur_Abbreviation());
+                    String nameToAcc = account.getName_acc();
 
-                    fromExp.setFromAcc(nameFromAcc);
-                    toExp.setFromAcc(nameToAcc);
+                    fromExp.setName_acc(nameFromAcc);
+                    toExp.setName_acc(nameToAcc);
 
                     DataExpenses.expenses.add(0, fromExp);
                     if (DataExpenses.expenses.size() >= 20) {

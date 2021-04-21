@@ -22,6 +22,9 @@ public interface CurrentsDao {
     @Query("DELETE FROM currents")
     void deleteAll();
 
+    @Query("SELECT * FROM currents WHERE Cur_Abbreviation = :abr")
+    Currents getByAbr(String abr);
+
     @Insert
     void insert(Currents currents);
 

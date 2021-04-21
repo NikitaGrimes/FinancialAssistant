@@ -50,7 +50,7 @@ public class TypesOfExpensesAdapter extends RecyclerView.Adapter{
             nameView.setText(expense.getName());
             double tempD = expense.getValue() / 100.;
             @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
-            valueView.setText(res + " " + expense.getCurrency());
+            valueView.setText(res + " " + expense.getCur_Abbreviation());
         }
     }
 }

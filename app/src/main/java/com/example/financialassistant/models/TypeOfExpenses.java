@@ -1,13 +1,11 @@
 package com.example.financialassistant.models;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 public class TypeOfExpenses {
 
+    public int id;
     private String name;
     private int value;
-    private String currency;
+    private String Cur_Abbreviation;
 
     public TypeOfExpenses() {
 
@@ -16,7 +14,14 @@ public class TypeOfExpenses {
     public TypeOfExpenses(String _name, int _value, String _cur) {
         this.name = _name;
         this.value = _value;
-        this.currency = _cur;
+        this.Cur_Abbreviation = _cur;
+    }
+
+    public TypeOfExpenses(int _id, String _name, int _value, String _cur) {
+        this.id = _id;
+        this.name = _name;
+        this.value = _value;
+        this.Cur_Abbreviation = _cur;
     }
 
     public String getName() {
@@ -35,12 +40,12 @@ public class TypeOfExpenses {
         this.value = value;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getCur_Abbreviation() {
+        return Cur_Abbreviation;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setCur_Abbreviation(String cur_Abbreviation) {
+        this.Cur_Abbreviation = cur_Abbreviation;
     }
 
 }

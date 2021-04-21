@@ -1,6 +1,5 @@
 package com.example.financialassistant.ui.main;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,11 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.financialassistant.AddNewTypeExpensesActivity;
 import com.example.financialassistant.AddOperationActivity;
-import com.example.financialassistant.MainActivity;
 import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.DebtsAdapter;
 import com.example.financialassistant.adapters.ExpensesAdapter;
@@ -161,7 +157,7 @@ public class Main_Fragment extends Fragment {
                                 DataTypesExpenses.adapter.notifyDataSetChanged();
                             }
                             for (Accounts account : DataAccounts.accounts) {
-                                if (account.getName().equals(expense.getFromAcc())) {
+                                if (account.getName_acc().equals(expense.getName_acc())) {
                                     account.setValue(account.getValue() - expense.getValue());
                                     break;
                                 }

@@ -55,9 +55,9 @@ public class AddAccountActivity extends AppCompatActivity {
         else if (action.equals("Remake")) {
             num = arguments.getInt("Num");
             Accounts account = DataAccounts.accounts.get(num);
-            name = account.getName();
+            name = account.getName_acc();
             value = account.getValue();
-            currency = account.getCurrency();
+            currency = account.getCur_Abbreviation();
             type = account.getType();
             nameText.setText(name);
             value_String = String.format("%.2f", value/100.);
@@ -134,7 +134,7 @@ public class AddAccountActivity extends AppCompatActivity {
                 if (action.equals("Remake") && i == num)
                     continue;
                 account = DataAccounts.accounts.get(i);
-                if (nameAccount.toLowerCase().equals(account.getName().toLowerCase())) {
+                if (nameAccount.toLowerCase().equals(account.getName_acc().toLowerCase())) {
                     Toast.makeText(this, "Название счета должно быть индивидуальным",
                             Toast.LENGTH_LONG).show();
                     return;

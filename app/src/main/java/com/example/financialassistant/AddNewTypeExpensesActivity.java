@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -73,7 +72,7 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                                     }
                                     TypeOfExpenses oldExpense = DataTypesExpenses.typesOfExpenses.get(num);
                                     TypeOfExpenses newExpense = new TypeOfExpenses(new_name, oldExpense.getValue(),
-                                            oldExpense.getCurrency());
+                                            oldExpense.getCur_Abbreviation());
                                     for (Expenses expenses : DataExpenses.expenses){
                                         if (expenses.getName().equals(oldExpense.getName())) {
                                             expenses.setName(new_name);

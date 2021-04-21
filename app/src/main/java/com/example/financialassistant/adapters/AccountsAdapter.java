@@ -50,10 +50,10 @@ public class AccountsAdapter extends RecyclerView.Adapter{
         public void bindView(int position){
             Accounts account = DataAccounts.accounts.get(position);
             nameView.setText(account.getType());
-            valueView.setText(account.getName());
+            valueView.setText(account.getName_acc());
             double tempD = account.getValue() / 100.;
             @SuppressLint("DefaultLocale") String resValue = String.format("%.2f", tempD);
-            currencyView.setText(resValue + " " + account.getCurrency());
+            currencyView.setText(resValue + " " + account.getCur_Abbreviation());
         }
     }
 }

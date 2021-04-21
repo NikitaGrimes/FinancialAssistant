@@ -9,26 +9,26 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.example.financialassistant.adapters.AccountsAdapter;
-import com.example.financialassistant.adapters.ExpensesAdapter;
-import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
+import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.CurrentsDao;
+import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.TypeOfAccDao;
+import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
-import com.example.financialassistant.database.DataBase;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Currents;
 import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.TypeOfExpenses;
+import com.example.financialassistant.modelsDB.TypeOfAccDB;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -48,9 +48,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -64,11 +62,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DataBaseApp.dataBase = Room.databaseBuilder(getApplicationContext(), DataBase.class, "FinancialDB").allowMainThreadQueries().build();
+        CurrentsDao currentsDao = DataBaseApp.getInstance(this).currentsDao();
+        TypeOfAccDao typeOfAccDao = DataBaseApp.getInstance(this).typeOfAccDao();
+        AccountsDao accountsDao = DataBaseApp.getInstance(this).accountsDao();
+        ExpDao expDao = DataBaseApp.getInstance(this).expDao();
+        TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
+        if (typeOfAccDao.getAll().isEmpty()) {
+            typeOfAccDao.insert(new TypeOfAccDB("Наличные"));
+            typeOfAccDao.insert(new TypeOfAccDB("Карта"));
+            typeOfAccDao.insert(new TypeOfAccDB("Электронные"));
+        }
         //Парсинг последних валют
-        if (DataBaseApp.dataBase.currentsDao().getById(1) != null && !isOnline(this)) {
+        if (currentsDao.getById(1) != null && !isOnline(this)) {
             Toast.makeText(this, "Отсутствует подключение к Интернету", Toast.LENGTH_LONG).show();
-            List<Currents> currentsList = DataBaseApp.dataBase.currentsDao().getAll();
+            List<Currents> currentsList = currentsDao.getAll();
             DataCurrents.currentList.addAll(currentsList);
             DataCurrents.fromCurrency = "USD";
             DataCurrents.toCurrency = "BYN";
@@ -124,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
             }
             res = s.toString();
             try {
-                CurrentsDao currentsDao = DataBaseApp.dataBase.currentsDao();
                 currentsDao.deleteAll();
                 JSONObject jsonObjects = new JSONObject(res);
                 Iterator<String> keys = jsonObjects.keys();
@@ -154,28 +160,60 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         //Ввод начальных значений
-        Accounts account = new Accounts("Family", "Карта", 3500, "BYN");
+        /*Currents tempCur = currentsDao.getByAbr("BYN");
+        int id_temp_id = tempCur.getCur_ID();
+        accountsDao.insert(new AccountsDB("Family", 3500, id_temp_id, 2));
+        tempCur = currentsDao.getByAbr("EUR");
+        id_temp_id = tempCur.getCur_ID();
+        accountsDao.insert(new AccountsDB("Nata", 2000, id_temp_id, 3));
+        tempCur = currentsDao.getByAbr("USD");
+        id_temp_id = tempCur.getCur_ID();
+        accountsDao.insert(new AccountsDB("MySelf", 3000, id_temp_id, 1));*/
+
+        /*Accounts account = new Accounts("Family", "Карта", 3500, "BYN");
         DataAccounts.accounts.add(account);
         account = new Accounts("Nata", "Электронные", 2000, "EUR");
         DataAccounts.accounts.add(account);
         account = new Accounts("MySelf", "Наличные", 3000, "USD");
-        DataAccounts.accounts.add(account);
+        DataAccounts.accounts.add(account);*/
 
-        TypeOfExpenses expense = new TypeOfExpenses("Всякое", 1000, "BYN");
+        List<Accounts> accountsList = accountsDao.getAll();
+        DataAccounts.accounts.addAll(accountsList);
+
+        /*Currents tempCur = currentsDao.getByAbr("BYN");
+        int id_temp_id = tempCur.getCur_ID();
+        typeOfExpDao.insert(new TypeOfExpDB("Всякое", 1000, id_temp_id));
+        typeOfExpDao.insert(new TypeOfExpDB("Подарки", 1500, id_temp_id));
+        typeOfExpDao.insert(new TypeOfExpDB("ФастФуд", 800, id_temp_id));*/
+
+        /*TypeOfExpenses expense = new TypeOfExpenses("Всякое", 1000, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);
         expense = new TypeOfExpenses("Подарки", 1500, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);
         expense = new TypeOfExpenses("ФастФуд", 800, "BYN");
-        DataTypesExpenses.typesOfExpenses.add(expense);
+        DataTypesExpenses.typesOfExpenses.add(expense);*/
 
-        Expenses expenses = new Expenses("Всякое", -200, "BYN", "Family");
+        List<TypeOfExpenses> typeOfExpenses = typeOfExpDao.getAll();
+        DataTypesExpenses.typesOfExpenses.addAll(typeOfExpenses);
+
+        /*Currents tempCur = currentsDao.getByAbr("BYN");
+        int id_temp_id = tempCur.getCur_ID();
+        expDao.insert(new ExpDB(1, -200, -200, id_temp_id, 1, new GregorianCalendar()));
+        expDao.insert(new ExpDB(2, -1000, -1000, id_temp_id, 1, new GregorianCalendar()));
+        expDao.insert(new ExpDB(3, -200, -200, id_temp_id, 1, new GregorianCalendar()));
+        expDao.insert(new ExpDB(1, -200, -200, id_temp_id, 1, new GregorianCalendar()));*/
+
+        /*Expenses expenses = new Expenses("Всякое", -200, "BYN", "Family");
         DataExpenses.expenses.add(expenses);
         expenses = new Expenses("Подарки", -1000, "BYN", "Family");
         DataExpenses.expenses.add(expenses);
         expenses = new Expenses("ФастФуд", -200, "BYN", "Family");
         DataExpenses.expenses.add(expenses);
         expenses = new Expenses("Всякое", -200, "BYN", "Family");
-        DataExpenses.expenses.add(expenses);
+        DataExpenses.expenses.add(expenses);*/
+
+        List<Expenses> expenses = expDao.getLast20();
+        DataExpenses.expenses.addAll(expenses);
 
         Debts debts = new Debts("Паше", 4000, "BYN", true);
         DataDebts.debts.add(debts);
@@ -360,8 +398,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             try {
-                CurrentsDao currentsDao = DataBaseApp.dataBase.currentsDao();
-                currentsDao.deleteAll();
+                CurrentsDao currentsDao = DataBaseApp.getInstance(getApplicationContext()).currentsDao();
                 JSONObject jsonObjects = new JSONObject(s);
                 Iterator<String> keys = jsonObjects.keys();
                 DataCurrents.currentList.clear();
@@ -372,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
                 uSCurrent.setCur_OfficialRate(1);
                 uSCurrent.setLastDate(new Date());
                 DataCurrents.currentList.add(uSCurrent);
-                currentsDao.insert(uSCurrent);
+                currentsDao.update(uSCurrent);
                 while(keys.hasNext()) {
                     String key = keys.next();
                     JSONObject jsonObject = jsonObjects.getJSONObject(key);
@@ -383,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
                     current.setCur_OfficialRate(jsonObject.getDouble("rate"));
                     current.setLastDate(new Date());
                     DataCurrents.currentList.add(current);
-                    currentsDao.insert(current);
+                    currentsDao.update(current);
                 }
                 Toast.makeText(getApplicationContext(), "Курс валют обновлен",
                         Toast.LENGTH_LONG).show();

@@ -1,36 +1,44 @@
 package com.example.financialassistant.models;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Expenses {
 
+    public int id;
     private String name;
     private int value;
     private int realValue;
-    private String currency;
-    private String fromAcc;
-    private GregorianCalendar date;
+    private String Cur_Abbreviation;
+    private String name_acc;
+    private GregorianCalendar date_operation;
 
     public Expenses(){
-        date = new GregorianCalendar();
+        date_operation = new GregorianCalendar();
     }
 
     public Expenses(String _name, int _value, String _currency, String _fromAcc){
         this.name = _name;
         this.realValue = this.value = _value;
-        this.currency = _currency;
-        this.date = new GregorianCalendar();
-        this.fromAcc = _fromAcc;
+        this.Cur_Abbreviation = _currency;
+        this.date_operation = new GregorianCalendar();
+        this.name_acc = _fromAcc;
     }
 
     public Expenses(String _name, int _value, String _currency, GregorianCalendar _date, String _fromAcc){
         this.name = _name;
         this.realValue = this.value = _value;
-        this.currency = _currency;
-        this.date = _date;
-        this.fromAcc = _fromAcc;
+        this.Cur_Abbreviation = _currency;
+        this.date_operation = _date;
+        this.name_acc = _fromAcc;
+    }
+
+    public Expenses(int _id, String _name, int _value, String _currency, GregorianCalendar _date, String _fromAcc){
+        this.id = _id;
+        this.name = _name;
+        this.realValue = this.value = _value;
+        this.Cur_Abbreviation = _currency;
+        this.date_operation = _date;
+        this.name_acc = _fromAcc;
     }
 
     public String getName() {
@@ -49,28 +57,28 @@ public class Expenses {
         this.value = value;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getCur_Abbreviation() {
+        return Cur_Abbreviation;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setCur_Abbreviation(String cur_Abbreviation) {
+        this.Cur_Abbreviation = cur_Abbreviation;
     }
 
-    public GregorianCalendar getDate() {
-        return date;
+    public GregorianCalendar getDate_operation() {
+        return date_operation;
     }
 
-    public void setDate(GregorianCalendar date) {
-        this.date = date;
+    public void setDate_operation(GregorianCalendar date_operation) {
+        this.date_operation = date_operation;
     }
 
-    public String getFromAcc() {
-        return fromAcc;
+    public String getName_acc() {
+        return name_acc;
     }
 
-    public void setFromAcc(String fromAcc) {
-        this.fromAcc = fromAcc;
+    public void setName_acc(String name_acc) {
+        this.name_acc = name_acc;
     }
 
     public int getRealValue() {

@@ -18,7 +18,11 @@ import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.DebtsAdapter;
 import com.example.financialassistant.adapters.ExpensesAdapter;
 import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
+import com.example.financialassistant.dao.AccountsDao;
+import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
@@ -26,6 +30,8 @@ import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
 import com.example.financialassistant.models.TypeOfExpenses;
+import com.example.financialassistant.modelsDB.AccountsDB;
+import com.example.financialassistant.modelsDB.TypeOfExpDB;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -146,11 +152,17 @@ public class Main_Fragment extends Fragment {
                             .setMessage("Удалить запись?")
                             .setPositiveButton("Удалить", (dialogInterface, i) -> {
                             DataExpenses.expenses.remove(expense);
+                            ExpDao expDao = DataBaseApp.getInstance(view.getContext()).expDao();
+                            expDao.deleteById(expense.id);
                             DataExpenses.adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                             if (expense.getValue() < 0) {
                                 for (TypeOfExpenses typeOfExpense : DataTypesExpenses.typesOfExpenses) {
                                     if (typeOfExpense.getName().equals(expense.getName())) {
                                         typeOfExpense.setValue(typeOfExpense.getValue() + expense.getRealValue());
+                                        TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(view.getContext()).typeOfExpDao();
+                                        TypeOfExpDB typeOfExpDB = typeOfExpDao.getTypeExpDBById(typeOfExpense.id);
+                                        typeOfExpDB.value = typeOfExpense.getValue();
+                                        typeOfExpDao.update(typeOfExpDB);
                                         break;
                                     }
                                 }
@@ -159,6 +171,10 @@ public class Main_Fragment extends Fragment {
                             for (Accounts account : DataAccounts.accounts) {
                                 if (account.getName_acc().equals(expense.getName_acc())) {
                                     account.setValue(account.getValue() - expense.getValue());
+                                    AccountsDao accDao = DataBaseApp.getInstance(view.getContext()).accountsDao();
+                                    AccountsDB accDB = accDao.getAccDBById(account.id);
+                                    accDB.value = account.getValue();
+                                    accDao.update(accDB);
                                     break;
                                 }
                             }

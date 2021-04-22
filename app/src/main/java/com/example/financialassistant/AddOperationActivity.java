@@ -364,8 +364,8 @@ public class AddOperationActivity extends AppCompatActivity {
                     long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
 
                     Expenses newExp = new Expenses(expense.getName(), -1 * value, account.getCur_Abbreviation(), account.getName_acc());
-                    newExp.id = (int) expDao.insert(new ExpDB(exp_type_id, -1 * value, realValueExp, cur_id, acc_id, newExp.getDate_operation()));
-                    newExp.setRealValue(realValueExp);
+                    newExp.id = (int) expDao.insert(new ExpDB(exp_type_id, -1 * value, -1 * realValueExp, cur_id, acc_id, newExp.getDate_operation()));
+                    newExp.setRealValue(-1 * realValueExp);
                     DataExpenses.expenses.add(0, newExp);
                     if(DataExpenses.expenses.size() >= 20) {
                         DataExpenses.expenses.remove(20);

@@ -37,6 +37,9 @@ public interface ExpDao {
     @Query("DELETE FROM expdb")
     void deleteAll();
 
+    @Query("DELETE FROM expdb where id = :id")
+    void deleteById(long id);
+
     @Insert
     long insert(ExpDB expDB);
 

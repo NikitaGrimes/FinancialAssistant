@@ -26,6 +26,7 @@ import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.TypeOfExpenses;
 import com.example.financialassistant.modelsDB.TypeOfAccDB;
+import com.example.financialassistant.modelsDB.TypeOfExpDB;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -71,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
             typeOfAccDao.insert(new TypeOfAccDB("Наличные"));
             typeOfAccDao.insert(new TypeOfAccDB("Карта"));
             typeOfAccDao.insert(new TypeOfAccDB("Электронные"));
+        }
+        if (typeOfExpDao.getTypeExpDBById(-1) == null) {
+            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-1, "Доход", 0, 933);
+            typeOfExpDao.insert(typeOfExpDB);
+        }
+        if (typeOfExpDao.getTypeExpDBById(-2) == null) {
+            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-2,"Перевод", 0, 933);
+            typeOfExpDao.insert(typeOfExpDB);
         }
         //Парсинг последних валют
         if (currentsDao.getById(1) != null && !isOnline(this)) {
@@ -193,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         expense = new TypeOfExpenses("ФастФуд", 800, "BYN");
         DataTypesExpenses.typesOfExpenses.add(expense);*/
 
-        List<TypeOfExpenses> typeOfExpenses = typeOfExpDao.getAll();
+        List<TypeOfExpenses> typeOfExpenses = typeOfExpDao.getAllExpType();
         DataTypesExpenses.typesOfExpenses.addAll(typeOfExpenses);
 
         /*Currents tempCur = currentsDao.getByAbr("BYN");

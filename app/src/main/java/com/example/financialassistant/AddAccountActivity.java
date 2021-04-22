@@ -14,9 +14,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.financialassistant.dao.AccountsDao;
+import com.example.financialassistant.dao.CurrentsDao;
+import com.example.financialassistant.dao.TypeOfAccDao;
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.models.Accounts;
+import com.example.financialassistant.modelsDB.AccountsDB;
 
 public class AddAccountActivity extends AppCompatActivity {
 
@@ -28,6 +33,7 @@ public class AddAccountActivity extends AppCompatActivity {
     String currency;
     String type;
     int num;
+    long oldId;
 
     Button chooseCurrency;
     Button saveAccount;
@@ -55,6 +61,7 @@ public class AddAccountActivity extends AppCompatActivity {
         else if (action.equals("Remake")) {
             num = arguments.getInt("Num");
             Accounts account = DataAccounts.accounts.get(num);
+            oldId = account.id;
             name = account.getName_acc();
             value = account.getValue();
             currency = account.getCur_Abbreviation();
@@ -144,10 +151,26 @@ public class AddAccountActivity extends AppCompatActivity {
             int valueAccInt = (int) (tempDouble * 100);
             account = new Accounts(nameAccount, typeAccount, valueAccInt,
                     chooseCurrency.getText().toString());
-            if (action.equals("Create"))
+            AccountsDao accountsDao = DataBaseApp.getInstance(this).accountsDao();
+            TypeOfAccDao typeOfAccDao = DataBaseApp.getInstance(this).typeOfAccDao();
+            CurrentsDao currentsDao = DataBaseApp.getInstance(this).currentsDao();
+            if (action.equals("Create")) {
+                long type_id = typeOfAccDao.getIdByName(account.getType());
+                long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
+                account.id = accountsDao.insert(new AccountsDB(account.getName_acc(), account.getValue(), cur_id, type_id));
                 DataAccounts.accounts.add(account);
-            else if (action.equals("Remake"))
+            }
+            else if (action.equals("Remake")) {
+                long type_id = typeOfAccDao.getIdByName(account.getType());
+                long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
+                AccountsDB oldAcc = accountsDao.getAccDBById(oldId);
+                oldAcc.value = account.getValue();
+                oldAcc.name_acc = account.getName_acc();
+                oldAcc.type_of_acc_id = type_id;
+                oldAcc.currents_id = cur_id;
+                accountsDao.update(oldAcc);
                 DataAccounts.accounts.set(num, account);
+            }
             Intent answerIntent = new Intent();
             answerIntent.putExtra("Action", "UpdateAccounts");
             setResult(RESULT_OK, answerIntent);

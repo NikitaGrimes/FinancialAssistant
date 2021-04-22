@@ -16,12 +16,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.financialassistant.adapters.NewExpensesTypeAdapter;
+import com.example.financialassistant.dao.CurrentsDao;
+import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
 import com.example.financialassistant.models.TypeOfExpenses;
+import com.example.financialassistant.modelsDB.TypeOfExpDB;
 
 import java.util.ArrayList;
 
@@ -78,6 +82,10 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                                             expenses.setName(new_name);
                                         }
                                     }
+                                    TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(context).typeOfExpDao();
+                                    TypeOfExpDB typeOfExpDB = typeOfExpDao.getTypeExpDBById(oldExpense.id);
+                                    typeOfExpDB.name = new_name;
+                                    typeOfExpDao.update(typeOfExpDB);
                                     DataTypesExpenses.typesOfExpenses.set(num, newExpense);
                                     types.set(num, new_name);
                                     adapter.notifyDataSetChanged();
@@ -121,7 +129,11 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                         return;
                     }
                 }
-                newExpense = new TypeOfExpenses(name, 0, "BYN");
+                TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
+                CurrentsDao currentsDao = DataBaseApp.getInstance(this).currentsDao();
+                long cur_id = currentsDao.getIdByAbr("BYN");
+                int newId = (int)typeOfExpDao.insert(new TypeOfExpDB(name, 0, cur_id));
+                newExpense = new TypeOfExpenses(newId, name, 0, "BYN");
                 DataTypesExpenses.typesOfExpenses.add(newExpense);
             }
             Intent answerIntent = new Intent();

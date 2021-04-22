@@ -22,13 +22,19 @@ public interface AccountsDao {
     @Query("SELECT accountsdb.id, accountsdb.name_acc, typeofaccdb.type, accountsdb.value, currents.Cur_Abbreviation  " +
             "FROM accountsdb inner join currents on accountsdb.currents_id = currents.Cur_ID inner join typeofaccdb " +
             "on accountsdb.type_of_acc_id = typeofaccdb.id where accountsdb.id = :id")
-    Accounts getById(long id);
+    Accounts getAccById(long id);
+
+    @Query("SELECT * FROM accountsdb where accountsdb.id = :id")
+    AccountsDB getAccDBById(long id);
+
+    @Query("SELECT id FROM accountsdb where name_acc = :name")
+    long getIdByName(String name);
 
     @Query("DELETE FROM accountsdb")
     void deleteAll();
 
     @Insert
-    void insert(AccountsDB accountsDB);
+    long insert(AccountsDB accountsDB);
 
     @Update
     void update(AccountsDB accountsDB);

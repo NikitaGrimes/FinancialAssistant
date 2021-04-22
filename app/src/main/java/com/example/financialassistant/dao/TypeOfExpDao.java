@@ -15,11 +15,17 @@ import java.util.List;
 public interface TypeOfExpDao {
 
     @Query("SELECT typeofexpdb.id, typeofexpdb.name, typeofexpdb.value, currents.Cur_Abbreviation " +
-            "FROM typeofexpdb inner join currents on typeofexpdb.currents_id = currents.Cur_ID")
-    List<TypeOfExpenses> getAll();
+            "FROM typeofexpdb inner join currents on typeofexpdb.currents_id = currents.Cur_ID where id != -1 and id != -2")
+    List<TypeOfExpenses> getAllExpType();
+
+    @Query("SELECT * FROM typeofexpdb where id = :id")
+    TypeOfExpDB getTypeExpDBById(long id);
+
+    @Query("SELECT id FROM typeofexpdb where name = :name")
+    long getIdByName(String name);
 
     @Insert
-    void insert(TypeOfExpDB typeOfExpDb);
+    long insert(TypeOfExpDB typeOfExpDb);
 
     @Update
     void update(TypeOfExpDB typeOfExpDb);

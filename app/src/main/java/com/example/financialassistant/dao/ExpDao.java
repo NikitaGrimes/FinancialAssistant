@@ -38,7 +38,7 @@ public interface ExpDao {
     void deleteAll();
 
     @Insert
-    void insert(ExpDB expDB);
+    long insert(ExpDB expDB);
 
     @Update
     void update(ExpDB expDB);

@@ -16,6 +16,9 @@ public interface TypeOfAccDao {
     @Query("SELECT * FROM typeofaccdb")
     List<TypeOfAccDB> getAll();
 
+    @Query("SELECT id FROM typeofaccdb where type = :name")
+    long getIdByName(String name);
+
     @Insert
     void insert(TypeOfAccDB typeOfAccDb);
 

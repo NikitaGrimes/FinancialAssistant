@@ -17,13 +17,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.financialassistant.dao.AccountsDao;
+import com.example.financialassistant.dao.CurrentsDao;
+import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.TypeOfExpenses;
+import com.example.financialassistant.modelsDB.AccountsDB;
+import com.example.financialassistant.modelsDB.ExpDB;
+import com.example.financialassistant.modelsDB.TypeOfExpDB;
 
 import java.util.GregorianCalendar;
 
@@ -281,9 +289,24 @@ public class AddOperationActivity extends AppCompatActivity {
                 int addValue = (int) (Double.parseDouble(str) * 100);
                 value += addValue;
                 account.setValue(value);
+
+                AccountsDao accountsDao = DataBaseApp.getInstance(this).accountsDao();
+                TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
+                CurrentsDao currentsDao = DataBaseApp.getInstance(this).currentsDao();
+
+                AccountsDB accountsDB = accountsDao.getAccDBById(account.id);
+                accountsDB.value = value;
+                accountsDao.update(accountsDB);
                 DataAccounts.accounts.set(pos, account);
 
+                ExpDao expDao = DataBaseApp.getInstance(this).expDao();
+
+                long acc_id = account.id;
+                long exp_type_id = typeOfExpDao.getIdByName("Доход");
+                long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
+
                 Expenses newExp = new Expenses("Доход", addValue, account.getCur_Abbreviation(), account.getName_acc());
+                newExp.id = (int) expDao.insert(new ExpDB(exp_type_id, addValue, addValue, cur_id, acc_id, newExp.getDate_operation()));
                 DataExpenses.expenses.add(0, newExp);
                 if (DataExpenses.expenses.size() >= 20) {
                     DataExpenses.expenses.remove(20);
@@ -318,11 +341,30 @@ public class AddOperationActivity extends AppCompatActivity {
                     valueAcc -= value;
                     valueExp += realValueExp;
                     account.setValue(valueAcc);
+
+                    AccountsDao accountsDao = DataBaseApp.getInstance(this).accountsDao();
+                    TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
+                    CurrentsDao currentsDao = DataBaseApp.getInstance(this).currentsDao();
+
+                    AccountsDB accountsDB = accountsDao.getAccDBById(account.id);
+                    accountsDB.value = valueAcc;
+                    accountsDao.update(accountsDB);
+
                     DataAccounts.accounts.set(posAcc, account);
+
                     expense.setValue(valueExp);
                     DataTypesExpenses.typesOfExpenses.set(posExp, expense);
+                    TypeOfExpDB typeOfExpDB = typeOfExpDao.getTypeExpDBById(expense.id);
+                    typeOfExpDB.value = expense.getValue();
+                    typeOfExpDao.update(typeOfExpDB);
+
+                    ExpDao expDao = DataBaseApp.getInstance(this).expDao();
+                    long acc_id = account.id;
+                    long exp_type_id = expense.id;
+                    long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
 
                     Expenses newExp = new Expenses(expense.getName(), -1 * value, account.getCur_Abbreviation(), account.getName_acc());
+                    newExp.id = (int) expDao.insert(new ExpDB(exp_type_id, -1 * value, realValueExp, cur_id, acc_id, newExp.getDate_operation()));
                     newExp.setRealValue(realValueExp);
                     DataExpenses.expenses.add(0, newExp);
                     if(DataExpenses.expenses.size() >= 20) {
@@ -360,6 +402,17 @@ public class AddOperationActivity extends AppCompatActivity {
                 if (fromAccValue >= fromValueInt) {
                     fromAccValue -= fromValueInt;
                     account.setValue(fromAccValue);
+
+                    AccountsDao accountsDao = DataBaseApp.getInstance(this).accountsDao();
+                    TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
+                    CurrentsDao currentsDao = DataBaseApp.getInstance(this).currentsDao();
+                    long cur_from_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
+                    long acc_from_id = account.id;
+
+                    AccountsDB accountsDB = accountsDao.getAccDBById(account.id);
+                    accountsDB.value = account.getValue();
+                    accountsDao.update(accountsDB);
+
                     DataAccounts.accounts.set(posFrom, account);
                     fromExp.setValue(-1 * fromValueInt);
                     fromExp.setCur_Abbreviation(account.getCur_Abbreviation());
@@ -373,6 +426,13 @@ public class AddOperationActivity extends AppCompatActivity {
                     int toAccValue = account.getValue();
                     toAccValue += toValueInt;
                     account.setValue(toAccValue);
+
+                    accountsDB = accountsDao.getAccDBById(account.id);
+                    accountsDB.value = account.getValue();
+                    accountsDao.update(accountsDB);
+                    long cur_to_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
+                    long acc_to_id = account.id;
+
                     DataAccounts.accounts.set(posTo, account);
                     toExp.setValue(toValueInt);
                     toExp.setCur_Abbreviation(account.getCur_Abbreviation());
@@ -380,6 +440,13 @@ public class AddOperationActivity extends AppCompatActivity {
 
                     fromExp.setName_acc(nameFromAcc);
                     toExp.setName_acc(nameToAcc);
+
+                    ExpDao expDao = DataBaseApp.getInstance(this).expDao();
+                    long exp_type_id = typeOfExpDao.getIdByName("Перевод");
+                    ExpDB expDB = new ExpDB(exp_type_id, toExp.getValue(), toExp.getRealValue(), cur_to_id, acc_to_id, toExp.getDate_operation());
+                    toExp.id = (int) expDao.insert(expDB);
+                    expDB = new ExpDB(exp_type_id, fromExp.getValue(), fromExp.getRealValue(), cur_from_id, acc_from_id, fromExp.getDate_operation());
+                    fromExp.id = (int) expDao.insert(expDB);
 
                     DataExpenses.expenses.add(0, fromExp);
                     if (DataExpenses.expenses.size() >= 20) {

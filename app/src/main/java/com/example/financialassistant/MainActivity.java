@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.CurrentsDao;
+import com.example.financialassistant.dao.DebtsDao;
 import com.example.financialassistant.dao.ExpDao;
 import com.example.financialassistant.dao.TypeOfAccDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
@@ -25,6 +26,7 @@ import com.example.financialassistant.models.Currents;
 import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.TypeOfExpenses;
+import com.example.financialassistant.modelsDB.DebtsDB;
 import com.example.financialassistant.modelsDB.TypeOfAccDB;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
 import com.google.android.material.tabs.TabLayout;
@@ -50,6 +52,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -68,19 +71,6 @@ public class MainActivity extends AppCompatActivity {
         AccountsDao accountsDao = DataBaseApp.getInstance(this).accountsDao();
         ExpDao expDao = DataBaseApp.getInstance(this).expDao();
         TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
-        if (typeOfAccDao.getAll().isEmpty()) {
-            typeOfAccDao.insert(new TypeOfAccDB("Наличные"));
-            typeOfAccDao.insert(new TypeOfAccDB("Карта"));
-            typeOfAccDao.insert(new TypeOfAccDB("Электронные"));
-        }
-        if (typeOfExpDao.getTypeExpDBById(-1) == null) {
-            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-1, "Доход", 0, 933);
-            typeOfExpDao.insert(typeOfExpDB);
-        }
-        if (typeOfExpDao.getTypeExpDBById(-2) == null) {
-            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-2,"Перевод", 0, 933);
-            typeOfExpDao.insert(typeOfExpDB);
-        }
         //Парсинг последних валют
         if (currentsDao.getById(1) != null && !isOnline(this)) {
             Toast.makeText(this, "Отсутствует подключение к Интернету", Toast.LENGTH_LONG).show();
@@ -89,14 +79,7 @@ public class MainActivity extends AppCompatActivity {
             DataCurrents.fromCurrency = "USD";
             DataCurrents.toCurrency = "BYN";
         }
-        else if (isOnline(this)) {
-            GetData getData = new GetData();
-            getData.execute();
-            DataCurrents.fromCurrency = "USD";
-            DataCurrents.toCurrency = "BYN";
-        }
-        else {
-            Toast.makeText(this, "Отсутствует подключение к Интернету", Toast.LENGTH_LONG).show();
+        else if (currentsDao.getById(1) == null) {
             AssetManager assetManager = getAssets();
             InputStream inputStream = null;
             StringBuilder stringBuilder = new StringBuilder();
@@ -168,6 +151,13 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        if (isOnline(this)) {
+            GetData getData = new GetData();
+            getData.execute();
+            DataCurrents.fromCurrency = "USD";
+            DataCurrents.toCurrency = "BYN";
+        }
+
         //Ввод начальных значений
         /*Currents tempCur = currentsDao.getByAbr("BYN");
         int id_temp_id = tempCur.getCur_ID();
@@ -185,6 +175,20 @@ public class MainActivity extends AppCompatActivity {
         DataAccounts.accounts.add(account);
         account = new Accounts("MySelf", "Наличные", 3000, "USD");
         DataAccounts.accounts.add(account);*/
+
+        if (typeOfAccDao.getAll().isEmpty()) {
+            typeOfAccDao.insert(new TypeOfAccDB("Наличные"));
+            typeOfAccDao.insert(new TypeOfAccDB("Карта"));
+            typeOfAccDao.insert(new TypeOfAccDB("Электронные"));
+        }
+        if (typeOfExpDao.getTypeExpDBById(-1) == null) {
+            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-1, "Доход", 0, 933);
+            typeOfExpDao.insert(typeOfExpDB);
+        }
+        if (typeOfExpDao.getTypeExpDBById(-2) == null) {
+            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-2,"Перевод", 0, 933);
+            typeOfExpDao.insert(typeOfExpDB);
+        }
 
         List<Accounts> accountsList = accountsDao.getAll();
         DataAccounts.accounts.addAll(accountsList);
@@ -224,12 +228,23 @@ public class MainActivity extends AppCompatActivity {
         List<Expenses> expenses = expDao.getLast20();
         DataExpenses.expenses.addAll(expenses);
 
+        /*long cur_id = currentsDao.getIdByAbr("BYN");
+        DebtsDao debtsDao = DataBaseApp.getInstance(this).debtsDao();
+        debtsDao.insert(new DebtsDB("Паше", 4000, cur_id, new GregorianCalendar(), true));
+        debtsDao.insert(new DebtsDB("Лере", 1000, cur_id, new GregorianCalendar(), true));
+        debtsDao.insert(new DebtsDB("Нате", 4000, cur_id, new GregorianCalendar(), false));
+
+
         Debts debts = new Debts("Паше", 4000, "BYN", true);
         DataDebts.debts.add(debts);
         debts = new Debts("Лере", 1000, "BYN", true);
         DataDebts.debts.add(debts);
         debts = new Debts("Нате", 500, "BYN", false);
-        DataDebts.debts.add(debts);
+        DataDebts.debts.add(debts);*/
+
+        DebtsDao debtsDao = DataBaseApp.getInstance(this).debtsDao();
+        List<Debts> debtsList = debtsDao.getAll();
+        DataDebts.debts.addAll(debtsList);
 
         //Создание адаптера секций
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -275,6 +290,12 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_more_vert, menu);
         return true;
+    }
+
+    public void onClickAddNewDebts(View view) {
+        Intent intent = new Intent(MainActivity.this, AddDebtsActivity.class);
+        intent.putExtra("Action", "Create");
+        startActivityForResult(intent, 0);
     }
 
     //Создание нового счета
@@ -329,6 +350,8 @@ public class MainActivity extends AppCompatActivity {
                     //DataExpenses.recyclerView.setAdapter(adapter2);
                     DataExpenses.adapter.notifyDataSetChanged();
                     break;
+                case "UpdateDebts":
+                    DataDebts.adapter.notifyDataSetChanged();
             }
         }
         /*DataAccounts.names.add("qwe");

@@ -1,5 +1,8 @@
 package com.example.financialassistant.ui.main;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,13 +15,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.financialassistant.AddDebtsActivity;
 import com.example.financialassistant.AddOperationActivity;
 import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.DebtsAdapter;
 import com.example.financialassistant.adapters.ExpensesAdapter;
 import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
 import com.example.financialassistant.dao.AccountsDao;
+import com.example.financialassistant.dao.DebtsDao;
 import com.example.financialassistant.dao.ExpDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
@@ -27,10 +37,12 @@ import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
+import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
 import com.example.financialassistant.models.TypeOfExpenses;
 import com.example.financialassistant.modelsDB.AccountsDB;
+import com.example.financialassistant.modelsDB.DebtsDB;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
 
 import org.jetbrains.annotations.NotNull;
@@ -82,6 +94,132 @@ public class Main_Fragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    private void createThreeButtonsAlertDialog(int num) {
+        Context context = this.getContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(this.getContext()));
+        builder.setTitle("Выберите действие");
+        builder.setNegativeButton("Изменить",
+                (dialog, which) -> {
+                    Intent intent = new Intent(getActivity(), AddDebtsActivity.class);
+                    intent.putExtra("Action", "Remake");
+                    intent.putExtra("Num", num);
+                    startActivityForResult(intent, 0);
+                });
+        builder.setPositiveButton("Погасить (частично)",
+                (dialog, which) -> {
+                    LayoutInflater li = LayoutInflater.from(context);
+                    @SuppressLint("InflateParams") View promptsView =
+                            li.inflate(R.layout.pay_for_debt, null);
+                    AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
+                    mDialogBuilder.setView(promptsView);
+                    final TextView debtName = (TextView) promptsView.
+                            findViewById(R.id.name_of_debt);
+                    final Spinner accSpinner = (Spinner) promptsView.
+                            findViewById(R.id.choose_debt_for_pay_spinner);
+                    final EditText valueInput = (EditText) promptsView.
+                            findViewById(R.id.value_for_pay_input);
+
+                    Debts debt = DataDebts.debts.get(num);
+
+                    String[] dataAcc = new String[DataAccounts.accounts.size()];
+                    int i = 0;
+                    for (Accounts account : DataAccounts.accounts) {
+                        dataAcc[i] = account.getName_acc();
+                        i++;
+                    }
+                    ArrayAdapter<String> adapterAcc = new ArrayAdapter<String>(context,
+                            android.R.layout.simple_spinner_item, dataAcc);
+                    adapterAcc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    accSpinner.setAdapter(adapterAcc);
+
+                    debtName.setText(debt.getName());
+
+                    mDialogBuilder.setCancelable(false).setPositiveButton("Погасить",
+                            (dialogInterface ,id) -> {
+                                int pos = accSpinner.getSelectedItemPosition();
+                                Accounts accounts = DataAccounts.accounts.get(pos);
+                                if (!accounts.getCur_Abbreviation().equals(debt.getCur_Abbreviation())) {
+                                    Toast.makeText(context, "Неверный счет для оплаты", Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    int pay_value = (int) Double.parseDouble(valueInput.getText().toString()) * 100;
+                                    if (debt.isDebtor()) {
+                                        if (pay_value > accounts.getValue()) {
+                                            Toast.makeText(context, "На счете мало средств", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            AccountsDao accountsDao = DataBaseApp.getInstance(context).accountsDao();
+                                            DebtsDao debtsDao = DataBaseApp.getInstance(context).debtsDao();
+                                            AccountsDB accountsDB = accountsDao.getAccDBById(accounts.id);
+                                            DebtsDB debtsDB = debtsDao.getDebtDBById(debt.id);
+                                            if (debt.getValue() <= pay_value) {
+                                                accounts.setValue(accounts.getValue() - debt.getValue());
+                                                DataAccounts.accounts.set(pos, accounts);
+                                                accountsDB.value = accounts.getValue();
+                                                accountsDao.update(accountsDB);
+                                                debtsDao.delete(debtsDB);
+                                                DataDebts.debts.remove(debt);
+                                            }
+                                            else {
+                                                accounts.setValue(accounts.getValue() - pay_value);
+                                                DataAccounts.accounts.set(pos, accounts);
+                                                accountsDB.value = accounts.getValue();
+                                                accountsDao.update(accountsDB);
+                                                debt.setValue(debt.getValue() - pay_value);
+                                                debtsDB.value = debt.getValue();
+                                                DataDebts.debts.set(num, debt);
+                                                debtsDao.update(debtsDB);
+                                            }
+                                            DataDebts.adapter.notifyDataSetChanged();
+                                            if (DataAccounts.adapter != null)
+                                                DataAccounts.adapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                    else {
+                                        AccountsDao accountsDao = DataBaseApp.getInstance(context).accountsDao();
+                                        DebtsDao debtsDao = DataBaseApp.getInstance(context).debtsDao();
+                                        AccountsDB accountsDB = accountsDao.getAccDBById(accounts.id);
+                                        DebtsDB debtsDB = debtsDao.getDebtDBById(debt.id);
+                                        if (debt.getValue() <= pay_value) {
+                                            accounts.setValue(accounts.getValue() + debt.getValue());
+                                            DataAccounts.accounts.set(pos, accounts);
+                                            accountsDB.value = accounts.getValue();
+                                            accountsDao.update(accountsDB);
+                                            debtsDao.delete(debtsDB);
+                                            DataDebts.debts.remove(debt);
+                                        }
+                                        else {
+                                            accounts.setValue(accounts.getValue() + pay_value);
+                                            DataAccounts.accounts.set(pos, accounts);
+                                            accountsDB.value = accounts.getValue();
+                                            accountsDao.update(accountsDB);
+                                            debt.setValue(debt.getValue() - pay_value);
+                                            debtsDB.value = debt.getValue();
+                                            DataDebts.debts.set(num, debt);
+                                            debtsDao.update(debtsDB);
+                                        }
+                                        DataDebts.adapter.notifyDataSetChanged();
+                                        if (DataAccounts.adapter != null)
+                                            DataAccounts.adapter.notifyDataSetChanged();
+                                    }
+                                    dialogInterface.cancel();
+                                    dialog.cancel();
+                                }
+                            })
+                            .setNegativeButton("Отмена",
+                                    (dialogInterface, id) -> {
+                                dialogInterface.cancel();
+                                dialog.cancel();
+                            });
+                    AlertDialog alertDialog = mDialogBuilder.create();
+                    alertDialog.show();
+                });
+        builder.setNeutralButton("Отмена",
+                (dialog, which) -> {
+                });
+
+        builder.show();
     }
 
     @Override
@@ -136,6 +274,20 @@ public class Main_Fragment extends Fragment {
         DebtsAdapter debtsAdapter = new DebtsAdapter();
         DataDebts.recyclerView.setAdapter(debtsAdapter);
         DataDebts.adapter = debtsAdapter;
+        DataDebts.recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(view.getContext(), DataTypesExpenses.recyclerView ,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                createThreeButtonsAlertDialog(position);
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+                        })
+        );
         ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NotNull RecyclerView recyclerView,

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddDebtsActivity"
+    android:padding="10dp">
+
+    <EditText
+        android:id="@+id/DebtsNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="text"
+        android:hint="@string/enter_name_of_debts"
+        android:textSize="22sp"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/debts_start_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_start_debts_value"
+        android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/current_debt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DebtsNameInput"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/current_debt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DebtsNameInput"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        android:onClick="onClickChooseCurrency"/>
+
+    <TextView
+        android:id="@+id/view_of_deadline_debts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/debts_start_value"
+        android:layout_marginTop="15dp"
+        android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/set_deadline_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/enter_date_debts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_of_deadline_debts"
+        android:textSize="20sp"
+        android:onClick="onClickChooseDeadline"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupIsDebtors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/set_deadline_button">
+
+        <RadioButton
+            android:id="@+id/i_am_debtor_case"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/i_am_debtor"
+            android:textSize="22sp" />
+
+        <RadioButton
+            android:id="@+id/someone_are_debtor_case"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/someone_are_debtor"
+            android:textSize="22sp" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/saveDebtsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupIsDebtors"
+        android:text="@string/addDebtsAddButton"
+        android:textSize="20sp"
+        android:onClick="onClickSaveDebt"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

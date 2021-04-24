@@ -7,6 +7,12 @@
     <string name="menu_new_type">Управление типами расходов</string>
     <string name="hello_blank_fragment">Привет из фрагмента!)</string>
     <string name="enter_new_name_of_type_exp">Введите новое название</string>
+    <string name="enter_name_of_debts">Введите название долга</string>
+    <string name="enter_start_debts_value">Введите значение долга</string>
+    <string name="enter_date_debts">Введите дедлайн долга</string>
+    <string name="i_am_debtor">Я должен</string>
+    <string name="someone_are_debtor">Мне должны</string>
+    <string name="enter_value_of_pay_debt">Введите размер погашения</string>
     <string-array name="currency">
         <item>BYN</item>
         <item>EU</item>
@@ -27,6 +33,8 @@
     <string name="backSpace">⌫</string>
     <string name="addAccountType">Тип счета</string>
     <string name="addAccountAddButton">Сохранить</string>
+    <string name="addDebtsAddButton">Сохранить</string>
+    <string name="addDebts">Добавить долг</string>
     <string name="addAccountRadioTextCash">Наличные</string>
     <string name="addAccountRadioTextCard">Карта</string>
     <string name="addAccountRadioTextElectronic">Электронные</string>

@@ -2,7 +2,6 @@ package com.example.financialassistant.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialassistant.R;
 import com.example.financialassistant.data.DataDebts;
-import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.models.Debts;
-import com.example.financialassistant.models.Expenses;
 
 import java.text.SimpleDateFormat;
 
@@ -67,7 +64,7 @@ public class DebtsAdapter  extends RecyclerView.Adapter{
             }
             double tempD = debt.getValue() / 100.;
             @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
-            valueView.setText(res + " " + debt.getCurrency());
+            valueView.setText(res + " " + debt.getCur_Abbreviation());
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
                     new SimpleDateFormat("dd.MM.yyyy");
             dateView.setText(simpleDateFormat.format(debt.getDeadLine().getTime()));

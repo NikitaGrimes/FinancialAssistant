@@ -12,46 +12,100 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="120dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_types_of_expenses"
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
-                android:layout_marginTop="10dp"
+                app:layout_constraintHeight_max="270dp"
+                app:layout_constraintHeight_min="20dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:layout_marginHorizontal="10dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/no_exp_type_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="30dp"
+                android:text="@string/you_have_not_exp_type"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_last_expenses"
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
-                android:layout_marginTop="60dp"
+                app:layout_constraintHeight_max="270dp"
+                app:layout_constraintHeight_min="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                android:layout_marginTop="60dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_types_of_expenses" />
+
+            <TextView
+                android:id="@+id/no_exp_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_types_of_expenses"
+                android:layout_marginTop="60dp"
+                android:text="@string/you_have_not_exp"/>
 
             <Button
+                android:id="@+id/toAddDebtActivityButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
                 android:layout_marginHorizontal="10dp"
                 android:textSize="16sp"
                 android:text="@string/addDebts"
-                android:onClick="onClickAddNewDebts"/>
+                android:onClick="onClickAddNewDebts"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_last_expenses"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_debts"
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
+                app:layout_constraintHeight_max="270dp"
+                app:layout_constraintHeight_min="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginHorizontal="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_marginBottom="60dp"/>
+                android:layout_marginBottom="60dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toAddDebtActivityButton" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/no_debts_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toAddDebtActivityButton"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="60dp"
+                android:text="@string/you_have_not_debts"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

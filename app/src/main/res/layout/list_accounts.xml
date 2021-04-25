@@ -8,6 +8,15 @@
     android:layout_margin="10dp"
     android:orientation="vertical">
 
+
+    <TextView
+        android:gravity="center_vertical"
+        android:textSize="22sp"
+        android:id="@+id/name_accounts"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="10dp"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +25,7 @@
 
         <TextView
             android:gravity="center_vertical"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:id="@+id/type_accounts"
             android:maxWidth="175dp"
             android:layout_width="175dp"
@@ -28,7 +37,7 @@
         <TextView
             android:textAlignment="textEnd"
             android:gravity="center_vertical"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:id="@+id/currency_accounts"
             android:maxWidth="175dp"
             android:layout_width="175dp"
@@ -39,12 +48,8 @@
             tools:ignore="RtlCompat" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:gravity="center_vertical"
-        android:textSize="20sp"
-        android:id="@+id/name_accounts"
-        android:maxWidth="370dp"
-        android:layout_width="370dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
 </LinearLayout>

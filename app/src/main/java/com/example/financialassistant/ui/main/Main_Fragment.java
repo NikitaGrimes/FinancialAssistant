@@ -64,6 +64,7 @@ public class Main_Fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    View newView;
 
     public Main_Fragment() {
         // Required empty public constructor
@@ -94,6 +95,12 @@ public class Main_Fragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkEmptyViews(newView);
     }
 
     private void createThreeButtonsAlertDialog(int num) {
@@ -205,6 +212,7 @@ public class Main_Fragment extends Fragment {
                                     }
                                     dialogInterface.cancel();
                                     dialog.cancel();
+                                    checkEmptyViews(newView);
                                 }
                             })
                             .setNegativeButton("Отмена",
@@ -222,11 +230,31 @@ public class Main_Fragment extends Fragment {
         builder.show();
     }
 
+    private void checkEmptyViews(View view) {
+        TextView noType = (TextView) view.findViewById(R.id.no_exp_type_TV);
+        if (DataTypesExpenses.typesOfExpenses.isEmpty())
+            noType.setVisibility(View.VISIBLE);
+        else
+            noType.setVisibility(View.GONE);
+        TextView noExp = (TextView) view.findViewById(R.id.no_exp_TV);
+        if (DataExpenses.expenses.isEmpty())
+            noExp.setVisibility(View.VISIBLE);
+        else
+            noExp.setVisibility(View.GONE);
+        TextView noDebts = (TextView) view.findViewById(R.id.no_debts_TV);
+        if (DataDebts.debts.isEmpty())
+            noDebts.setVisibility(View.VISIBLE);
+        else
+            noDebts.setVisibility(View.GONE);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        checkEmptyViews(view);
+        newView = view;
         DataTypesExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_types_of_expenses);
         TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
         DataTypesExpenses.recyclerView.setAdapter(adapter);
@@ -331,6 +359,7 @@ public class Main_Fragment extends Fragment {
                                 }
                             }
                             DataAccounts.adapter.notifyDataSetChanged();
+                            checkEmptyViews(newView);
                             })
                             .setNegativeButton("Отмена", (dialogInterface, i) -> Objects.requireNonNull(DataExpenses.adapter).notifyItemChanged(viewHolder.getAdapterPosition()))
                             .setCancelable(false)

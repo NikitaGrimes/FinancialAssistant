@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxWidth="175dp"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +30,7 @@
 
     <TextView
         android:gravity="center_vertical"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:id="@+id/value_expense"
         android:maxWidth="370dp"
         android:layout_width="370dp"

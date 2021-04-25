@@ -8,18 +8,21 @@ import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.CurrentsDao;
 import com.example.financialassistant.dao.DebtsDao;
 import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.ScheduledPayDao;
 import com.example.financialassistant.dao.TypeOfAccDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.models.Currents;
 import com.example.financialassistant.modelsDB.AccountsDB;
 import com.example.financialassistant.modelsDB.DebtsDB;
 import com.example.financialassistant.modelsDB.ExpDB;
+import com.example.financialassistant.modelsDB.ScheduledPayDB;
 import com.example.financialassistant.modelsDB.TypeOfAccDB;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
 import com.example.financialassistant.utils.ConverterDateLong;
 import com.example.financialassistant.utils.ConverterGrCalLong;
 
-@Database(entities = {Currents.class, TypeOfAccDB.class, AccountsDB.class, TypeOfExpDB.class, ExpDB.class, DebtsDB.class}, version = 1)
+@Database(entities = {Currents.class, TypeOfAccDB.class, AccountsDB.class, TypeOfExpDB.class,
+        ExpDB.class, DebtsDB.class, ScheduledPayDB.class}, version = 1)
 @TypeConverters({ConverterDateLong.class, ConverterGrCalLong.class})
 public abstract class DataBase extends RoomDatabase {
     public abstract CurrentsDao currentsDao();
@@ -28,4 +31,5 @@ public abstract class DataBase extends RoomDatabase {
     public abstract TypeOfExpDao typeOfExpDao();
     public abstract ExpDao expDao();
     public abstract DebtsDao debtsDao();
+    public abstract ScheduledPayDao scheduledPayDao();
 }

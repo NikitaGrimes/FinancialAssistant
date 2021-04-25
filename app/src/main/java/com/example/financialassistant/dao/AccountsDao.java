@@ -30,6 +30,9 @@ public interface AccountsDao {
     @Query("SELECT id FROM accountsdb where name_acc = :name")
     long getIdByName(String name);
 
+    @Query("DELETE FROM accountsdb where id = :id")
+    void deleteById(long id);
+
     @Query("DELETE FROM accountsdb")
     void deleteAll();
 

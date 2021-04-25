@@ -3,6 +3,7 @@ package com.example.financialassistant;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -16,18 +17,25 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.financialassistant.adapters.NewExpensesTypeAdapter;
+import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.CurrentsDao;
+import com.example.financialassistant.dao.ExpDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataTypesExpenses;
+import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
 import com.example.financialassistant.models.TypeOfExpenses;
+import com.example.financialassistant.modelsDB.AccountsDB;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AddNewTypeExpensesActivity extends AppCompatActivity {
 
@@ -52,7 +60,8 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
         }
         adapter = new NewExpensesTypeAdapter(this, types);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, DataAccounts.recyclerView ,
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerView ,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -74,6 +83,7 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                                             return;
                                         }
                                     }
+
                                     TypeOfExpenses oldExpense = DataTypesExpenses.typesOfExpenses.get(num);
                                     TypeOfExpenses newExpense = new TypeOfExpenses(new_name, oldExpense.getValue(),
                                             oldExpense.getCur_Abbreviation());
@@ -98,7 +108,35 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-
+                        num = position;
+                        new AlertDialog.Builder(context)
+                                .setMessage("Удалить категорию? Будут удалены все записи с данной категорией!")
+                                .setPositiveButton("Удалить", (dialogInterface, i) -> {
+                                    TypeOfExpenses typeOfExpense = DataTypesExpenses.typesOfExpenses.get(num);
+                                    DataTypesExpenses.typesOfExpenses.remove(num);
+                                    DataTypesExpenses.adapter.notifyDataSetChanged();
+                                    types.remove(num);
+                                    adapter.notifyItemRemoved(num);
+                                    ExpDao expDao = DataBaseApp.getInstance(context).expDao();
+                                    expDao.deleteByTypeId(typeOfExpense.id);
+                                    TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(context).typeOfExpDao();
+                                    typeOfExpDao.deleteById(typeOfExpense.id);
+                                    for (int j = 0; j < DataExpenses.expenses.size(); j++) {
+                                        if (DataExpenses.expenses.get(j).getName().equals(typeOfExpense.getName())) {
+                                            DataExpenses.expenses.remove(j);
+                                            j--;
+                                        }
+                                    }
+                                    if (DataExpenses.adapter != null) {
+                                        DataExpenses.adapter.notifyDataSetChanged();
+                                    }
+                                })
+                                .setNegativeButton("Отмена", (dialogInterface, i) ->
+                                {
+                                    dialogInterface.cancel();
+                                })
+                                .setCancelable(false)
+                                .create().show();
                     }
                 })
         );

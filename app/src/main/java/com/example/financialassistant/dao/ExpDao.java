@@ -40,6 +40,12 @@ public interface ExpDao {
     @Query("DELETE FROM expdb where id = :id")
     void deleteById(long id);
 
+    @Query("DELETE FROM expdb where type_of_exp_id = :id")
+    void deleteByTypeId(long id);
+
+    @Query("DELETE FROM expdb where acc_id = :id")
+    void deleteByAccId(long id);
+
     @Insert
     long insert(ExpDB expDB);
 

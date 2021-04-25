@@ -24,6 +24,9 @@ public interface TypeOfExpDao {
     @Query("SELECT id FROM typeofexpdb where name = :name")
     long getIdByName(String name);
 
+    @Query("delete from typeofexpdb where id = :id")
+    void deleteById(long id);
+
     @Insert
     long insert(TypeOfExpDB typeOfExpDb);
 

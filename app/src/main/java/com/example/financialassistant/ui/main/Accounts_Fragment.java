@@ -1,8 +1,10 @@
 package com.example.financialassistant.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,12 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.financialassistant.AddAccountActivity;
 import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.AccountsAdapter;
+import com.example.financialassistant.dao.AccountsDao;
+import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
+import com.example.financialassistant.data.DataBaseApp;
+import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.data.DataTypesExpenses;
+import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.RecyclerItemClickListener;
+import com.example.financialassistant.models.TypeOfExpenses;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,11 +75,14 @@ public class Accounts_Fragment extends Fragment{
         }
     }
 
+    Context context;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Привязка RecyclerView
         View view = inflater.inflate(R.layout.fragment_accounts, container, false);
+        context = view.getContext();
         DataAccounts.recyclerView = (RecyclerView) view.findViewById(R.id.list_accounts);
         AccountsAdapter adapter = new AccountsAdapter();
         DataAccounts.recyclerView.setAdapter(adapter);
@@ -88,7 +102,33 @@ public class Accounts_Fragment extends Fragment{
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-
+                        int num = position;
+                        new AlertDialog.Builder(context)
+                                .setMessage("Удалить счет? Будут удалены все записи с данным счетом!")
+                                .setPositiveButton("Удалить", (dialogInterface, i) -> {
+                                    Accounts account = DataAccounts.accounts.get(num);
+                                    DataAccounts.accounts.remove(account);
+                                    DataAccounts.adapter.notifyItemRemoved(num);
+                                    ExpDao expDao = DataBaseApp.getInstance(context).expDao();
+                                    expDao.deleteByAccId(account.id);
+                                    AccountsDao accountsDao = DataBaseApp.getInstance(context).accountsDao();
+                                    accountsDao.deleteById(account.id);
+                                    for (int j = 0; j < DataExpenses.expenses.size(); j++) {
+                                        if (DataExpenses.expenses.get(j).getName_acc().equals(account.getName_acc())) {
+                                            DataExpenses.expenses.remove(j);
+                                            j--;
+                                        }
+                                    }
+                                    if (DataExpenses.adapter != null) {
+                                        DataExpenses.adapter.notifyDataSetChanged();
+                                    }
+                                })
+                                .setNegativeButton("Отмена", (dialogInterface, i) ->
+                                {
+                                    dialogInterface.cancel();
+                                })
+                                .setCancelable(false)
+                                .create().show();
                     }
                 })
         );

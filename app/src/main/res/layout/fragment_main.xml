@@ -19,18 +19,29 @@
             android:orientation="vertical"
             android:paddingBottom="120dp">
 
+            <TextView
+                android:id="@+id/type_of_exp_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="30dp"
+                android:text="@string/expenses_type"
+                android:textSize="18sp"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_types_of_expenses"
                 android:layout_width="match_parent"
                 app:layout_constraintHeight_max="270dp"
                 app:layout_constraintHeight_min="20dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginHorizontal="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/type_of_exp_TV" />
 
             <TextView
                 android:id="@+id/no_exp_type_TV"
@@ -39,9 +50,20 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@+id/type_of_exp_TV"
+                android:layout_marginTop="10dp"
                 android:text="@string/you_have_not_exp_type"/>
+
+            <TextView
+                android:id="@+id/exp_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_types_of_expenses"
+                android:layout_marginTop="60dp"
+                android:text="@string/last_expenses"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_last_expenses"
@@ -50,11 +72,11 @@
                 app:layout_constraintHeight_min="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/list_types_of_expenses" />
+                app:layout_constraintTop_toBottomOf="@+id/exp_TV" />
 
             <TextView
                 android:id="@+id/no_exp_TV"
@@ -63,21 +85,67 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/list_types_of_expenses"
-                android:layout_marginTop="60dp"
+                app:layout_constraintTop_toBottomOf="@+id/exp_TV"
+                android:layout_marginTop="10dp"
                 android:text="@string/you_have_not_exp"/>
+
+            <TextView
+                android:id="@+id/scheduled_pay_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/scheduled_pay"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="60dp"
+                app:layout_constraintTop_toBottomOf="@+id/list_last_expenses" />
+
+            <TextView
+                android:id="@+id/no_sch_pay_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:text="@string/you_have_not_scheduled_pay"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scheduled_pay_TV" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_scheduled_pay"
+                android:layout_width="match_parent"
+                app:layout_constraintHeight_max="270dp"
+                app:layout_constraintHeight_min="20dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scheduled_pay_TV" />
+
+            <TextView
+                android:id="@+id/debts_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="60dp"
+                android:text="@string/debts"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/list_scheduled_pay" />
 
             <Button
                 android:id="@+id/toAddDebtActivityButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
                 android:layout_marginHorizontal="10dp"
-                android:textSize="16sp"
-                android:text="@string/addDebts"
                 android:onClick="onClickAddNewDebts"
+                android:text="@string/addDebts"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/list_last_expenses"/>
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/debts_TV" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_debts"

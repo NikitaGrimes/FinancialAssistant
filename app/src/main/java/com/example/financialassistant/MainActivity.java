@@ -20,11 +20,13 @@ import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.data.DataScheduledPay;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Currents;
 import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
+import com.example.financialassistant.models.ScheduledPay;
 import com.example.financialassistant.models.TypeOfExpenses;
 import com.example.financialassistant.modelsDB.DebtsDB;
 import com.example.financialassistant.modelsDB.TypeOfAccDB;
@@ -51,6 +53,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -246,6 +249,13 @@ public class MainActivity extends AppCompatActivity {
         List<Debts> debtsList = debtsDao.getAll();
         DataDebts.debts.addAll(debtsList);
 
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.add(Calendar.HOUR, 1);
+        ScheduledPay scheduledPay = new ScheduledPay(1, "4 Талона", -300, "BYN", "Nik", gregorianCalendar);
+        DataScheduledPay.scheduledPays.add(scheduledPay);
+        scheduledPay = new ScheduledPay(2, "2 Талона", -150, "BYN", "Nik", gregorianCalendar);
+        DataScheduledPay.scheduledPays.add(scheduledPay);
+
         //Создание адаптера секций
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -338,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
                     //DataTypesExpenses.recyclerView.setAdapter(adapter);
                     DataTypesExpenses.adapter.notifyDataSetChanged();
                     DataExpenses.adapter.notifyDataSetChanged();
+                    DataScheduledPay.adapter.notifyDataSetChanged();
                     break;
                 case "UpdateExpensesAndAccounts":
                     //AccountsAdapter adapter0 = new AccountsAdapter();
@@ -349,6 +360,7 @@ public class MainActivity extends AppCompatActivity {
                     //ExpensesAdapter adapter2 = new ExpensesAdapter();
                     //DataExpenses.recyclerView.setAdapter(adapter2);
                     DataExpenses.adapter.notifyDataSetChanged();
+                    DataScheduledPay.adapter.notifyDataSetChanged();
                     break;
                 case "UpdateDebts":
                     DataDebts.adapter.notifyDataSetChanged();

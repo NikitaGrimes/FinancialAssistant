@@ -16,20 +16,20 @@ public class ScheduledPay {
 
     }
 
-    public ScheduledPay(String _name, int _value, String _currency, String _fromAcc) {
+    public ScheduledPay(String _name, int _value, String _currency, String _fromAcc, GregorianCalendar _gregorianCalendar) {
         this.name = _name;
         this.realValue = this.value = _value;
         this.Cur_Abbreviation = _currency;
-        this.date_operation = new GregorianCalendar();
+        this.date_operation = _gregorianCalendar;
         this.name_acc = _fromAcc;
     }
 
-    public ScheduledPay(int _id, String _name, int _value, String _currency, String _fromAcc) {
+    public ScheduledPay(int _id, String _name, int _value, String _currency, String _fromAcc, GregorianCalendar _gregorianCalendar) {
         this.id = _id;
         this.name = _name;
         this.realValue = this.value = _value;
         this.Cur_Abbreviation = _currency;
-        this.date_operation = new GregorianCalendar();
+        this.date_operation = _gregorianCalendar;
         this.name_acc = _fromAcc;
     }
 

@@ -26,6 +26,7 @@ import com.example.financialassistant.AddOperationActivity;
 import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.DebtsAdapter;
 import com.example.financialassistant.adapters.ExpensesAdapter;
+import com.example.financialassistant.adapters.ScheduledPayAdapter;
 import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
 import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.DebtsDao;
@@ -35,6 +36,7 @@ import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.data.DataScheduledPay;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Debts;
@@ -241,6 +243,11 @@ public class Main_Fragment extends Fragment {
             noExp.setVisibility(View.VISIBLE);
         else
             noExp.setVisibility(View.GONE);
+        TextView noScheduledPay = (TextView) view.findViewById(R.id.no_sch_pay_TV);
+        if (DataScheduledPay.scheduledPays.isEmpty())
+            noScheduledPay.setVisibility(View.VISIBLE);
+        else
+            noScheduledPay.setVisibility(View.GONE);
         TextView noDebts = (TextView) view.findViewById(R.id.no_debts_TV);
         if (DataDebts.debts.isEmpty())
             noDebts.setVisibility(View.VISIBLE);
@@ -298,6 +305,11 @@ public class Main_Fragment extends Fragment {
                             }
                         })
         );
+        DataScheduledPay.recyclerView = (RecyclerView) view.findViewById(R.id.list_scheduled_pay);
+        ScheduledPayAdapter scheduledPayAdapter = new ScheduledPayAdapter();
+        DataScheduledPay.recyclerView.setAdapter(scheduledPayAdapter);
+        DataScheduledPay.adapter = scheduledPayAdapter;
+
         DataDebts.recyclerView = (RecyclerView) view.findViewById(R.id.list_debts);
         DebtsAdapter debtsAdapter = new DebtsAdapter();
         DataDebts.recyclerView.setAdapter(debtsAdapter);

@@ -14,8 +14,13 @@
     <string name="someone_are_debtor">Мне должны</string>
     <string name="enter_value_of_pay_debt">Введите размер погашения</string>
     <string name="you_have_not_exp_type">У Вас нет категорий расходов :(</string>
-    <string name="you_have_not_exp">У Вас нет расходов :)</string>
+    <string name="you_have_not_exp">У Вас нет операций :)</string>
     <string name="you_have_not_debts">У Вас нет долгов :)</string>
+    <string name="you_have_not_scheduled_pay">У Вас нет запланированных операций :)</string>
+    <string name="expenses_type">Категории расходов</string>
+    <string name="last_expenses">Последние операции</string>
+    <string name="scheduled_pay">Запланированные операции</string>
+    <string name="debts">Долги</string>
     <string-array name="currency">
         <item>BYN</item>
         <item>EU</item>

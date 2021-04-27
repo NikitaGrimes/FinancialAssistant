@@ -27,6 +27,9 @@ public interface AccountsDao {
     @Query("SELECT * FROM accountsdb where accountsdb.id = :id")
     AccountsDB getAccDBById(long id);
 
+    @Query("SELECT * FROM accountsdb where name_acc = :name")
+    AccountsDB getAccDBByName(String name);
+
     @Query("SELECT id FROM accountsdb where name_acc = :name")
     long getIdByName(String name);
 

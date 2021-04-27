@@ -20,10 +20,12 @@ import com.example.financialassistant.adapters.NewExpensesTypeAdapter;
 import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.CurrentsDao;
 import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.ScheduledPayDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.data.DataScheduledPay;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Expenses;
@@ -119,6 +121,8 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                                     adapter.notifyItemRemoved(num);
                                     ExpDao expDao = DataBaseApp.getInstance(context).expDao();
                                     expDao.deleteByTypeId(typeOfExpense.id);
+                                    ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(context).scheduledPayDao();
+                                    scheduledPayDao.deleteByTypeId(typeOfExpense.id);
                                     TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(context).typeOfExpDao();
                                     typeOfExpDao.deleteById(typeOfExpense.id);
                                     for (int j = 0; j < DataExpenses.expenses.size(); j++) {
@@ -129,6 +133,15 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                                     }
                                     if (DataExpenses.adapter != null) {
                                         DataExpenses.adapter.notifyDataSetChanged();
+                                    }
+                                    for (int j = 0; j < DataScheduledPay.scheduledPays.size(); j++) {
+                                        if (DataScheduledPay.scheduledPays.get(j).getName().equals(typeOfExpense.getName())) {
+                                            DataScheduledPay.scheduledPays.remove(j);
+                                            j--;
+                                        }
+                                    }
+                                    if (DataScheduledPay.adapter != null) {
+                                        DataScheduledPay.adapter.notifyDataSetChanged();
                                     }
                                 })
                                 .setNegativeButton("Отмена", (dialogInterface, i) ->

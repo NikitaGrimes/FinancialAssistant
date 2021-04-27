@@ -31,6 +31,7 @@ import com.example.financialassistant.adapters.TypesOfExpensesAdapter;
 import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.DebtsDao;
 import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.ScheduledPayDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataBaseApp;
@@ -42,9 +43,12 @@ import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.RecyclerItemClickListener;
+import com.example.financialassistant.models.ScheduledPay;
 import com.example.financialassistant.models.TypeOfExpenses;
 import com.example.financialassistant.modelsDB.AccountsDB;
 import com.example.financialassistant.modelsDB.DebtsDB;
+import com.example.financialassistant.modelsDB.ExpDB;
+import com.example.financialassistant.modelsDB.ScheduledPayDB;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
 
 import org.jetbrains.annotations.NotNull;
@@ -328,7 +332,7 @@ public class Main_Fragment extends Fragment {
                             }
                         })
         );
-        ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NotNull RecyclerView recyclerView,
                                   @NotNull RecyclerView.ViewHolder viewHolder,
@@ -381,6 +385,125 @@ public class Main_Fragment extends Fragment {
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
         itemTouchHelper.attachToRecyclerView(DataExpenses.recyclerView);
+
+        DataScheduledPay.recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(view.getContext(), DataTypesExpenses.recyclerView ,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                if (!DataScheduledPay.scheduledPays.isEmpty()) {
+                                    ScheduledPay scheduledPay = DataScheduledPay.scheduledPays.get(position);
+                                    new AlertDialog.Builder(view.getContext())
+                                            .setMessage("Совершить операцию?")
+                                            .setPositiveButton("Совершить", (dialogInterface, i) -> {
+                                                ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(view.getContext()).scheduledPayDao();
+                                                AccountsDao accountsDao = DataBaseApp.getInstance(view.getContext()).accountsDao();
+                                                ExpDao expDao = DataBaseApp.getInstance(view.getContext()).expDao();
+                                                TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(view.getContext()).typeOfExpDao();
+
+
+                                                AccountsDB accountsDB = accountsDao.getAccDBByName(scheduledPay.getName_acc());
+                                                TypeOfExpDB typeOfExpDB = typeOfExpDao.getTypeExpDBByName(scheduledPay.getName());
+                                                Accounts account = null;
+                                                int accIndex = -1;
+                                                TypeOfExpenses typeOfExpense = null;
+                                                int typeIndex = -1;
+
+                                                for (int j = 0; j < DataAccounts.accounts.size(); j++) {
+                                                    account = DataAccounts.accounts.get(j);
+                                                    if (account.getName_acc().equals(scheduledPay.getName_acc())) {
+                                                        accIndex = j;
+                                                        break;
+                                                    }
+                                                }
+
+                                                for (int j = 0; j < DataTypesExpenses.typesOfExpenses.size(); j++) {
+                                                    typeOfExpense = DataTypesExpenses.typesOfExpenses.get(j);
+                                                    if (typeOfExpense.getName().equals(scheduledPay.getName())) {
+                                                        typeIndex = j;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (account != null && account.getValue() >= scheduledPay.getValue()) {
+
+                                                    account.setValue(account.getValue() + scheduledPay.getValue());
+                                                    accountsDB.value = account.getValue();
+                                                    DataAccounts.accounts.set(accIndex, account);
+                                                    accountsDao.update(accountsDB);
+                                                    if (DataAccounts.adapter != null) {
+                                                        DataAccounts.adapter.notifyDataSetChanged();
+                                                    }
+
+                                                    if (typeIndex != -1) {
+                                                        typeOfExpense.setValue(typeOfExpense.getValue() - scheduledPay.getRealValue());
+                                                        typeOfExpDB.value = typeOfExpense.getValue();
+                                                        DataTypesExpenses.typesOfExpenses.set(typeIndex, typeOfExpense);
+                                                        typeOfExpDao.update(typeOfExpDB);
+                                                        DataTypesExpenses.adapter.notifyDataSetChanged();
+                                                    }
+
+                                                    Expenses newExp = new Expenses(scheduledPay.getName(), scheduledPay.getValue(), scheduledPay.getCur_Abbreviation(), scheduledPay.getName_acc());
+                                                    newExp.setRealValue(scheduledPay.getRealValue());
+                                                    newExp.id = (int) expDao.insert(new ExpDB(typeOfExpDB.id, newExp.getValue(), newExp.getRealValue(), accountsDB.currents_id, accountsDB.id, newExp.getDate_operation()));
+                                                    DataExpenses.expenses.add(0, newExp);
+                                                    if (DataExpenses.expenses.size() >= 20) {
+                                                        DataExpenses.expenses.remove(20);
+                                                    }
+                                                    DataExpenses.adapter.notifyDataSetChanged();
+
+                                                    scheduledPayDao.deleteById(scheduledPay.id);
+                                                    DataScheduledPay.scheduledPays.remove(scheduledPay);
+                                                    DataScheduledPay.adapter.notifyDataSetChanged();
+                                                    checkEmptyViews(newView);
+                                                }
+                                                else {
+                                                    Toast.makeText(view.getContext(), "На счете недостаточно средств",
+                                                            Toast.LENGTH_LONG).show();
+                                                }
+                                            })
+                                            .setNegativeButton("Отмена", (dialogInterface, i) -> dialogInterface.cancel())
+                                            .setCancelable(false)
+                                            .create().show();
+                                }
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+                        })
+        );
+
+        ItemTouchHelper.SimpleCallback touchHelperCallbackSchPay = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NotNull RecyclerView recyclerView,
+                                  @NotNull RecyclerView.ViewHolder viewHolder,
+                                  @NotNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (!DataScheduledPay.scheduledPays.isEmpty()) {
+                    ScheduledPay scheduledPay = DataScheduledPay.scheduledPays.get(viewHolder.getAdapterPosition());
+                    new AlertDialog.Builder(view.getContext())
+                            .setMessage("Удалить запись?")
+                            .setPositiveButton("Удалить", (dialogInterface, i) -> {
+                                ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(view.getContext()).scheduledPayDao();
+                                scheduledPayDao.deleteById(scheduledPay.id);
+                                DataScheduledPay.scheduledPays.remove(scheduledPay);
+                                DataScheduledPay.adapter.notifyDataSetChanged();
+                                checkEmptyViews(newView);
+                            })
+                            .setNegativeButton("Отмена", (dialogInterface, i) -> Objects.requireNonNull(DataScheduledPay.adapter).notifyItemChanged(viewHolder.getAdapterPosition()))
+                            .setCancelable(false)
+                            .create().show();
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelperSchPay = new ItemTouchHelper(touchHelperCallbackSchPay);
+        itemTouchHelperSchPay.attachToRecyclerView(DataScheduledPay.recyclerView);
         return view;
     }
 }

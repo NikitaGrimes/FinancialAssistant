@@ -19,10 +19,12 @@ import com.example.financialassistant.R;
 import com.example.financialassistant.adapters.AccountsAdapter;
 import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.ScheduledPayDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataBaseApp;
 import com.example.financialassistant.data.DataExpenses;
+import com.example.financialassistant.data.DataScheduledPay;
 import com.example.financialassistant.data.DataTypesExpenses;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.RecyclerItemClickListener;
@@ -111,6 +113,8 @@ public class Accounts_Fragment extends Fragment{
                                     DataAccounts.adapter.notifyItemRemoved(num);
                                     ExpDao expDao = DataBaseApp.getInstance(context).expDao();
                                     expDao.deleteByAccId(account.id);
+                                    ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(context).scheduledPayDao();
+                                    scheduledPayDao.deleteByAccId(account.id);
                                     AccountsDao accountsDao = DataBaseApp.getInstance(context).accountsDao();
                                     accountsDao.deleteById(account.id);
                                     for (int j = 0; j < DataExpenses.expenses.size(); j++) {
@@ -121,6 +125,15 @@ public class Accounts_Fragment extends Fragment{
                                     }
                                     if (DataExpenses.adapter != null) {
                                         DataExpenses.adapter.notifyDataSetChanged();
+                                    }
+                                    for (int j = 0; j < DataScheduledPay.scheduledPays.size(); j++) {
+                                        if (DataScheduledPay.scheduledPays.get(j).getName_acc().equals(account.getName_acc())) {
+                                            DataScheduledPay.scheduledPays.remove(j);
+                                            j--;
+                                        }
+                                    }
+                                    if (DataScheduledPay.adapter != null) {
+                                        DataScheduledPay.adapter.notifyDataSetChanged();
                                     }
                                 })
                                 .setNegativeButton("Отмена", (dialogInterface, i) ->

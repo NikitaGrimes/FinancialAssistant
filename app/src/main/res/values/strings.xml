@@ -20,6 +20,8 @@
     <string name="expenses_type">Категории расходов</string>
     <string name="last_expenses">Последние операции</string>
     <string name="scheduled_pay">Запланированные операции</string>
+    <string name="schedule">Запланировать</string>
+    <string name="setDateTime">Задать дату и время</string>
     <string name="debts">Долги</string>
     <string-array name="currency">
         <item>BYN</item>

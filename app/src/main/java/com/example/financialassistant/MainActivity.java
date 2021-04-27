@@ -13,6 +13,7 @@ import com.example.financialassistant.dao.AccountsDao;
 import com.example.financialassistant.dao.CurrentsDao;
 import com.example.financialassistant.dao.DebtsDao;
 import com.example.financialassistant.dao.ExpDao;
+import com.example.financialassistant.dao.ScheduledPayDao;
 import com.example.financialassistant.dao.TypeOfAccDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
@@ -29,11 +30,14 @@ import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.ScheduledPay;
 import com.example.financialassistant.models.TypeOfExpenses;
 import com.example.financialassistant.modelsDB.DebtsDB;
+import com.example.financialassistant.modelsDB.ScheduledPayDB;
 import com.example.financialassistant.modelsDB.TypeOfAccDB;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -41,6 +45,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.financialassistant.adapters.SectionsPagerAdapter;
@@ -249,12 +254,9 @@ public class MainActivity extends AppCompatActivity {
         List<Debts> debtsList = debtsDao.getAll();
         DataDebts.debts.addAll(debtsList);
 
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.add(Calendar.HOUR, 1);
-        ScheduledPay scheduledPay = new ScheduledPay(1, "4 Талона", -300, "BYN", "Nik", gregorianCalendar);
-        DataScheduledPay.scheduledPays.add(scheduledPay);
-        scheduledPay = new ScheduledPay(2, "2 Талона", -150, "BYN", "Nik", gregorianCalendar);
-        DataScheduledPay.scheduledPays.add(scheduledPay);
+        ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(this).scheduledPayDao();
+        List<ScheduledPay> payList = scheduledPayDao.getAll();
+        DataScheduledPay.scheduledPays.addAll(payList);
 
         //Создание адаптера секций
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -262,6 +264,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+
 
         /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -291,8 +295,10 @@ public class MainActivity extends AppCompatActivity {
         if(isCon)
             Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();*/
+
         Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
         startActivityForResult(intent, 0);
+
     }
 
     @Override

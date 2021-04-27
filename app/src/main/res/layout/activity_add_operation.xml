@@ -56,6 +56,36 @@
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/incomeAccountSpinner" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/isScheduledInCome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/schedule"
+                    android:textSize="18sp"
+                    android:onClick="onSwitchInComeDT"
+                    app:layout_constraintTop_toBottomOf="@+id/incomeEnterValue"/>
+
+                <TextView
+                    android:id="@+id/date_time_InCome_TV"
+                    android:layout_marginVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/isScheduledInCome"/>
+
+                <Button
+                    android:id="@+id/set_date_time_income_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setDateTime"
+                    android:textSize="16sp"
+                    android:onClick="onDateTimeClick"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/date_time_InCome_TV"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <RadioButton
@@ -101,6 +131,36 @@
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/costsExpensesSpinner" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/isScheduledOutCome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/schedule"
+                    android:textSize="18sp"
+                    android:onClick="onSwitchOutComeDT"
+                    app:layout_constraintTop_toBottomOf="@+id/costsEnterValue"/>
+
+                <TextView
+                    android:id="@+id/date_time_OutCome_TV"
+                    android:layout_marginVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/isScheduledOutCome"/>
+
+                <Button
+                    android:id="@+id/set_date_time_outcome_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setDateTime"
+                    android:textSize="16sp"
+                    android:onClick="onDateTimeClick"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/date_time_OutCome_TV"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <RadioButton
@@ -227,13 +287,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
+                android:id="@+id/save_operation_bt"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/saveOperation"
                 android:textSize="20sp"
-                android:layout_gravity="center_horizontal"
-                android:onClick="onClickSaveOperation"/>
+                android:layout_gravity="center_horizontal"/>
 
         </RadioGroup>
     </ScrollView>

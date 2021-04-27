@@ -21,6 +21,9 @@ public interface TypeOfExpDao {
     @Query("SELECT * FROM typeofexpdb where id = :id")
     TypeOfExpDB getTypeExpDBById(long id);
 
+    @Query("SELECT * FROM typeofexpdb where name = :name")
+    TypeOfExpDB getTypeExpDBByName(String name);
+
     @Query("SELECT id FROM typeofexpdb where name = :name")
     long getIdByName(String name);
 

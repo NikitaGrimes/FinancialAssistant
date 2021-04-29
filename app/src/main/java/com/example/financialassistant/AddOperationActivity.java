@@ -12,6 +12,7 @@ import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -83,7 +84,8 @@ public class AddOperationActivity extends AppCompatActivity {
     TextView DateTimeIn;
     TextView DateTimeOut;
 
-    Calendar dateAndTime = Calendar.getInstance();
+    Calendar dateAndTimeIn = Calendar.getInstance();
+    Calendar dateAndTimeOut = Calendar.getInstance();
 
     private final int OPERATION_INCOME = 1;
     private final int OPERATION_OUTCOME = 2;
@@ -95,6 +97,7 @@ public class AddOperationActivity extends AppCompatActivity {
 
     int mode;
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,16 +137,17 @@ public class AddOperationActivity extends AppCompatActivity {
         outComeCL.setVisibility(View.GONE);
         exChangeCL.setVisibility(View.GONE);
 
-        dateAndTime.add(Calendar.HOUR, 1);
+        dateAndTimeIn.add(Calendar.HOUR, 1);
+        dateAndTimeOut.add(Calendar.HOUR, 1);
 
-
+        createNotificationChannel();
 
         DateTimeIn.setText(DateUtils.formatDateTime(this,
-                dateAndTime.getTimeInMillis(),
+                dateAndTimeIn.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
                         | DateUtils.FORMAT_SHOW_TIME));
         DateTimeOut.setText(DateUtils.formatDateTime(this,
-                dateAndTime.getTimeInMillis(),
+                dateAndTimeOut.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
                         | DateUtils.FORMAT_SHOW_TIME));
 
@@ -275,7 +279,6 @@ public class AddOperationActivity extends AppCompatActivity {
             oldExp = null;
         }
         saveButton = (Button) findViewById(R.id.save_operation_bt);
-        notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         saveButton.setOnClickListener(v -> {
             if (mode == OPERATION_INCOME) {
                 int pos = inComeSpinnerAcc.getSelectedItemPosition();
@@ -296,12 +299,30 @@ public class AddOperationActivity extends AppCompatActivity {
                         long acc_id = account.id;
                         long exp_type_id = typeOfExpDao.getIdByName("Доход");
                         long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
-                        GregorianCalendar gregorianCalendar = (GregorianCalendar) dateAndTime;
+                        GregorianCalendar gregorianCalendar = (GregorianCalendar) dateAndTimeIn;
                         ScheduledPay scheduledPay = new ScheduledPay("Доход", addValue,
                                 account.getCur_Abbreviation(), account.getName_acc(), gregorianCalendar);
                         scheduledPay.id = (int) scheduledPayDao.insert(new ScheduledPayDB(exp_type_id,
                                 addValue, addValue, cur_id, acc_id, gregorianCalendar));
                         DataScheduledPay.scheduledPays.add(scheduledPay);
+
+                        Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
+                        intent.setAction(Integer.toString(scheduledPay.id));
+                        intent.putExtra("contentText", scheduledPay.getName_acc() + " -> " +
+                                scheduledPay.getName() + ", " + String.format("%.2f", scheduledPay.getValue() / 100.)
+                                + " " +
+                                scheduledPay.getCur_Abbreviation());
+                        intent.putExtra("id", scheduledPay.id);
+
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast
+                                (AddOperationActivity.this, 0, intent,  0);
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                        long time = System.currentTimeMillis() + temp;
+                        //long settime = System.currentTimeMillis();
+                        //long time = System.currentTimeMillis() + 20 * 1000;
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, time,
+                                pendingIntent);
 
                         Intent answerIntent = new Intent();
                         answerIntent.putExtra("Action", "UpdateExpenses");
@@ -365,13 +386,30 @@ public class AddOperationActivity extends AppCompatActivity {
                         long acc_id = account.id;
                         long exp_type_id = expense.id;
                         long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
-                        GregorianCalendar gregorianCalendar = (GregorianCalendar) dateAndTime;
+                        GregorianCalendar gregorianCalendar = (GregorianCalendar) dateAndTimeOut;
                         ScheduledPay scheduledPay = new ScheduledPay(expense.getName(), -1 * value,
                                 account.getCur_Abbreviation(), account.getName_acc(), gregorianCalendar);
                         scheduledPay.id = (int) scheduledPayDao.insert(new ScheduledPayDB(exp_type_id,
                                 -1 * value, -1 * realValueExp, cur_id, acc_id, gregorianCalendar));
                         scheduledPay.setRealValue(-1 * realValueExp);
                         DataScheduledPay.scheduledPays.add(scheduledPay);
+
+                        Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
+                        intent.setAction(Integer.toString(scheduledPay.id));
+                        intent.putExtra("contentText", scheduledPay.getName_acc() + " -> " +
+                                scheduledPay.getName() + ", " + String.format("%.2f", scheduledPay.getValue() / 100.)
+                                + " " +
+                                scheduledPay.getCur_Abbreviation());
+                        intent.putExtra("id", scheduledPay.id);
+
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast
+                                (AddOperationActivity.this, 0, intent,  0);
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        //long time = dateAndTimeOut.getTimeInMillis();
+
+                        long time = System.currentTimeMillis() + 20 * 1000;
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, time,
+                                pendingIntent);
 
                         Intent answerIntent = new Intent();
                         answerIntent.putExtra("Action", "UpdateExpenses");
@@ -510,27 +548,40 @@ public class AddOperationActivity extends AppCompatActivity {
         });
     }
 
-    private void restartNotify() {
-        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, TimeNotification.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
-                intent, PendingIntent.FLAG_CANCEL_CURRENT );
-// На случай, если мы ранее запускали активити, а потом поменяли время,
-// откажемся от уведомления
-        am.cancel(pendingIntent);
-// Устанавливаем разовое напоминание
-        am.set(AlarmManager.RTC_WAKEUP, stamp.getTime(), pendingIntent);
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Notification for scheduled pays";
+            String description = "Channel for Financial Assistant";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("FAChannel", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
-    public void onDateTimeClick(View view) {
+    public void onDateTimeInClick(View view) {
         new TimePickerDialog(AddOperationActivity.this, t,
-                dateAndTime.get(Calendar.HOUR_OF_DAY),
-                dateAndTime.get(Calendar.MINUTE), true)
+                dateAndTimeIn.get(Calendar.HOUR_OF_DAY),
+                dateAndTimeIn.get(Calendar.MINUTE), true)
                 .show();
         new DatePickerDialog(AddOperationActivity.this, d,
-                dateAndTime.get(Calendar.YEAR),
-                dateAndTime.get(Calendar.MONTH),
-                dateAndTime.get(Calendar.DAY_OF_MONTH))
+                dateAndTimeIn.get(Calendar.YEAR),
+                dateAndTimeIn.get(Calendar.MONTH),
+                dateAndTimeIn.get(Calendar.DAY_OF_MONTH))
+                .show();
+    }
+
+    public void onDateTimeOutClick(View view) {
+        new TimePickerDialog(AddOperationActivity.this, t,
+                dateAndTimeOut.get(Calendar.HOUR_OF_DAY),
+                dateAndTimeOut.get(Calendar.MINUTE), true)
+                .show();
+        new DatePickerDialog(AddOperationActivity.this, d,
+                dateAndTimeOut.get(Calendar.YEAR),
+                dateAndTimeOut.get(Calendar.MONTH),
+                dateAndTimeOut.get(Calendar.DAY_OF_MONTH))
                 .show();
     }
 
@@ -538,13 +589,13 @@ public class AddOperationActivity extends AppCompatActivity {
     private void setInitialDateTime() {
         if (mode == OPERATION_INCOME) {
             DateTimeIn.setText(DateUtils.formatDateTime(this,
-                    dateAndTime.getTimeInMillis(),
+                    dateAndTimeIn.getTimeInMillis(),
                     DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
                             | DateUtils.FORMAT_SHOW_TIME));
         }
         else if (mode == OPERATION_OUTCOME) {
             DateTimeOut.setText(DateUtils.formatDateTime(this,
-                    dateAndTime.getTimeInMillis(),
+                    dateAndTimeOut.getTimeInMillis(),
                     DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
                             | DateUtils.FORMAT_SHOW_TIME));
         }
@@ -552,17 +603,32 @@ public class AddOperationActivity extends AppCompatActivity {
 
     // установка обработчика выбора времени
     TimePickerDialog.OnTimeSetListener t = (view, hourOfDay, minute) -> {
-        dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        dateAndTime.set(Calendar.MINUTE, minute);
-        setInitialDateTime();
+        if (mode == OPERATION_INCOME) {
+            dateAndTimeIn.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            dateAndTimeIn.set(Calendar.MINUTE, minute);
+            setInitialDateTime();
+        }
+        else if (mode == OPERATION_OUTCOME) {
+            dateAndTimeOut.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            dateAndTimeOut.set(Calendar.MINUTE, minute);
+            setInitialDateTime();
+        }
     };
 
     // установка обработчика выбора даты
     DatePickerDialog.OnDateSetListener d = (view, year, monthOfYear, dayOfMonth) -> {
-        dateAndTime.set(Calendar.YEAR, year);
-        dateAndTime.set(Calendar.MONTH, monthOfYear);
-        dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        setInitialDateTime();
+        if (mode == OPERATION_INCOME) {
+            dateAndTimeIn.set(Calendar.YEAR, year);
+            dateAndTimeIn.set(Calendar.MONTH, monthOfYear);
+            dateAndTimeIn.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            setInitialDateTime();
+        }
+        else if (mode == OPERATION_OUTCOME) {
+            dateAndTimeOut.set(Calendar.YEAR, year);
+            dateAndTimeOut.set(Calendar.MONTH, monthOfYear);
+            dateAndTimeOut.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            setInitialDateTime();
+        }
     };
 
     public void onSwitchInComeDT(View view) {

@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/setDateTime"
                     android:textSize="16sp"
-                    android:onClick="onDateTimeClick"
+                    android:onClick="onDateTimeInClick"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/date_time_InCome_TV"/>
 
@@ -157,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/setDateTime"
                     android:textSize="16sp"
-                    android:onClick="onDateTimeClick"
+                    android:onClick="onDateTimeOutClick"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/date_time_OutCome_TV"/>
 

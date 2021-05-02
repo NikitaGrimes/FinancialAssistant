@@ -300,29 +300,49 @@ public class AddOperationActivity extends AppCompatActivity {
                         long exp_type_id = typeOfExpDao.getIdByName("Доход");
                         long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
                         GregorianCalendar gregorianCalendar = (GregorianCalendar) dateAndTimeIn;
+                        gregorianCalendar.set(Calendar.SECOND, 0);
                         ScheduledPay scheduledPay = new ScheduledPay("Доход", addValue,
                                 account.getCur_Abbreviation(), account.getName_acc(), gregorianCalendar);
                         scheduledPay.id = (int) scheduledPayDao.insert(new ScheduledPayDB(exp_type_id,
                                 addValue, addValue, cur_id, acc_id, gregorianCalendar));
+
+                        for (ScheduledPay scheduledPay1 : DataScheduledPay.scheduledPays) {
+                            if (scheduledPay1.getDate_operation().after(System.currentTimeMillis()) &&
+                                    scheduledPay.getDate_operation().before(scheduledPay1.getDate_operation())) {
+                                Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
+                                intent.setAction(Integer.toString(scheduledPay1.id));
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast
+                                        (AddOperationActivity.this, 0, intent, 0);
+                                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                alarmManager.cancel(pendingIntent);
+
+                                intent = new Intent(AddOperationActivity.this, TimeNotification.class);
+                                intent.setAction(Integer.toString(scheduledPay.id));
+
+                                pendingIntent = PendingIntent.getBroadcast
+                                        (AddOperationActivity.this, 0, intent, 0);
+                                alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                                long time = System.currentTimeMillis() + temp;
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, time,
+                                        pendingIntent);
+                            }
+                        }
+
                         DataScheduledPay.scheduledPays.add(scheduledPay);
 
-                        Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
-                        intent.setAction(Integer.toString(scheduledPay.id));
-                        intent.putExtra("contentText", scheduledPay.getName_acc() + " -> " +
-                                scheduledPay.getName() + ", " + String.format("%.2f", scheduledPay.getValue() / 100.)
-                                + " " +
-                                scheduledPay.getCur_Abbreviation());
-                        intent.putExtra("id", scheduledPay.id);
+                        if (DataScheduledPay.scheduledPays.size() == 1) {
+                            Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
+                            intent.setAction(Integer.toString(scheduledPay.id));
 
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast
-                                (AddOperationActivity.this, 0, intent,  0);
-                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-                        long time = System.currentTimeMillis() + temp;
-                        //long settime = System.currentTimeMillis();
-                        //long time = System.currentTimeMillis() + 20 * 1000;
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, time,
-                                pendingIntent);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast
+                                    (AddOperationActivity.this, 0, intent, 0);
+                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                            long time = System.currentTimeMillis() + temp;
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, time,
+                                    pendingIntent);
+                        }
 
                         Intent answerIntent = new Intent();
                         answerIntent.putExtra("Action", "UpdateExpenses");
@@ -387,6 +407,7 @@ public class AddOperationActivity extends AppCompatActivity {
                         long exp_type_id = expense.id;
                         long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
                         GregorianCalendar gregorianCalendar = (GregorianCalendar) dateAndTimeOut;
+                        gregorianCalendar.set(Calendar.SECOND, 0);
                         ScheduledPay scheduledPay = new ScheduledPay(expense.getName(), -1 * value,
                                 account.getCur_Abbreviation(), account.getName_acc(), gregorianCalendar);
                         scheduledPay.id = (int) scheduledPayDao.insert(new ScheduledPayDB(exp_type_id,
@@ -394,22 +415,43 @@ public class AddOperationActivity extends AppCompatActivity {
                         scheduledPay.setRealValue(-1 * realValueExp);
                         DataScheduledPay.scheduledPays.add(scheduledPay);
 
-                        Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
-                        intent.setAction(Integer.toString(scheduledPay.id));
-                        intent.putExtra("contentText", scheduledPay.getName_acc() + " -> " +
-                                scheduledPay.getName() + ", " + String.format("%.2f", scheduledPay.getValue() / 100.)
-                                + " " +
-                                scheduledPay.getCur_Abbreviation());
-                        intent.putExtra("id", scheduledPay.id);
+                        for (ScheduledPay scheduledPay1 : DataScheduledPay.scheduledPays) {
+                            if (scheduledPay1.getDate_operation().after(System.currentTimeMillis()) &&
+                                    scheduledPay.getDate_operation().before(scheduledPay1.getDate_operation())) {
+                                Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
+                                intent.setAction(Integer.toString(scheduledPay1.id));
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast
+                                        (AddOperationActivity.this, 0, intent, 0);
+                                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                alarmManager.cancel(pendingIntent);
 
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast
-                                (AddOperationActivity.this, 0, intent,  0);
-                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        //long time = dateAndTimeOut.getTimeInMillis();
+                                intent = new Intent(AddOperationActivity.this, TimeNotification.class);
+                                intent.setAction(Integer.toString(scheduledPay.id));
 
-                        long time = System.currentTimeMillis() + 20 * 1000;
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, time,
-                                pendingIntent);
+                                pendingIntent = PendingIntent.getBroadcast
+                                        (AddOperationActivity.this, 0, intent, 0);
+                                alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                                long time = System.currentTimeMillis() + temp;
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, time,
+                                        pendingIntent);
+                            }
+                        }
+
+                        DataScheduledPay.scheduledPays.add(scheduledPay);
+
+                        if (DataScheduledPay.scheduledPays.size() == 1) {
+                            Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
+                            intent.setAction(Integer.toString(scheduledPay.id));
+
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast
+                                    (AddOperationActivity.this, 0, intent, 0);
+                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                            long time = System.currentTimeMillis() + temp;
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, time,
+                                    pendingIntent);
+                        }
 
                         Intent answerIntent = new Intent();
                         answerIntent.putExtra("Action", "UpdateExpenses");

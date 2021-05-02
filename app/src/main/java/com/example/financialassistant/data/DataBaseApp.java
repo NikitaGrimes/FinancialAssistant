@@ -10,7 +10,7 @@ public class DataBaseApp {
 
     private static DataBase instance;
 
-    private static final String DATABASE_NAME = "FinancialDB";
+    public static final String DATABASE_NAME = "FinancialDB";
 
     public static DataBase getInstance(Context context) {
         if(instance == null)

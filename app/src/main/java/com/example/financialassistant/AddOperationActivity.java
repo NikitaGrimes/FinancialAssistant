@@ -310,17 +310,17 @@ public class AddOperationActivity extends AppCompatActivity {
                             if (scheduledPay1.getDate_operation().after(System.currentTimeMillis()) &&
                                     scheduledPay.getDate_operation().before(scheduledPay1.getDate_operation())) {
                                 Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
-                                intent.setAction(Integer.toString(scheduledPay1.id));
+                                intent.putExtra("Id", scheduledPay1.id);
                                 PendingIntent pendingIntent = PendingIntent.getBroadcast
-                                        (AddOperationActivity.this, 0, intent, 0);
+                                        (AddOperationActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                                 alarmManager.cancel(pendingIntent);
 
                                 intent = new Intent(AddOperationActivity.this, TimeNotification.class);
-                                intent.setAction(Integer.toString(scheduledPay.id));
+                                intent.putExtra("Id", scheduledPay.id);
 
                                 pendingIntent = PendingIntent.getBroadcast
-                                        (AddOperationActivity.this, 0, intent, 0);
+                                        (AddOperationActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                                 long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
                                 long time = System.currentTimeMillis() + temp;
@@ -333,10 +333,10 @@ public class AddOperationActivity extends AppCompatActivity {
 
                         if (DataScheduledPay.scheduledPays.size() == 1) {
                             Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
-                            intent.setAction(Integer.toString(scheduledPay.id));
+                            intent.putExtra("Id", scheduledPay.id);
 
                             PendingIntent pendingIntent = PendingIntent.getBroadcast
-                                    (AddOperationActivity.this, 0, intent, 0);
+                                    (AddOperationActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                             long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
                             long time = System.currentTimeMillis() + temp;
@@ -413,23 +413,22 @@ public class AddOperationActivity extends AppCompatActivity {
                         scheduledPay.id = (int) scheduledPayDao.insert(new ScheduledPayDB(exp_type_id,
                                 -1 * value, -1 * realValueExp, cur_id, acc_id, gregorianCalendar));
                         scheduledPay.setRealValue(-1 * realValueExp);
-                        DataScheduledPay.scheduledPays.add(scheduledPay);
 
                         for (ScheduledPay scheduledPay1 : DataScheduledPay.scheduledPays) {
                             if (scheduledPay1.getDate_operation().after(System.currentTimeMillis()) &&
                                     scheduledPay.getDate_operation().before(scheduledPay1.getDate_operation())) {
                                 Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
-                                intent.setAction(Integer.toString(scheduledPay1.id));
+                                intent.putExtra("Id", scheduledPay1.id);
                                 PendingIntent pendingIntent = PendingIntent.getBroadcast
-                                        (AddOperationActivity.this, 0, intent, 0);
+                                        (AddOperationActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                                 alarmManager.cancel(pendingIntent);
 
                                 intent = new Intent(AddOperationActivity.this, TimeNotification.class);
-                                intent.setAction(Integer.toString(scheduledPay.id));
+                                intent.putExtra("Id", scheduledPay.id);
 
                                 pendingIntent = PendingIntent.getBroadcast
-                                        (AddOperationActivity.this, 0, intent, 0);
+                                        (AddOperationActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                                 long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
                                 long time = System.currentTimeMillis() + temp;
@@ -442,10 +441,10 @@ public class AddOperationActivity extends AppCompatActivity {
 
                         if (DataScheduledPay.scheduledPays.size() == 1) {
                             Intent intent = new Intent(AddOperationActivity.this, TimeNotification.class);
-                            intent.setAction(Integer.toString(scheduledPay.id));
+                            intent.putExtra("Id", scheduledPay.id);
 
                             PendingIntent pendingIntent = PendingIntent.getBroadcast
-                                    (AddOperationActivity.this, 0, intent, 0);
+                                    (AddOperationActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                             long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
                             long time = System.currentTimeMillis() + temp;

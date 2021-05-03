@@ -39,6 +39,7 @@ import com.example.financialassistant.data.DataDebts;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataScheduledPay;
 import com.example.financialassistant.data.DataTypesExpenses;
+import com.example.financialassistant.data.DataViews;
 import com.example.financialassistant.models.Accounts;
 import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
@@ -266,6 +267,8 @@ public class Main_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         checkEmptyViews(view);
         newView = view;
+        DataViews.emptyLastExp = (TextView) view.findViewById(R.id.no_exp_TV);
+        DataViews.emptyScheduledPay = (TextView) view.findViewById(R.id.no_sch_pay_TV);
         DataTypesExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_types_of_expenses);
         TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
         DataTypesExpenses.recyclerView.setAdapter(adapter);

@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         List<Accounts> accountsList = accountsDao.getAll();
+        DataAccounts.accounts.clear();
         DataAccounts.accounts.addAll(accountsList);
 
         /*Currents tempCur = currentsDao.getByAbr("BYN");
@@ -215,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         DataTypesExpenses.typesOfExpenses.add(expense);*/
 
         List<TypeOfExpenses> typeOfExpenses = typeOfExpDao.getAllExpType();
+        DataTypesExpenses.typesOfExpenses.clear();
         DataTypesExpenses.typesOfExpenses.addAll(typeOfExpenses);
 
         /*Currents tempCur = currentsDao.getByAbr("BYN");
@@ -234,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
         DataExpenses.expenses.add(expenses);*/
 
         List<Expenses> expenses = expDao.getLast20();
+        DataExpenses.expenses.clear();
         DataExpenses.expenses.addAll(expenses);
 
         /*long cur_id = currentsDao.getIdByAbr("BYN");
@@ -252,10 +255,12 @@ public class MainActivity extends AppCompatActivity {
 
         DebtsDao debtsDao = DataBaseApp.getInstance(this).debtsDao();
         List<Debts> debtsList = debtsDao.getAll();
+        DataDebts.debts.clear();
         DataDebts.debts.addAll(debtsList);
 
         ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(this).scheduledPayDao();
         List<ScheduledPay> payList = scheduledPayDao.getAll();
+        DataScheduledPay.scheduledPays.clear();
         DataScheduledPay.scheduledPays.addAll(payList);
 
         //Создание адаптера секций

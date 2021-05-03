@@ -35,18 +35,34 @@ public class TimeNotification extends BroadcastReceiver {
                 .build();
         ScheduledPayDao scheduledPayDao = instance.scheduledPayDao();
         List<ScheduledPay> payList = scheduledPayDao.getAll();
-        String Id = intent.getAction();
-        ScheduledPay scheduledPayNow = scheduledPayDao.getById(Integer.parseInt(Id));
-        @SuppressLint("DefaultLocale") String contentText = scheduledPayNow.getName_acc() + " -> " + scheduledPayNow.getName() +
-                ", " + String.format("%.2f", scheduledPayNow.getValue() / 100.) + " " + scheduledPayNow.getCur_Abbreviation();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "FAChannel")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("У Вас есть запланированный платеж")
-                .setContentText(contentText)
-                .setPriority(PRIORITY_DEFAULT);
+        int Id = intent.getIntExtra("Id", -1);
+        ScheduledPay scheduledPayNow = scheduledPayDao.getById(Id);
+        if (scheduledPayNow != null) {
+            Intent confirmIntent = new Intent(context, NotificationConfirm.class);
+            Intent cancelIntent = new Intent(context, NotificationCancel.class);
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(Integer.parseInt(Id), builder.build());
+            confirmIntent.putExtra("Id", scheduledPayNow.id);
+            cancelIntent.putExtra("Id", scheduledPayNow.id);
+
+            PendingIntent confirmPendingIntent = PendingIntent.getBroadcast(context, 0, confirmIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 0, cancelIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            @SuppressLint("DefaultLocale") String contentText = scheduledPayNow.getName_acc() + " -> " + scheduledPayNow.getName() +
+                    ", " + String.format("%.2f", scheduledPayNow.getValue() / 100.) + " " + scheduledPayNow.getCur_Abbreviation();
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "FAChannel")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("У Вас есть запланированный платеж")
+                    .setContentText(contentText)
+                    .setPriority(PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+                    .addAction(R.drawable.ic_launcher_foreground, "Confirm", confirmPendingIntent)
+                    .addAction(R.drawable.ic_launcher_foreground, "Delete", cancelPendingIntent);
+
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+            notificationManagerCompat.notify(Id, builder.build());
+        }
 
         long time = System.currentTimeMillis();
         boolean isFind = false;
@@ -61,9 +77,9 @@ public class TimeNotification extends BroadcastReceiver {
             }
         }
         if (isFind) {
-            intent.setAction(Integer.toString(id));
+            intent.putExtra("Id" , id);
             PendingIntent pendingIntent = PendingIntent.getBroadcast
-                    (context, 0, intent,  0);
+                    (context, 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
             alarmManager.set(AlarmManager.RTC_WAKEUP, shortestTime,
                     pendingIntent);

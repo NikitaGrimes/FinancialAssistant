@@ -301,9 +301,16 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();*/
 
-        Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
-        startActivityForResult(intent, 0);
-
+        if (DataAccounts.accounts.size() < 1) {
+            Toast.makeText(view.getContext(), "Отсутствуют счета!", Toast.LENGTH_LONG).show();
+        }
+        else if (DataTypesExpenses.typesOfExpenses.size() < 1) {
+            Toast.makeText(view.getContext(), "Отсутствуют категории расходов!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
+            startActivityForResult(intent, 0);
+        }
     }
 
     @Override

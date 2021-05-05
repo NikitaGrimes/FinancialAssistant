@@ -30,6 +30,9 @@ public interface TypeOfExpDao {
     @Query("delete from typeofexpdb where id = :id")
     void deleteById(long id);
 
+    @Query("select * from typeofexpdb")
+    List<TypeOfExpDB> getAll();
+
     @Insert
     long insert(TypeOfExpDB typeOfExpDb);
 

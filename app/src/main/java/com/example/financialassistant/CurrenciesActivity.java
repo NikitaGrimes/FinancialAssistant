@@ -64,7 +64,7 @@ public class CurrenciesActivity extends AppCompatActivity {
                 new RecyclerItemClickListener(getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         String curName = currents.get(position).getCur_Abbreviation();
-                        if (who == 3 || who == 4) {
+                        if (who == 3 || who == 4 || who == 5) {
                             Intent answerIntent = new Intent();
                             answerIntent.putExtra("Currency", curName);
                             setResult(RESULT_OK, answerIntent);

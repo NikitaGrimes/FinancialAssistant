@@ -33,6 +33,7 @@ import com.example.financialassistant.modelsDB.DebtsDB;
 import com.example.financialassistant.modelsDB.ScheduledPayDB;
 import com.example.financialassistant.modelsDB.TypeOfAccDB;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
+import com.example.financialassistant.utils.JSONMainCurHelper;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -79,40 +80,23 @@ public class MainActivity extends AppCompatActivity {
         AccountsDao accountsDao = DataBaseApp.getInstance(this).accountsDao();
         ExpDao expDao = DataBaseApp.getInstance(this).expDao();
         TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
+
+        DataCurrents.mainCur = JSONMainCurHelper.importFromJSON(this);
+        if (DataCurrents.mainCur == null) {
+            JSONMainCurHelper.exportToJSON(this, "BYN");
+        }
+        DataCurrents.mainCur = JSONMainCurHelper.importFromJSON(this);
+        DataCurrents.fromCurrency = "USD";
+        DataCurrents.toCurrency = DataCurrents.mainCur;
+
         //Парсинг последних валют
         if (currentsDao.getById(1) != null && !isOnline(this)) {
             Toast.makeText(this, "Отсутствует подключение к Интернету", Toast.LENGTH_LONG).show();
             List<Currents> currentsList = currentsDao.getAll();
             DataCurrents.currentList.addAll(currentsList);
-            DataCurrents.fromCurrency = "USD";
-            DataCurrents.toCurrency = "BYN";
         }
         else if (currentsDao.getById(1) == null) {
-            AssetManager assetManager = getAssets();
-            InputStream inputStream = null;
-            StringBuilder stringBuilder = new StringBuilder();
-            try {
-                inputStream = assetManager.open("selectedСurrencies.json");
-                InputStreamReader isr = new InputStreamReader(inputStream);
-                int data = isr.read();
-                while (data != -1) {
-                    stringBuilder.append((char) data);
-                    data = isr.read();
-                }
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String res = stringBuilder.toString();
-            try {
-                JSONObject jsonObject = new JSONObject(res);
-                JSONObject firstObject = jsonObject.getJSONObject("from");
-                DataCurrents.fromCurrency = firstObject.getString("currency");
-                JSONObject secondObject = jsonObject.getJSONObject("to");
-                DataCurrents.toCurrency = secondObject.getString("currency");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            String res;
             //Парсинг курса валют
             AssetManager am = getAssets();
             InputStream is = null;
@@ -162,8 +146,6 @@ public class MainActivity extends AppCompatActivity {
         if (isOnline(this)) {
             GetData getData = new GetData();
             getData.execute();
-            DataCurrents.fromCurrency = "USD";
-            DataCurrents.toCurrency = "BYN";
         }
 
         //Ввод начальных значений
@@ -311,6 +293,17 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
             startActivityForResult(intent, 0);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (DataTypesExpenses.adapter != null)
+            DataTypesExpenses.adapter.notifyDataSetChanged();
+        if (DataExpenses.adapter != null)
+            DataExpenses.adapter.notifyDataSetChanged();
+        if (DataScheduledPay.adapter != null)
+            DataScheduledPay.adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -7,67 +7,60 @@
     android:layout_height="match_parent"
     tools:context=".SettingsActivity">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/isNullifyDBSwitchCompat"
+    <TextView
+        android:id="@+id/mainCurTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/mainCur"
+        android:textSize="18sp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="22sp"
-        android:text="@string/settingsNullifyDB"
-        android:layout_margin="10dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/settingsRadioGroup"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/mainCurAbr"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="vertical"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/isNullifyDBSwitchCompat">
+        app:layout_constraintTop_toBottomOf="@+id/mainCurTV" />
 
-        <RadioButton
-            android:id="@+id/everyMonthRadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settingsNullifyEveryMonth"
-            android:textSize="22sp" />
+    <TextView
+        android:id="@+id/mainCurName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainCurAbr" />
 
-        <Spinner
-            android:id="@+id/everyMonthDayNullifyDBSpinner"
-            android:layout_width="153dp"
-            android:layout_height="36dp"
-            android:layout_margin="10dp"
-            android:entries="@array/days31"
-            android:scrollbarSize="22sp" />
-
-        <RadioButton
-            android:id="@+id/everyDayOfWeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settingsNullifyEveryDayOfWeek"
-            android:textSize="22sp" />
-
-        <Spinner
-            android:id="@+id/everyWeekNullifyDBSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_margin="10dp"
-            android:entries="@array/daysOfWeek"
-            android:scrollbarSize="22sp" />
-    </RadioGroup>
+    <Button
+        android:id="@+id/mainCurBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/changeMainCur"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainCurName"
+        android:onClick="onChangeMainCurClick"/>
 
     <Button
         android:id="@+id/nullifyDBButton"
-        android:text="@string/settingsNullifyDBNowButton"
-        android:textSize="16sp"
-        android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/red"
+        android:onClick="onDeleteBDClick"
+        android:text="@string/settingsNullifyDBNowButton"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsRadioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/mainCurBT" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,6 +22,8 @@
     <string name="scheduled_pay">Запланированные операции</string>
     <string name="schedule">Запланировать</string>
     <string name="setDateTime">Задать дату и время</string>
+    <string name="mainCur">Основная валюта</string>
+    <string name="changeMainCur">Изменить основную валюту</string>
     <string name="debts">Долги</string>
     <string-array name="currency">
         <item>BYN</item>

@@ -15,7 +15,6 @@ public class Currents {
     @PrimaryKey(autoGenerate = true)
     private int Cur_ID;
 
-
     private Date LastDate;
     private String Cur_Abbreviation;
     private String Cur_Name;

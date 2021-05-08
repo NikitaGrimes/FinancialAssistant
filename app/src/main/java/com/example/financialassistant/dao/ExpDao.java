@@ -11,6 +11,7 @@ import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.modelsDB.AccountsDB;
 import com.example.financialassistant.modelsDB.ExpDB;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Dao
@@ -27,6 +28,12 @@ public interface ExpDao {
             "= accountsdb.id inner join typeofexpdb on expdb.type_of_exp_id = typeofexpdb.id inner join " +
             "currents on expdb.currents_id = currents.Cur_ID ORDER BY date_operation DESC limit 20")
     List<Expenses> getLast20();
+
+    @Query("SELECT expdb.id, expdb.value, expdb.realValue, expdb.date_operation, accountsdb.name_acc," +
+            "typeofexpdb.name, currents.Cur_Abbreviation from expdb inner join accountsdb on expdb.acc_id " +
+            "= accountsdb.id inner join typeofexpdb on expdb.type_of_exp_id = typeofexpdb.id inner join " +
+            "currents on expdb.currents_id = currents.Cur_ID where expdb.date_operation > :time")
+    List<Expenses> getByTime(GregorianCalendar time);
 
     @Query("SELECT expdb.id, expdb.value, expdb.realValue, expdb.date_operation, accountsdb.name_acc," +
             "typeofexpdb.name, currents.Cur_Abbreviation from expdb inner join accountsdb on expdb.acc_id " +

@@ -9,6 +9,7 @@ import androidx.room.Update;
 import com.example.financialassistant.models.TypeOfExpenses;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Dao

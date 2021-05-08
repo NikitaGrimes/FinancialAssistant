@@ -30,6 +30,28 @@
                 android:text="@string/expenses_type"
                 android:textSize="18sp"/>
 
+            <TextView
+                android:id="@+id/filter_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toStartOf="@+id/exp_filter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/type_of_exp_TV" />
+
+            <Spinner
+                android:id="@+id/exp_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/exp_filters"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="40dp"
+                android:spinnerMode="dialog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/type_of_exp_TV" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_types_of_expenses"
                 android:layout_width="match_parent"
@@ -41,7 +63,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/type_of_exp_TV" />
+                app:layout_constraintTop_toBottomOf="@+id/exp_filter" />
 
             <TextView
                 android:id="@+id/no_exp_type_TV"
@@ -50,7 +72,7 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/type_of_exp_TV"
+                app:layout_constraintTop_toBottomOf="@+id/exp_filter"
                 android:layout_marginTop="10dp"
                 android:text="@string/you_have_not_exp_type"/>
 
@@ -106,6 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textSize="22sp"
+                android:gravity="center"
                 android:text="@string/you_have_not_scheduled_pay"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

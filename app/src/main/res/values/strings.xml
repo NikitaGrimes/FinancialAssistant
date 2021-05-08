@@ -5,7 +5,22 @@
     <string name="tab_text_3">Конвертер</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_new_type">Управление типами расходов</string>
-    <string name="hello_blank_fragment">Привет из фрагмента!)</string>
+
+    <string name="income">Доход</string>
+    <string name="exChange">Перевод</string>
+    <string name="out_acc">Отсутствуют счета!</string>
+    <string name="out_type_of_exp">Отсутствуют категории расходов!</string>
+    <string name="currencies_updated">Курс валют обновлен.</string>
+    <string-array name="exp_filters">
+        <item>Нет</item>
+        <item>7 дней</item>
+        <item>30 дней</item>
+        <item>Текущий месяц</item>
+        <item>3 месяца</item>
+        <item>1 год</item>
+        <item>3 года</item>
+    </string-array>
+    <string name="filter">Фильтр</string>
     <string name="enter_new_name_of_type_exp">Введите новое название</string>
     <string name="enter_name_of_debts">Введите название долга</string>
     <string name="enter_start_debts_value">Введите значение долга</string>
@@ -24,13 +39,8 @@
     <string name="setDateTime">Задать дату и время</string>
     <string name="mainCur">Основная валюта</string>
     <string name="changeMainCur">Изменить основную валюту</string>
+    <string name="Internet_out">Отсутствует подключение к Интернету.</string>
     <string name="debts">Долги</string>
-    <string-array name="currency">
-        <item>BYN</item>
-        <item>EU</item>
-        <item>USD</item>
-        <item>RUB</item>
-    </string-array>
     <string name="calc_1">1</string>
     <string name="calc_2">2</string>
     <string name="calc_3">3</string>
@@ -72,46 +82,4 @@
     <string name="saveOperation">Сохранить операцию</string>
     <string name="fromAccExChange">С</string>
     <string name="toAccExChange">На</string>
-    <string-array name="days31">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>18</item>
-        <item>19</item>
-        <item>20</item>
-        <item>21</item>
-        <item>22</item>
-        <item>23</item>
-        <item>24</item>
-        <item>25</item>
-        <item>26</item>
-        <item>27</item>
-        <item>28</item>
-        <item>29</item>
-        <item>30</item>
-        <item>31</item>
-    </string-array>
-    <string-array name="daysOfWeek">
-        <item>Понедельник</item>
-        <item>Вторник</item>
-        <item>Среда</item>
-        <item>Четверг</item>
-        <item>Пятница</item>
-        <item>Суббота</item>
-        <item>Воскресенье</item>
-    </string-array>
 </resources>

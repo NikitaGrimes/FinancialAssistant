@@ -59,7 +59,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -68,6 +70,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static String JSON_URL = "https://www.floatrates.com/daily/usd.json";
+    private static String CUR_JSON = "currents.json";
+    private static String BYN = "BYN";
+    private static String USD = "USD";
+    private static String US_DOLLAR = "U.S. Dollar";
+    private static String DOLLAR_ID = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +90,15 @@ public class MainActivity extends AppCompatActivity {
 
         DataCurrents.mainCur = JSONMainCurHelper.importFromJSON(this);
         if (DataCurrents.mainCur == null) {
-            JSONMainCurHelper.exportToJSON(this, "BYN");
+            JSONMainCurHelper.exportToJSON(this, BYN);
         }
         DataCurrents.mainCur = JSONMainCurHelper.importFromJSON(this);
-        DataCurrents.fromCurrency = "USD";
+        DataCurrents.fromCurrency = USD;
         DataCurrents.toCurrency = DataCurrents.mainCur;
 
         //Парсинг последних валют
         if (currentsDao.getById(1) != null && !isOnline(this)) {
-            Toast.makeText(this, "Отсутствует подключение к Интернету", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.Internet_out), Toast.LENGTH_LONG).show();
             List<Currents> currentsList = currentsDao.getAll();
             DataCurrents.currentList.addAll(currentsList);
         }
@@ -102,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             InputStream is = null;
             StringBuilder s = new StringBuilder();
             try {
-                is = am.open("currents.json");
+                is = am.open(CUR_JSON);
                 InputStreamReader isr = new InputStreamReader(is);
                 int data = isr.read();
                 while (data != -1) {
@@ -120,9 +127,9 @@ public class MainActivity extends AppCompatActivity {
                 Iterator<String> keys = jsonObjects.keys();
                 DataCurrents.currentList.clear();
                 Currents uSCurrent = new Currents();
-                uSCurrent.setCur_ID("1");
-                uSCurrent.setCur_Abbreviation("USD");
-                uSCurrent.setCur_Name("U.S. Dollar");
+                uSCurrent.setCur_ID(DOLLAR_ID);
+                uSCurrent.setCur_Abbreviation(USD);
+                uSCurrent.setCur_Name(US_DOLLAR);
                 uSCurrent.setCur_OfficialRate(1);
                 uSCurrent.setLastDate(new Date());
                 DataCurrents.currentList.add(uSCurrent);
@@ -147,36 +154,21 @@ public class MainActivity extends AppCompatActivity {
             GetData getData = new GetData();
             getData.execute();
         }
-
         //Ввод начальных значений
-        /*Currents tempCur = currentsDao.getByAbr("BYN");
-        int id_temp_id = tempCur.getCur_ID();
-        accountsDao.insert(new AccountsDB("Family", 3500, id_temp_id, 2));
-        tempCur = currentsDao.getByAbr("EUR");
-        id_temp_id = tempCur.getCur_ID();
-        accountsDao.insert(new AccountsDB("Nata", 2000, id_temp_id, 3));
-        tempCur = currentsDao.getByAbr("USD");
-        id_temp_id = tempCur.getCur_ID();
-        accountsDao.insert(new AccountsDB("MySelf", 3000, id_temp_id, 1));*/
-
-        /*Accounts account = new Accounts("Family", "Карта", 3500, "BYN");
-        DataAccounts.accounts.add(account);
-        account = new Accounts("Nata", "Электронные", 2000, "EUR");
-        DataAccounts.accounts.add(account);
-        account = new Accounts("MySelf", "Наличные", 3000, "USD");
-        DataAccounts.accounts.add(account);*/
 
         if (typeOfAccDao.getAll().isEmpty()) {
-            typeOfAccDao.insert(new TypeOfAccDB("Наличные"));
-            typeOfAccDao.insert(new TypeOfAccDB("Карта"));
-            typeOfAccDao.insert(new TypeOfAccDB("Электронные"));
+            typeOfAccDao.insert(new TypeOfAccDB(getResources().getString(R.string.addAccountRadioTextCash)));
+            typeOfAccDao.insert(new TypeOfAccDB(getResources().getString(R.string.addAccountRadioTextCard)));
+            typeOfAccDao.insert(new TypeOfAccDB(getResources().getString(R.string.addAccountRadioTextElectronic)));
         }
         if (typeOfExpDao.getTypeExpDBById(-1) == null) {
-            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-1, "Доход", 0, 933);
+            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-1,
+                    getResources().getString(R.string.income), 0, 1);
             typeOfExpDao.insert(typeOfExpDB);
         }
         if (typeOfExpDao.getTypeExpDBById(-2) == null) {
-            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-2,"Перевод", 0, 933);
+            TypeOfExpDB typeOfExpDB = new TypeOfExpDB(-2,
+                    getResources().getString(R.string.exChange), 0, 1);
             typeOfExpDao.insert(typeOfExpDB);
         }
 
@@ -184,56 +176,13 @@ public class MainActivity extends AppCompatActivity {
         DataAccounts.accounts.clear();
         DataAccounts.accounts.addAll(accountsList);
 
-        /*Currents tempCur = currentsDao.getByAbr("BYN");
-        int id_temp_id = tempCur.getCur_ID();
-        typeOfExpDao.insert(new TypeOfExpDB("Всякое", 1000, id_temp_id));
-        typeOfExpDao.insert(new TypeOfExpDB("Подарки", 1500, id_temp_id));
-        typeOfExpDao.insert(new TypeOfExpDB("ФастФуд", 800, id_temp_id));*/
-
-        /*TypeOfExpenses expense = new TypeOfExpenses("Всякое", 1000, "BYN");
-        DataTypesExpenses.typesOfExpenses.add(expense);
-        expense = new TypeOfExpenses("Подарки", 1500, "BYN");
-        DataTypesExpenses.typesOfExpenses.add(expense);
-        expense = new TypeOfExpenses("ФастФуд", 800, "BYN");
-        DataTypesExpenses.typesOfExpenses.add(expense);*/
-
         List<TypeOfExpenses> typeOfExpenses = typeOfExpDao.getAllExpType();
         DataTypesExpenses.typesOfExpenses.clear();
         DataTypesExpenses.typesOfExpenses.addAll(typeOfExpenses);
 
-        /*Currents tempCur = currentsDao.getByAbr("BYN");
-        int id_temp_id = tempCur.getCur_ID();
-        expDao.insert(new ExpDB(1, -200, -200, id_temp_id, 1, new GregorianCalendar()));
-        expDao.insert(new ExpDB(2, -1000, -1000, id_temp_id, 1, new GregorianCalendar()));
-        expDao.insert(new ExpDB(3, -200, -200, id_temp_id, 1, new GregorianCalendar()));
-        expDao.insert(new ExpDB(1, -200, -200, id_temp_id, 1, new GregorianCalendar()));*/
-
-        /*Expenses expenses = new Expenses("Всякое", -200, "BYN", "Family");
-        DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("Подарки", -1000, "BYN", "Family");
-        DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("ФастФуд", -200, "BYN", "Family");
-        DataExpenses.expenses.add(expenses);
-        expenses = new Expenses("Всякое", -200, "BYN", "Family");
-        DataExpenses.expenses.add(expenses);*/
-
         List<Expenses> expenses = expDao.getLast20();
         DataExpenses.expenses.clear();
         DataExpenses.expenses.addAll(expenses);
-
-        /*long cur_id = currentsDao.getIdByAbr("BYN");
-        DebtsDao debtsDao = DataBaseApp.getInstance(this).debtsDao();
-        debtsDao.insert(new DebtsDB("Паше", 4000, cur_id, new GregorianCalendar(), true));
-        debtsDao.insert(new DebtsDB("Лере", 1000, cur_id, new GregorianCalendar(), true));
-        debtsDao.insert(new DebtsDB("Нате", 4000, cur_id, new GregorianCalendar(), false));
-
-
-        Debts debts = new Debts("Паше", 4000, "BYN", true);
-        DataDebts.debts.add(debts);
-        debts = new Debts("Лере", 1000, "BYN", true);
-        DataDebts.debts.add(debts);
-        debts = new Debts("Нате", 500, "BYN", false);
-        DataDebts.debts.add(debts);*/
 
         DebtsDao debtsDao = DataBaseApp.getInstance(this).debtsDao();
         List<Debts> debtsList = debtsDao.getAll();
@@ -251,43 +200,17 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-
-
-
-        /*FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                DataAccounts.names.add("qwe");
-                DataAccounts.values.add("qwe");
-                AccountsAdapter adapter = new AccountsAdapter();
-                DataAccounts.recyclerView.setAdapter(adapter);
-                Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
-                startActivityForResult(intent, 0);
-            }
-        });*/
     }
 
     //Создание новой операции расходов или доходов
     public void onClickNewOperation(View view) {
-        /*Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        DataAccounts.names.add("qwe");
-        DataAccounts.values.add("qwe");
-        AccountsAdapter adapter = new AccountsAdapter();
-        DataAccounts.recyclerView.setAdapter(adapter);
-        boolean isCon = isOnline(this);
-        if(isCon)
-            Snackbar.make(view, String.valueOf(DataAccounts.names.size()), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();*/
-
         if (DataAccounts.accounts.size() < 1) {
-            Toast.makeText(view.getContext(), "Отсутствуют счета!", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(),
+                    getResources().getString(R.string.out_acc), Toast.LENGTH_LONG).show();
         }
         else if (DataTypesExpenses.typesOfExpenses.size() < 1) {
-            Toast.makeText(view.getContext(), "Отсутствуют категории расходов!", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(),
+                    getResources().getString(R.string.out_type_of_exp), Toast.LENGTH_LONG).show();
         }
         else {
             Intent intent = new Intent(MainActivity.this, AddOperationActivity.class);
@@ -350,26 +273,16 @@ public class MainActivity extends AppCompatActivity {
             String action = data.getStringExtra("Action");
             switch (action) {
                 case "UpdateAccounts":
-                    //AccountsAdapter adapter = new AccountsAdapter();
-                    //DataAccounts.recyclerView.setAdapter(adapter);
                     DataAccounts.adapter.notifyDataSetChanged();
                     break;
                 case "UpdateExpenses":
-                    //TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
-                    //DataTypesExpenses.recyclerView.setAdapter(adapter);
                     DataTypesExpenses.adapter.notifyDataSetChanged();
                     DataExpenses.adapter.notifyDataSetChanged();
                     DataScheduledPay.adapter.notifyDataSetChanged();
                     break;
                 case "UpdateExpensesAndAccounts":
-                    //AccountsAdapter adapter0 = new AccountsAdapter();
-                    //DataAccounts.recyclerView.setAdapter(adapter0);
                     DataAccounts.adapter.notifyDataSetChanged();
-                    //TypesOfExpensesAdapter adapter1 = new TypesOfExpensesAdapter();
-                    //DataTypesExpenses.recyclerView.setAdapter(adapter1);
                     DataTypesExpenses.adapter.notifyDataSetChanged();
-                    //ExpensesAdapter adapter2 = new ExpensesAdapter();
-                    //DataExpenses.recyclerView.setAdapter(adapter2);
                     DataExpenses.adapter.notifyDataSetChanged();
                     DataScheduledPay.adapter.notifyDataSetChanged();
                     break;
@@ -377,16 +290,6 @@ public class MainActivity extends AppCompatActivity {
                     DataDebts.adapter.notifyDataSetChanged();
             }
         }
-        /*DataAccounts.names.add("qwe");
-        DataAccounts.types.add("qwe");
-        DataAccounts.currency.add("qwe");
-        AccountsAdapter adapter = new AccountsAdapter();
-        DataAccounts.recyclerView.setAdapter(adapter);
-        TextView textView = (TextView) findViewById(R.id.test);
-        if (resultCode == RESULT_OK) {
-            String thiefname = data.getStringExtra("qwe");
-            textView.setText(thiefname);
-        }*/
     }
 
     //Создание кнопок "Меню"
@@ -410,13 +313,10 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting())
-        {
-            return true;
-        }
-        return false;
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    @SuppressLint("StaticFieldLeak")
     public class GetData extends AsyncTask<String, String, String>{
 
         @Override
@@ -458,9 +358,9 @@ public class MainActivity extends AppCompatActivity {
                 Iterator<String> keys = jsonObjects.keys();
                 DataCurrents.currentList.clear();
                 Currents uSCurrent = new Currents();
-                uSCurrent.setCur_ID("1");
-                uSCurrent.setCur_Abbreviation("USD");
-                uSCurrent.setCur_Name("U.S. Dollar");
+                uSCurrent.setCur_ID(DOLLAR_ID);
+                uSCurrent.setCur_Abbreviation(USD);
+                uSCurrent.setCur_Name(US_DOLLAR);
                 uSCurrent.setCur_OfficialRate(1);
                 uSCurrent.setLastDate(new Date());
                 DataCurrents.currentList.add(uSCurrent);
@@ -477,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                     DataCurrents.currentList.add(current);
                     currentsDao.update(current);
                 }
-                Toast.makeText(getApplicationContext(), "Курс валют обновлен",
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.currencies_updated),
                         Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();

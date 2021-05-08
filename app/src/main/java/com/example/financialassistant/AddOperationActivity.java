@@ -290,7 +290,7 @@ public class AddOperationActivity extends AppCompatActivity {
                     if (str.charAt(0) == '.') {
                         str = "0" + str;
                     }
-                    int addValue = (int) (Double.parseDouble(str) * 100);
+                    int addValue = (int) (Double.parseDouble(str) * 100 + 0.1);
                     if (isScheduledIn.isChecked())
                     {
                         ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(this).scheduledPayDao();
@@ -392,7 +392,7 @@ public class AddOperationActivity extends AppCompatActivity {
                     }
                     Accounts account = DataAccounts.accounts.get(posAcc);
                     TypeOfExpenses expense = DataTypesExpenses.typesOfExpenses.get(posExp);
-                    int value = (int) (Double.parseDouble(str) * 100);
+                    int value = (int) (Double.parseDouble(str) * 100 + 0.1);
                     int valueAcc = account.getValue();
                     int valueExp = expense.getValue();
                     int realValueExp = value;
@@ -430,7 +430,7 @@ public class AddOperationActivity extends AppCompatActivity {
                                 pendingIntent = PendingIntent.getBroadcast
                                         (AddOperationActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                                long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                                long temp = dateAndTimeOut.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
                                 long time = System.currentTimeMillis() + temp;
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, time,
                                         pendingIntent);
@@ -446,7 +446,7 @@ public class AddOperationActivity extends AppCompatActivity {
                             PendingIntent pendingIntent = PendingIntent.getBroadcast
                                     (AddOperationActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                            long temp = dateAndTimeIn.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                            long temp = dateAndTimeOut.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
                             long time = System.currentTimeMillis() + temp;
                             alarmManager.set(AlarmManager.RTC_WAKEUP, time,
                                     pendingIntent);
@@ -476,7 +476,7 @@ public class AddOperationActivity extends AppCompatActivity {
                             expense.setValue(valueExp);
                             DataTypesExpenses.typesOfExpenses.set(posExp, expense);
                             TypeOfExpDB typeOfExpDB = typeOfExpDao.getTypeExpDBById(expense.id);
-                            typeOfExpDB.value = expense.getValue();
+                            typeOfExpDB.value += realValueExp;
                             typeOfExpDao.update(typeOfExpDB);
 
                             ExpDao expDao = DataBaseApp.getInstance(this).expDao();
@@ -520,7 +520,7 @@ public class AddOperationActivity extends AppCompatActivity {
                     if (fromValue.charAt(0) == '.') {
                         fromValue = "0" + fromValue;
                     }
-                    int fromValueInt = (int)(Double.parseDouble(fromValue) * 100);
+                    int fromValueInt = (int)(Double.parseDouble(fromValue) * 100 + 0.1);
                     if (fromAccValue >= fromValueInt) {
                         fromAccValue -= fromValueInt;
                         account.setValue(fromAccValue);
@@ -543,7 +543,7 @@ public class AddOperationActivity extends AppCompatActivity {
                         if (toValue.charAt(0) == '.') {
                             toValue = "0" + toValue;
                         }
-                        int toValueInt = (int)(Double.parseDouble(toValue) * 100);
+                        int toValueInt = (int)(Double.parseDouble(toValue) * 100 + 0.1);
                         account = DataAccounts.accounts.get(posTo);
                         int toAccValue = account.getValue();
                         toAccValue += toValueInt;

@@ -175,7 +175,7 @@ public class AddDebtsActivity extends AppCompatActivity {
                     }
                 }
             }
-            int startValue = (int) Double.parseDouble(valueText.getText().toString()) * 100;
+            int startValue = (int) (Double.parseDouble(valueText.getText().toString()) * 100 + 0.1);
             GregorianCalendar newDeadline = (GregorianCalendar) chosenDate;
             String currency = chooseCurButton.getText().toString();
             DebtsDao debtsDao = DataBaseApp.getInstance(view.getContext()).debtsDao();

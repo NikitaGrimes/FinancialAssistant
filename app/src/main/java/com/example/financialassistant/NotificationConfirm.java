@@ -92,7 +92,7 @@ public class NotificationConfirm extends BroadcastReceiver {
 
                 if (typeIndex != -1) {
                     typeOfExpense.setValue(typeOfExpense.getValue() - scheduledPay.getRealValue());
-                    typeOfExpDB.value = typeOfExpense.getValue();
+                    typeOfExpDB.value -= scheduledPay.getRealValue();
                     DataTypesExpenses.typesOfExpenses.set(typeIndex, typeOfExpense);
                     typeOfExpDao.update(typeOfExpDB);
                     if (DataTypesExpenses.adapter != null)

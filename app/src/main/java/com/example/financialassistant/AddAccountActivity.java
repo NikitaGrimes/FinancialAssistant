@@ -148,7 +148,7 @@ public class AddAccountActivity extends AppCompatActivity {
                 }
             }
             double tempDouble = Double.parseDouble(valueAccount);
-            int valueAccInt = (int) (tempDouble * 100);
+            int valueAccInt = (int) (tempDouble * 100 + 0.1);
             account = new Accounts(nameAccount, typeAccount, valueAccInt,
                     chooseCurrency.getText().toString());
             AccountsDao accountsDao = DataBaseApp.getInstance(this).accountsDao();

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -54,6 +55,10 @@ import com.example.financialassistant.modelsDB.TypeOfExpDB;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -158,7 +163,7 @@ public class Main_Fragment extends Fragment {
                                     Toast.makeText(context, "Неверный счет для оплаты", Toast.LENGTH_LONG).show();
                                 }
                                 else {
-                                    int pay_value = (int) Double.parseDouble(valueInput.getText().toString()) * 100;
+                                    int pay_value = (int) (Double.parseDouble(valueInput.getText().toString()) * 100 + 0.1);
                                     if (debt.isDebtor()) {
                                         if (pay_value > accounts.getValue()) {
                                             Toast.makeText(context, "На счете мало средств", Toast.LENGTH_LONG).show();
@@ -270,48 +275,18 @@ public class Main_Fragment extends Fragment {
         DataViews.emptyLastExp = (TextView) view.findViewById(R.id.no_exp_TV);
         DataViews.emptyScheduledPay = (TextView) view.findViewById(R.id.no_sch_pay_TV);
         DataTypesExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_types_of_expenses);
+        //DataTypesExpenses.filterOfExpenses = new ArrayList<>(DataTypesExpenses.typesOfExpenses);
         TypesOfExpensesAdapter adapter = new TypesOfExpensesAdapter();
         DataTypesExpenses.recyclerView.setAdapter(adapter);
         DataTypesExpenses.adapter = adapter;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         DataTypesExpenses.recyclerView.setLayoutManager(layoutManager);
-        DataTypesExpenses.recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(view.getContext(), DataTypesExpenses.recyclerView ,
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                //Intent intent = new Intent(getActivity(), AddNewTypeExpensesActivity.class);
-                                //intent.putExtra("Action", "Remake");
-                                //intent.putExtra("Num", position);
-                                //startActivityForResult(intent, 0);
-                            }
 
-                            @Override
-                            public void onLongItemClick(View view, int position) {
-
-                            }
-                        })
-        );
         DataExpenses.recyclerView = (RecyclerView) view.findViewById(R.id.list_last_expenses);
         ExpensesAdapter expensesAdapter = new ExpensesAdapter();
         DataExpenses.recyclerView.setAdapter(expensesAdapter);
         DataExpenses.adapter = expensesAdapter;
-        DataExpenses.recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(view.getContext(), DataTypesExpenses.recyclerView ,
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                Intent intent = new Intent(getActivity(), AddOperationActivity.class);
-                                intent.putExtra("Num", position);
-                                startActivityForResult(intent, 0);
-                            }
 
-                            @Override
-                            public void onLongItemClick(View view, int position) {
-
-                            }
-                        })
-        );
         DataScheduledPay.recyclerView = (RecyclerView) view.findViewById(R.id.list_scheduled_pay);
         ScheduledPayAdapter scheduledPayAdapter = new ScheduledPayAdapter();
         DataScheduledPay.recyclerView.setAdapter(scheduledPayAdapter);
@@ -360,7 +335,7 @@ public class Main_Fragment extends Fragment {
                                         typeOfExpense.setValue(typeOfExpense.getValue() + expense.getRealValue());
                                         TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(view.getContext()).typeOfExpDao();
                                         TypeOfExpDB typeOfExpDB = typeOfExpDao.getTypeExpDBById(typeOfExpense.id);
-                                        typeOfExpDB.value = typeOfExpense.getValue();
+                                        typeOfExpDB.value += + expense.getRealValue();
                                         typeOfExpDao.update(typeOfExpDB);
                                         break;
                                     }
@@ -404,7 +379,6 @@ public class Main_Fragment extends Fragment {
                                                 ExpDao expDao = DataBaseApp.getInstance(view.getContext()).expDao();
                                                 TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(view.getContext()).typeOfExpDao();
 
-
                                                 AccountsDB accountsDB = accountsDao.getAccDBByName(scheduledPay.getName_acc());
                                                 TypeOfExpDB typeOfExpDB = typeOfExpDao.getTypeExpDBByName(scheduledPay.getName());
                                                 Accounts account = null;
@@ -440,7 +414,7 @@ public class Main_Fragment extends Fragment {
 
                                                     if (typeIndex != -1) {
                                                         typeOfExpense.setValue(typeOfExpense.getValue() - scheduledPay.getRealValue());
-                                                        typeOfExpDB.value = typeOfExpense.getValue();
+                                                        typeOfExpDB.value -= scheduledPay.getRealValue();
                                                         DataTypesExpenses.typesOfExpenses.set(typeIndex, typeOfExpense);
                                                         typeOfExpDao.update(typeOfExpDB);
                                                         DataTypesExpenses.adapter.notifyDataSetChanged();
@@ -507,6 +481,138 @@ public class Main_Fragment extends Fragment {
         };
         ItemTouchHelper itemTouchHelperSchPay = new ItemTouchHelper(touchHelperCallbackSchPay);
         itemTouchHelperSchPay.attachToRecyclerView(DataScheduledPay.recyclerView);
+
+        Spinner filter = (Spinner) view.findViewById(R.id.exp_filter);
+        filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View itemSelected,
+                                       int selectedItemPosition, long selectedId) {
+
+                String[] choose = getResources().getStringArray(R.array.exp_filters);
+                switch (choose[selectedItemPosition]) {
+                    case "Нет":
+                        TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(view.getContext()).typeOfExpDao();
+                        List<TypeOfExpenses> typeOfExpensesList = typeOfExpDao.getAllExpType();
+                        DataTypesExpenses.typesOfExpenses.clear();
+                        DataTypesExpenses.typesOfExpenses.addAll(typeOfExpensesList);
+                        DataTypesExpenses.adapter.notifyDataSetChanged();
+                        break;
+                    case "7 дней":
+                        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+                        gregorianCalendar.add(Calendar.DAY_OF_YEAR, -7);
+                        ExpDao expDao = DataBaseApp.getInstance(view.getContext()).expDao();
+                        List<Expenses> expensesList = expDao.getByTime(gregorianCalendar);
+                        for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                            typeOfExpenses.setValue(0);
+                        }
+                        for (Expenses expense : expensesList) {
+                            for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                                if (expense.getName().equals(typeOfExpenses.getName())) {
+                                    typeOfExpenses.setValue(typeOfExpenses.getValue() - expense.getRealValue());
+                                    break;
+                                }
+                            }
+                        }
+                        DataTypesExpenses.adapter.notifyDataSetChanged();
+                        break;
+                    case "30 дней":
+                        GregorianCalendar gregorianCalendar30 = new GregorianCalendar();
+                        gregorianCalendar30.add(Calendar.DAY_OF_YEAR, -30);
+                        ExpDao expDao30 = DataBaseApp.getInstance(view.getContext()).expDao();
+                        List<Expenses> expensesList30 = expDao30.getByTime(gregorianCalendar30);
+                        for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                            typeOfExpenses.setValue(0);
+                        }
+                        for (Expenses expense : expensesList30) {
+                            for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                                if (expense.getName().equals(typeOfExpenses.getName())) {
+                                    typeOfExpenses.setValue(typeOfExpenses.getValue() - expense.getRealValue());
+                                    break;
+                                }
+                            }
+                        }
+                        DataTypesExpenses.adapter.notifyDataSetChanged();
+                        break;
+                    case "Текущий месяц":
+                        GregorianCalendar gregorianCalendarNM = new GregorianCalendar();
+                        gregorianCalendarNM.set(Calendar.DAY_OF_MONTH, 0);
+                        gregorianCalendarNM.set(Calendar.HOUR, 0);
+                        gregorianCalendarNM.set(Calendar.MINUTE, 0);
+                        ExpDao expDaoNM = DataBaseApp.getInstance(view.getContext()).expDao();
+                        List<Expenses> expensesListNM = expDaoNM.getByTime(gregorianCalendarNM);
+                        for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                            typeOfExpenses.setValue(0);
+                        }
+                        for (Expenses expense : expensesListNM) {
+                            for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                                if (expense.getName().equals(typeOfExpenses.getName())) {
+                                    typeOfExpenses.setValue(typeOfExpenses.getValue() - expense.getRealValue());
+                                    break;
+                                }
+                            }
+                        }
+                        DataTypesExpenses.adapter.notifyDataSetChanged();
+                        break;
+                    case "3 месяца":
+                        GregorianCalendar gregorianCalendar3M = new GregorianCalendar();
+                        gregorianCalendar3M.add(Calendar.MONTH, -3);
+                        ExpDao expDao3M = DataBaseApp.getInstance(view.getContext()).expDao();
+                        List<Expenses> expensesList3M = expDao3M.getByTime(gregorianCalendar3M);
+                        for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                            typeOfExpenses.setValue(0);
+                        }
+                        for (Expenses expense : expensesList3M) {
+                            for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                                if (expense.getName().equals(typeOfExpenses.getName())) {
+                                    typeOfExpenses.setValue(typeOfExpenses.getValue() - expense.getRealValue());
+                                    break;
+                                }
+                            }
+                        }
+                        DataTypesExpenses.adapter.notifyDataSetChanged();
+                        break;
+                    case "1 год":
+                        GregorianCalendar gregorianCalendar1Y = new GregorianCalendar();
+                        gregorianCalendar1Y.add(Calendar.YEAR, -1);
+                        ExpDao expDao1Y = DataBaseApp.getInstance(view.getContext()).expDao();
+                        List<Expenses> expensesList1Y = expDao1Y.getByTime(gregorianCalendar1Y);
+                        for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                            typeOfExpenses.setValue(0);
+                        }
+                        for (Expenses expense : expensesList1Y) {
+                            for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                                if (expense.getName().equals(typeOfExpenses.getName())) {
+                                    typeOfExpenses.setValue(typeOfExpenses.getValue() - expense.getRealValue());
+                                    break;
+                                }
+                            }
+                        }
+                        DataTypesExpenses.adapter.notifyDataSetChanged();
+                        break;
+                    case "3 года":
+                        GregorianCalendar gregorianCalendar3Y = new GregorianCalendar();
+                        gregorianCalendar3Y.add(Calendar.YEAR, -3);
+                        ExpDao expDao3Y = DataBaseApp.getInstance(view.getContext()).expDao();
+                        List<Expenses> expensesList3Y = expDao3Y.getByTime(gregorianCalendar3Y);
+                        for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                            typeOfExpenses.setValue(0);
+                        }
+                        for (Expenses expense : expensesList3Y) {
+                            for (TypeOfExpenses typeOfExpenses : DataTypesExpenses.typesOfExpenses) {
+                                if (expense.getName().equals(typeOfExpenses.getName())) {
+                                    typeOfExpenses.setValue(typeOfExpenses.getValue() - expense.getRealValue());
+                                    break;
+                                }
+                            }
+                        }
+                        DataTypesExpenses.adapter.notifyDataSetChanged();
+                        break;
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         return view;
     }
 }

@@ -89,6 +89,7 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                                     TypeOfExpenses oldExpense = DataTypesExpenses.typesOfExpenses.get(num);
                                     TypeOfExpenses newExpense = new TypeOfExpenses(new_name, oldExpense.getValue(),
                                             oldExpense.getCur_Abbreviation());
+                                    newExpense.id = oldExpense.id;
                                     for (Expenses expenses : DataExpenses.expenses){
                                         if (expenses.getName().equals(oldExpense.getName())) {
                                             expenses.setName(new_name);

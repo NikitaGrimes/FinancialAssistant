@@ -175,7 +175,23 @@ public class AddDebtsActivity extends AppCompatActivity {
                     }
                 }
             }
-            int startValue = (int) (Double.parseDouble(valueText.getText().toString()) * 100 + 0.1);
+            int startValue = 0;
+            String str = valueText.getText().toString();
+            StringBuilder temp = new StringBuilder();
+            for (int i = 0; i < str.length(); i++){
+                if (str.charAt(i) == ',') {
+                    temp.append(".");
+                }
+                else {
+                    temp.append(str.charAt(i));
+                }
+            }
+            try {
+                startValue = (int) (Double.parseDouble(temp.toString()) * 100 + 0.1);
+            }
+            catch (Exception e) {
+                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            }
             GregorianCalendar newDeadline = (GregorianCalendar) chosenDate;
             String currency = chooseCurButton.getText().toString();
             DebtsDao debtsDao = DataBaseApp.getInstance(view.getContext()).debtsDao();

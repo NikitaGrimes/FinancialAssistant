@@ -70,7 +70,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter{
                 valueView.setText(res + " " + expense.getCur_Abbreviation() + " ---> " + expense.getName_acc());
             }
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat("dd.MM.yyyy hh:mm");
+                    new SimpleDateFormat("dd.MM.yyyy HH:mm");
             dateView.setText(simpleDateFormat.format(expense.getDate_operation().getTime()));
         }
     }

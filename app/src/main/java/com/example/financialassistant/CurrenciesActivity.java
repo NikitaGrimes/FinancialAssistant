@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class CurrenciesActivity extends AppCompatActivity {
 
     ArrayList<Currents> currents;
+    CurrenciesAdapter adapter;
     int who;
 
     @Override
@@ -33,9 +34,10 @@ public class CurrenciesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setContentView(R.layout.activity_currencies);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_currencies);
-        CurrenciesAdapter adapter = new CurrenciesAdapter(this, DataCurrents.currentList);
+        currents = new ArrayList<>();
+        currents.addAll(DataCurrents.currentList);
+        adapter = new CurrenciesAdapter(this, currents);
         recyclerView.setAdapter(adapter);
-        currents = DataCurrents.currentList;
         EditText nameCurrency = (EditText) findViewById(R.id.editCurrencyNameText);
         nameCurrency.addTextChangedListener(new TextWatcher() {
             @Override
@@ -49,15 +51,14 @@ public class CurrenciesActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(final Editable s) {
                 String str = s.toString();
-                currents = new ArrayList<>();
+                currents.clear();
                 for (int i = 0; i < DataCurrents.currentList.size(); i++){
                     if (DataCurrents.currentList.get(i).getCur_Abbreviation().toLowerCase().contains(str.toLowerCase()) ||
                     DataCurrents.currentList.get(i).getCur_Name().toLowerCase().contains(str.toLowerCase())){
                         currents.add(DataCurrents.currentList.get(i));
                     }
                 }
-                CurrenciesAdapter adapter = new CurrenciesAdapter(getApplicationContext(), currents);
-                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
         });
         recyclerView.addOnItemTouchListener(

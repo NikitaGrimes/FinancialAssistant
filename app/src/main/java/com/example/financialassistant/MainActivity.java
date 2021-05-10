@@ -97,10 +97,12 @@ public class MainActivity extends AppCompatActivity {
         DataCurrents.toCurrency = DataCurrents.mainCur;
 
         //Парсинг последних валют
+
+        List<Currents> currentsList = currentsDao.getAll();
+        DataCurrents.currentList.addAll(currentsList);
+
         if (currentsDao.getById(1) != null && !isOnline(this)) {
             Toast.makeText(this, getResources().getString(R.string.Internet_out), Toast.LENGTH_LONG).show();
-            List<Currents> currentsList = currentsDao.getAll();
-            DataCurrents.currentList.addAll(currentsList);
         }
         else if (currentsDao.getById(1) == null) {
             String res;

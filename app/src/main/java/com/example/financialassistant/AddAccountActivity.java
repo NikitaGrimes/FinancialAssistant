@@ -134,7 +134,16 @@ public class AddAccountActivity extends AppCompatActivity {
             }
             RadioButton myRadioButton = (RadioButton) findViewById(checkedRadioButtonId);
             String typeAccount = myRadioButton.getText().toString();
-            String valueAccount = valueText.getText().toString();
+            StringBuilder valueAccount = new StringBuilder();
+            String valueTempAccount = valueText.getText().toString();
+            for (int i = 0; i < valueTempAccount.length(); i++){
+                if (valueTempAccount.charAt(i) == ',') {
+                    valueAccount.append(".");
+                }
+                else {
+                    valueAccount.append(valueTempAccount.charAt(i));
+                }
+            }
             String nameAccount = nameText.getText().toString();
             Accounts account;
             for (int i = 0; i < DataAccounts.accounts.size(); i++) {
@@ -147,7 +156,13 @@ public class AddAccountActivity extends AppCompatActivity {
                     return;
                 }
             }
-            double tempDouble = Double.parseDouble(valueAccount);
+            double tempDouble = 0;
+            try {
+                tempDouble = Double.parseDouble(valueAccount.toString());
+            }
+            catch (Exception e) {
+                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            }
             int valueAccInt = (int) (tempDouble * 100 + 0.1);
             account = new Accounts(nameAccount, typeAccount, valueAccInt,
                     chooseCurrency.getText().toString());
@@ -169,6 +184,7 @@ public class AddAccountActivity extends AppCompatActivity {
                 oldAcc.type_of_acc_id = type_id;
                 oldAcc.currents_id = cur_id;
                 accountsDao.update(oldAcc);
+                account.id = oldAcc.id;
                 DataAccounts.accounts.set(num, account);
             }
             Intent answerIntent = new Intent();

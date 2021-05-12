@@ -194,7 +194,14 @@ public class AddOperationActivity extends AppCompatActivity {
                     double rate = Double.parseDouble(rateEditText.getText().toString());
                     double toValue = fromValue * rate;
                     @SuppressLint("DefaultLocale") String result = String.format("%.2f", toValue);
-                    toValueCur.setText(result);
+                    StringBuilder res = new StringBuilder();
+                    for (int i = 0; i < result.length(); i++) {
+                        if (result.charAt(i) == ',') {
+                            res.append('.');
+                        }
+                        else res.append(result.charAt(i));
+                    }
+                    toValueCur.setText(res.toString());
                 }
             }
 
@@ -218,7 +225,14 @@ public class AddOperationActivity extends AppCompatActivity {
                     double rate = Double.parseDouble(rateEditText.getText().toString());
                     double toValue = fromValue * rate;
                     @SuppressLint("DefaultLocale") String result = String.format("%.2f", toValue);
-                    toValueCur.setText(result);
+                    StringBuilder res = new StringBuilder();
+                    for (int i = 0; i < result.length(); i++) {
+                        if (result.charAt(i) == ',') {
+                            res.append('.');
+                        }
+                        else res.append(result.charAt(i));
+                    }
+                    toValueCur.setText(res.toString());
                 }
             }
 
@@ -250,7 +264,14 @@ public class AddOperationActivity extends AppCompatActivity {
                     double rate = Double.parseDouble(rateEditText.getText().toString());
                     double toValue = fromValue * rate;
                     @SuppressLint("DefaultLocale") String result = String.format("%.2f", toValue);
-                    toValueCur.setText(result);
+                    StringBuilder res = new StringBuilder();
+                    for (int i = 0; i < result.length(); i++) {
+                        if (result.charAt(i) == ',') {
+                            res.append('.');
+                        }
+                        else res.append(result.charAt(i));
+                    }
+                    toValueCur.setText(res.toString());
                 }
             }
         });
@@ -698,7 +719,14 @@ public class AddOperationActivity extends AppCompatActivity {
         }
         double rate = secondValue / firstValue; //Расчет курса первой валюты ко второй
         @SuppressLint("DefaultLocale") String result = String.format("%.2f", rate);
-        return result;
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < result.length(); i++) {
+            if (result.charAt(i) == ',') {
+                res.append('.');
+            }
+            else res.append(result.charAt(i));
+        }
+        return res.toString();
     }
 
     @Override

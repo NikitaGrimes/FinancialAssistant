@@ -63,7 +63,9 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/exp_filter" />
+                app:layout_constraintTop_toBottomOf="@+id/exp_filter"
+                android:theme="@style/RecyclerViewTheme"
+                android:background="@drawable/rounded_corners"/>
 
             <TextView
                 android:id="@+id/no_exp_type_TV"
@@ -98,7 +100,9 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/exp_TV" />
+                app:layout_constraintTop_toBottomOf="@+id/exp_TV"
+                android:theme="@style/RecyclerViewTheme"
+                android:background="@drawable/rounded_corners"/>
 
             <TextView
                 android:id="@+id/no_exp_TV"
@@ -145,7 +149,9 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scheduled_pay_TV" />
+                app:layout_constraintTop_toBottomOf="@+id/scheduled_pay_TV"
+                android:theme="@style/RecyclerViewTheme"
+                android:background="@drawable/rounded_corners"/>
 
             <TextView
                 android:id="@+id/debts_TV"
@@ -168,7 +174,7 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/debts_TV" />
+                app:layout_constraintTop_toBottomOf="@+id/debts_TV"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_debts"
@@ -182,7 +188,9 @@
                 android:layout_marginBottom="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toAddDebtActivityButton" />
+                app:layout_constraintTop_toBottomOf="@+id/toAddDebtActivityButton"
+                android:theme="@style/RecyclerViewTheme"
+                android:background="@drawable/rounded_corners"/>
 
             <TextView
                 android:id="@+id/no_debts_TV"

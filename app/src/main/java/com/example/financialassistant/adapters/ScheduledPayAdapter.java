@@ -69,7 +69,7 @@ public class ScheduledPayAdapter extends RecyclerView.Adapter{
                 valueView.setText(res + " " + scheduledPay.getCur_Abbreviation() + " ---> " + scheduledPay.getName_acc());
             }
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat("dd.MM.yyyy hh:mm");
+                    new SimpleDateFormat("dd.MM.yyyy HH:mm");
             dateView.setText(simpleDateFormat.format(scheduledPay.getDate_operation().getTime()));
         }
     }

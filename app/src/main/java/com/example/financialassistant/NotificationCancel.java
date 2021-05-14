@@ -1,10 +1,12 @@
 package com.example.financialassistant;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
 import com.example.financialassistant.dao.ScheduledPayDao;
@@ -14,6 +16,7 @@ import com.example.financialassistant.data.DataViews;
 import com.example.financialassistant.database.DataBase;
 import com.example.financialassistant.models.ScheduledPay;
 
+import java.net.IDN;
 import java.util.List;
 
 public class NotificationCancel extends BroadcastReceiver {
@@ -43,8 +46,17 @@ public class NotificationCancel extends BroadcastReceiver {
             if (DataViews.emptyScheduledPay != null) {
                 if (DataScheduledPay.scheduledPays.size() == 0) {
                     DataViews.emptyScheduledPay.setVisibility(View.VISIBLE);
+                    if (DataScheduledPay.recyclerView != null) {
+                        DataScheduledPay.recyclerView.setVisibility(View.GONE);
+                    }
                 }
             }
         }
+        cancelNotification(context, Id);
+    }
+
+    public static void cancelNotification(Context context, int notifyId) {
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        notificationManagerCompat.cancel(notifyId);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.financialassistant;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
 import com.example.financialassistant.dao.AccountsDao;
@@ -125,13 +127,22 @@ public class NotificationConfirm extends BroadcastReceiver {
                     DataViews.emptyLastExp.setVisibility(View.GONE);
                     if (DataScheduledPay.scheduledPays.size() == 0) {
                         DataViews.emptyScheduledPay.setVisibility(View.VISIBLE);
+                        if (DataScheduledPay.recyclerView != null) {
+                            DataScheduledPay.recyclerView.setVisibility(View.GONE);
+                        }
                     }
                 }
+                cancelNotification(context, Id);
             }
             else {
                 Toast.makeText(context, "На счете недостаточно средств",
                         Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public static void cancelNotification(Context context, int notifyId) {
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        notificationManagerCompat.cancel(notifyId);
     }
 }

@@ -244,25 +244,57 @@ public class Main_Fragment extends Fragment {
 
     private void checkEmptyViews(View view) {
         TextView noType = (TextView) view.findViewById(R.id.no_exp_type_TV);
-        if (DataTypesExpenses.typesOfExpenses.isEmpty())
+        if (DataTypesExpenses.typesOfExpenses.isEmpty()) {
             noType.setVisibility(View.VISIBLE);
-        else
+            if (DataTypesExpenses.recyclerView != null) {
+                DataTypesExpenses.recyclerView.setVisibility(View.GONE);
+            }
+        }
+        else {
             noType.setVisibility(View.GONE);
+            if (DataTypesExpenses.recyclerView != null) {
+                DataTypesExpenses.recyclerView.setVisibility(View.VISIBLE);
+            }
+        }
         TextView noExp = (TextView) view.findViewById(R.id.no_exp_TV);
-        if (DataExpenses.expenses.isEmpty())
+        if (DataExpenses.expenses.isEmpty()) {
             noExp.setVisibility(View.VISIBLE);
-        else
+            if (DataExpenses.recyclerView != null) {
+                DataExpenses.recyclerView.setVisibility(View.GONE);
+            }
+        }
+        else {
             noExp.setVisibility(View.GONE);
+            if (DataExpenses.recyclerView != null) {
+                DataExpenses.recyclerView.setVisibility(View.VISIBLE);
+            }
+        }
         TextView noScheduledPay = (TextView) view.findViewById(R.id.no_sch_pay_TV);
-        if (DataScheduledPay.scheduledPays.isEmpty())
+        if (DataScheduledPay.scheduledPays.isEmpty()) {
             noScheduledPay.setVisibility(View.VISIBLE);
-        else
+            if (DataScheduledPay.recyclerView != null) {
+                DataScheduledPay.recyclerView.setVisibility(View.GONE);
+            }
+        }
+        else {
             noScheduledPay.setVisibility(View.GONE);
+            if (DataScheduledPay.recyclerView != null) {
+                DataScheduledPay.recyclerView.setVisibility(View.VISIBLE);
+            }
+        }
         TextView noDebts = (TextView) view.findViewById(R.id.no_debts_TV);
-        if (DataDebts.debts.isEmpty())
+        if (DataDebts.debts.isEmpty()) {
             noDebts.setVisibility(View.VISIBLE);
-        else
+            if (DataDebts.recyclerView != null) {
+                DataDebts.recyclerView.setVisibility(View.GONE);
+            }
+        }
+        else {
             noDebts.setVisibility(View.GONE);
+            if (DataDebts.recyclerView != null) {
+                DataDebts.recyclerView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override

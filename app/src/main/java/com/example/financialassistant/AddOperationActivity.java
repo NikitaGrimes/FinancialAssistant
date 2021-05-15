@@ -392,7 +392,7 @@ public class AddOperationActivity extends AppCompatActivity {
                         newExp.id = (int) expDao.insert(new ExpDB(exp_type_id, addValue, addValue, cur_id, acc_id, newExp.getDate_operation()));
                         DataExpenses.expenses.add(0, newExp);
                         if (DataExpenses.expenses.size() >= 20) {
-                            DataExpenses.expenses.remove(20);
+                            DataExpenses.expenses.remove(19);
                         }
 
                         Intent answerIntent = new Intent();
@@ -510,7 +510,7 @@ public class AddOperationActivity extends AppCompatActivity {
                             newExp.setRealValue(-1 * realValueExp);
                             DataExpenses.expenses.add(0, newExp);
                             if (DataExpenses.expenses.size() >= 20) {
-                                DataExpenses.expenses.remove(20);
+                                DataExpenses.expenses.remove(19);
                             }
 
                             Intent answerIntent = new Intent();
@@ -593,11 +593,11 @@ public class AddOperationActivity extends AppCompatActivity {
 
                         DataExpenses.expenses.add(0, fromExp);
                         if (DataExpenses.expenses.size() >= 20) {
-                            DataExpenses.expenses.remove(20);
+                            DataExpenses.expenses.remove(19);
                         }
                         DataExpenses.expenses.add(0, toExp);
                         if (DataExpenses.expenses.size() >= 20) {
-                            DataExpenses.expenses.remove(20);
+                            DataExpenses.expenses.remove(19);
                         }
 
                         Intent answerIntent = new Intent();

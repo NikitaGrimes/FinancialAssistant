@@ -457,7 +457,7 @@ public class Main_Fragment extends Fragment {
                                                     newExp.id = (int) expDao.insert(new ExpDB(typeOfExpDB.id, newExp.getValue(), newExp.getRealValue(), accountsDB.currents_id, accountsDB.id, newExp.getDate_operation()));
                                                     DataExpenses.expenses.add(0, newExp);
                                                     if (DataExpenses.expenses.size() >= 20) {
-                                                        DataExpenses.expenses.remove(20);
+                                                        DataExpenses.expenses.remove(19);
                                                     }
                                                     DataExpenses.adapter.notifyDataSetChanged();
 

@@ -8,9 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="grey_bk">#FF222222</color>
     <color name="grey_dark">#FF444444</color>
-    <color name="grey_light">#FF999999</color>
+    <color name="grey_light">#FFDDDDDD</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FFFF0000</color>
-    <color name="green">#FF00FF00</color>
+    <color name="green">#FF22CC22</color>
     <color name="trans">#00000000</color>
 </resources>

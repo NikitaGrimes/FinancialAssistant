@@ -1,6 +1,7 @@
 package com.example.financialassistant.adapters;
 
 import android.content.Context;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 2: return new Converter_Fragment();
             default: return new Main_Fragment();
         }
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+
     }
 
     @Override

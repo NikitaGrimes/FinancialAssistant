@@ -29,7 +29,7 @@
 
     <style name="RecyclerViewTheme">
         <item name="android:background">@color/grey_light</item>
-        <item name="android:backgroundTint">@color/grey_dark</item>
+        <item name="android:backgroundTint">@color/grey_light</item>
     </style>
 
     <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">

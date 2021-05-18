@@ -58,7 +58,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter{
             nameView.setText(expense.getName());
             double tempD = expense.getValue() / 100.;
             if (tempD < 0) {
-                valueView.setTextColor(ContextCompat.getColor(context, R.color.red));
+                valueView.setTextColor(ContextCompat.getColor(context, R.color.red_real));
                 @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
                 valueView.setText(res + " " + expense.getCur_Abbreviation() + " <--- " + expense.getName_acc());
             }

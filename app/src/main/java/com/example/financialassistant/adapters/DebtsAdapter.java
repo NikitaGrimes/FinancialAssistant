@@ -57,7 +57,7 @@ public class DebtsAdapter  extends RecyclerView.Adapter{
             Debts debt = DataDebts.debts.get(position);
             nameView.setText(debt.getName());
             if (debt.isDebtor()) {
-                nameView.setTextColor(ContextCompat.getColor(context, R.color.red));
+                nameView.setTextColor(ContextCompat.getColor(context, R.color.red_real));
             }
             else {
                 nameView.setTextColor(ContextCompat.getColor(context, R.color.green));

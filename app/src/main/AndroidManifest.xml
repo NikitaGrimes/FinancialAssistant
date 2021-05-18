@@ -12,9 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinancialAssistant">
+        <activity
+            android:name=".DetailedStatistics"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".TimeNotification" />
-        <receiver android:name=".NotificationConfirm"/>
-        <receiver android:name=".NotificationCancel"/>
+        <receiver android:name=".NotificationConfirm" />
+        <receiver android:name=".NotificationCancel" />
+
         <activity
             android:name=".AddDebtsActivity"
             android:screenOrientation="portrait" />

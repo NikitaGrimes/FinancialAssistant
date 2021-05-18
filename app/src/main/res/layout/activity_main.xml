@@ -22,10 +22,10 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:tabIndicator="@color/white"
-            app:tabTextColor="@color/white"
-            app:tabSelectedTextColor="@color/black"
+            android:background="?attr/tabBackground"
+            app:tabIndicator="?attr/tabIndicator"
+            app:tabTextColor="?attr/tabTextColor"
+            app:tabSelectedTextColor="?attr/tabSelectedTextColor"
             android:elevation="12dp"/>
     </com.google.android.material.appbar.AppBarLayout>
 

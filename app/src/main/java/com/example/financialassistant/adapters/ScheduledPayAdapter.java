@@ -12,9 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialassistant.R;
-import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataScheduledPay;
-import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.ScheduledPay;
 
 import java.text.SimpleDateFormat;
@@ -61,7 +59,7 @@ public class ScheduledPayAdapter extends RecyclerView.Adapter{
             double tempD = scheduledPay.getValue() / 100.;
             @SuppressLint("DefaultLocale") String res = String.format("%.2f", tempD);
             if (tempD < 0) {
-                valueView.setTextColor(ContextCompat.getColor(context, R.color.red));
+                valueView.setTextColor(ContextCompat.getColor(context, R.color.red_real));
                 valueView.setText(res + " " + scheduledPay.getCur_Abbreviation() + " <--- " + scheduledPay.getName_acc());
             }
             else {

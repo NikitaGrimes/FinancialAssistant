@@ -29,16 +29,12 @@ import com.example.financialassistant.models.Debts;
 import com.example.financialassistant.models.Expenses;
 import com.example.financialassistant.models.ScheduledPay;
 import com.example.financialassistant.models.TypeOfExpenses;
-import com.example.financialassistant.modelsDB.DebtsDB;
-import com.example.financialassistant.modelsDB.ScheduledPayDB;
 import com.example.financialassistant.modelsDB.TypeOfAccDB;
 import com.example.financialassistant.modelsDB.TypeOfExpDB;
 import com.example.financialassistant.utils.JSONMainCurHelper;
 import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,7 +42,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.financialassistant.adapters.SectionsPagerAdapter;
@@ -59,22 +54,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String JSON_URL = "https://www.floatrates.com/daily/usd.json";
-    private static String CUR_JSON = "currents.json";
-    private static String BYN = "BYN";
-    private static String USD = "USD";
-    private static String US_DOLLAR = "U.S. Dollar";
-    private static String DOLLAR_ID = "1";
+    private static final String JSON_URL = "https://www.floatrates.com/daily/usd.json";
+    private static final String CUR_JSON = "currents.json";
+    private static final String BYN = "BYN";
+    private static final String USD = "USD";
+    private static final String US_DOLLAR = "U.S. Dollar";
+    private static final String DOLLAR_ID = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
         DataCurrents.mainCur = JSONMainCurHelper.importFromJSON(this);
         DataCurrents.fromCurrency = USD;
         DataCurrents.toCurrency = DataCurrents.mainCur;
-
         //Парсинг последних валют
-
         List<Currents> currentsList = currentsDao.getAll();
         DataCurrents.currentList.addAll(currentsList);
 
@@ -306,6 +295,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AddNewTypeExpensesActivity.class);
             intent.putExtra("Action", "Create");
             startActivityForResult(intent, 0);
+        }
+        else if (item.getItemId() == R.id.detailedStatistics) { //Нажатие на статистику
+            Intent intent = new Intent(MainActivity.this, DetailedStatistics.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

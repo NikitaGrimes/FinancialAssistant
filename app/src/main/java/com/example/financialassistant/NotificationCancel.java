@@ -47,7 +47,7 @@ public class NotificationCancel extends BroadcastReceiver {
                 if (DataScheduledPay.scheduledPays.size() == 0) {
                     DataViews.emptyScheduledPay.setVisibility(View.VISIBLE);
                     if (DataScheduledPay.recyclerView != null) {
-                        DataScheduledPay.recyclerView.setVisibility(View.GONE);
+                        DataScheduledPay.recyclerView.setVisibility(View.INVISIBLE);
                     }
                 }
             }

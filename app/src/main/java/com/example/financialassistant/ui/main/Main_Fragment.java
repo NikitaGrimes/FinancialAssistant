@@ -118,15 +118,15 @@ public class Main_Fragment extends Fragment {
     private void createThreeButtonsAlertDialog(int num) {
         Context context = this.getContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(this.getContext()));
-        builder.setTitle("Выберите действие");
-        builder.setNegativeButton("Изменить",
+        builder.setTitle(getResources().getString(R.string.chooseAction));
+        builder.setNegativeButton(getResources().getText(R.string.change),
                 (dialog, which) -> {
                     Intent intent = new Intent(getActivity(), AddDebtsActivity.class);
                     intent.putExtra("Action", "Remake");
                     intent.putExtra("Num", num);
                     startActivityForResult(intent, 0);
                 });
-        builder.setPositiveButton("Погасить (частично)",
+        builder.setPositiveButton(getResources().getString(R.string.rePayPartDebt),
                 (dialog, which) -> {
                     LayoutInflater li = LayoutInflater.from(context);
                     @SuppressLint("InflateParams") View promptsView =
@@ -155,18 +155,20 @@ public class Main_Fragment extends Fragment {
 
                     debtName.setText(debt.getName());
 
-                    mDialogBuilder.setCancelable(false).setPositiveButton("Погасить",
+                    mDialogBuilder.setCancelable(false).setPositiveButton(getResources().getString(R.string.rePayDebt),
                             (dialogInterface ,id) -> {
                                 int pos = accSpinner.getSelectedItemPosition();
                                 Accounts accounts = DataAccounts.accounts.get(pos);
                                 if (!accounts.getCur_Abbreviation().equals(debt.getCur_Abbreviation())) {
-                                    Toast.makeText(context, "Неверный счет для оплаты", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, getResources().getString(R.string.incorrectAcc),
+                                            Toast.LENGTH_LONG).show();
                                 }
                                 else {
                                     int pay_value = (int) (Double.parseDouble(valueInput.getText().toString()) * 100 + 0.1);
                                     if (debt.isDebtor()) {
                                         if (pay_value > accounts.getValue()) {
-                                            Toast.makeText(context, "На счете мало средств", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(context, getResources().getString(R.string.notEnoughMoney),
+                                                    Toast.LENGTH_LONG).show();
                                         } else {
                                             AccountsDao accountsDao = DataBaseApp.getInstance(context).accountsDao();
                                             DebtsDao debtsDao = DataBaseApp.getInstance(context).debtsDao();
@@ -227,7 +229,7 @@ public class Main_Fragment extends Fragment {
                                     checkEmptyViews(newView);
                                 }
                             })
-                            .setNegativeButton("Отмена",
+                            .setNegativeButton(getResources().getString(R.string.cancel),
                                     (dialogInterface, id) -> {
                                 dialogInterface.cancel();
                                 dialog.cancel();
@@ -235,7 +237,7 @@ public class Main_Fragment extends Fragment {
                     AlertDialog alertDialog = mDialogBuilder.create();
                     alertDialog.show();
                 });
-        builder.setNeutralButton("Отмена",
+        builder.setNeutralButton(getResources().getString(R.string.cancel),
                 (dialog, which) -> {
                 });
 
@@ -247,7 +249,7 @@ public class Main_Fragment extends Fragment {
         if (DataTypesExpenses.typesOfExpenses.isEmpty()) {
             noType.setVisibility(View.VISIBLE);
             if (DataTypesExpenses.recyclerView != null) {
-                DataTypesExpenses.recyclerView.setVisibility(View.GONE);
+                DataTypesExpenses.recyclerView.setVisibility(View.INVISIBLE);
             }
         }
         else {
@@ -260,7 +262,7 @@ public class Main_Fragment extends Fragment {
         if (DataExpenses.expenses.isEmpty()) {
             noExp.setVisibility(View.VISIBLE);
             if (DataExpenses.recyclerView != null) {
-                DataExpenses.recyclerView.setVisibility(View.GONE);
+                DataExpenses.recyclerView.setVisibility(View.INVISIBLE);
             }
         }
         else {
@@ -273,7 +275,7 @@ public class Main_Fragment extends Fragment {
         if (DataScheduledPay.scheduledPays.isEmpty()) {
             noScheduledPay.setVisibility(View.VISIBLE);
             if (DataScheduledPay.recyclerView != null) {
-                DataScheduledPay.recyclerView.setVisibility(View.GONE);
+                DataScheduledPay.recyclerView.setVisibility(View.INVISIBLE);
             }
         }
         else {
@@ -286,7 +288,7 @@ public class Main_Fragment extends Fragment {
         if (DataDebts.debts.isEmpty()) {
             noDebts.setVisibility(View.VISIBLE);
             if (DataDebts.recyclerView != null) {
-                DataDebts.recyclerView.setVisibility(View.GONE);
+                DataDebts.recyclerView.setVisibility(View.INVISIBLE);
             }
         }
         else {
@@ -355,8 +357,8 @@ public class Main_Fragment extends Fragment {
                 if (!DataExpenses.expenses.isEmpty()) {
                     Expenses expense = DataExpenses.expenses.get(viewHolder.getAdapterPosition());
                     new AlertDialog.Builder(view.getContext())
-                            .setMessage("Удалить запись?")
-                            .setPositiveButton("Удалить", (dialogInterface, i) -> {
+                            .setMessage(getResources().getString(R.string.removeOperation))
+                            .setPositiveButton(getResources().getString(R.string.remove), (dialogInterface, i) -> {
                             DataExpenses.expenses.remove(expense);
                             ExpDao expDao = DataBaseApp.getInstance(view.getContext()).expDao();
                             expDao.deleteById(expense.id);
@@ -387,7 +389,9 @@ public class Main_Fragment extends Fragment {
                             DataAccounts.adapter.notifyDataSetChanged();
                             checkEmptyViews(newView);
                             })
-                            .setNegativeButton("Отмена", (dialogInterface, i) -> Objects.requireNonNull(DataExpenses.adapter).notifyItemChanged(viewHolder.getAdapterPosition()))
+                            .setNegativeButton(getResources().getString(R.string.cancel),
+                                    (dialogInterface, i) -> Objects.requireNonNull(DataExpenses.adapter)
+                                            .notifyItemChanged(viewHolder.getAdapterPosition()))
                             .setCancelable(false)
                             .create().show();
                 }
@@ -404,8 +408,8 @@ public class Main_Fragment extends Fragment {
                                 if (!DataScheduledPay.scheduledPays.isEmpty()) {
                                     ScheduledPay scheduledPay = DataScheduledPay.scheduledPays.get(position);
                                     new AlertDialog.Builder(view.getContext())
-                                            .setMessage("Совершить операцию?")
-                                            .setPositiveButton("Совершить", (dialogInterface, i) -> {
+                                            .setMessage(getResources().getString(R.string.commitOperation))
+                                            .setPositiveButton(getResources().getString(R.string.commit), (dialogInterface, i) -> {
                                                 ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(view.getContext()).scheduledPayDao();
                                                 AccountsDao accountsDao = DataBaseApp.getInstance(view.getContext()).accountsDao();
                                                 ExpDao expDao = DataBaseApp.getInstance(view.getContext()).expDao();
@@ -467,11 +471,13 @@ public class Main_Fragment extends Fragment {
                                                     checkEmptyViews(newView);
                                                 }
                                                 else {
-                                                    Toast.makeText(view.getContext(), "На счете недостаточно средств",
+                                                    Toast.makeText(view.getContext(), getResources()
+                                                                    .getString(R.string.notEnoughMoney),
                                                             Toast.LENGTH_LONG).show();
                                                 }
                                             })
-                                            .setNegativeButton("Отмена", (dialogInterface, i) -> dialogInterface.cancel())
+                                            .setNegativeButton(getResources().getString(R.string.cancel),
+                                                    (dialogInterface, i) -> dialogInterface.cancel())
                                             .setCancelable(false)
                                             .create().show();
                                 }
@@ -497,15 +503,17 @@ public class Main_Fragment extends Fragment {
                 if (!DataScheduledPay.scheduledPays.isEmpty()) {
                     ScheduledPay scheduledPay = DataScheduledPay.scheduledPays.get(viewHolder.getAdapterPosition());
                     new AlertDialog.Builder(view.getContext())
-                            .setMessage("Удалить запись?")
-                            .setPositiveButton("Удалить", (dialogInterface, i) -> {
+                            .setMessage(getResources().getString(R.string.removeOperation))
+                            .setPositiveButton(getResources().getString(R.string.remove), (dialogInterface, i) -> {
                                 ScheduledPayDao scheduledPayDao = DataBaseApp.getInstance(view.getContext()).scheduledPayDao();
                                 scheduledPayDao.deleteById(scheduledPay.id);
                                 DataScheduledPay.scheduledPays.remove(scheduledPay);
                                 DataScheduledPay.adapter.notifyDataSetChanged();
                                 checkEmptyViews(newView);
                             })
-                            .setNegativeButton("Отмена", (dialogInterface, i) -> Objects.requireNonNull(DataScheduledPay.adapter).notifyItemChanged(viewHolder.getAdapterPosition()))
+                            .setNegativeButton(getResources().getString(R.string.cancel),
+                                    (dialogInterface, i) -> Objects.requireNonNull(DataScheduledPay.adapter)
+                                            .notifyItemChanged(viewHolder.getAdapterPosition()))
                             .setCancelable(false)
                             .create().show();
                 }
@@ -519,16 +527,15 @@ public class Main_Fragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View itemSelected,
                                        int selectedItemPosition, long selectedId) {
 
-                String[] choose = getResources().getStringArray(R.array.exp_filters);
-                switch (choose[selectedItemPosition]) {
-                    case "Нет":
+                switch (selectedItemPosition) {
+                    case 0:
                         TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(view.getContext()).typeOfExpDao();
                         List<TypeOfExpenses> typeOfExpensesList = typeOfExpDao.getAllExpType();
                         DataTypesExpenses.typesOfExpenses.clear();
                         DataTypesExpenses.typesOfExpenses.addAll(typeOfExpensesList);
                         DataTypesExpenses.adapter.notifyDataSetChanged();
                         break;
-                    case "7 дней":
+                    case 1:
                         GregorianCalendar gregorianCalendar = new GregorianCalendar();
                         gregorianCalendar.add(Calendar.DAY_OF_YEAR, -7);
                         ExpDao expDao = DataBaseApp.getInstance(view.getContext()).expDao();
@@ -546,7 +553,7 @@ public class Main_Fragment extends Fragment {
                         }
                         DataTypesExpenses.adapter.notifyDataSetChanged();
                         break;
-                    case "30 дней":
+                    case 2:
                         GregorianCalendar gregorianCalendar30 = new GregorianCalendar();
                         gregorianCalendar30.add(Calendar.DAY_OF_YEAR, -30);
                         ExpDao expDao30 = DataBaseApp.getInstance(view.getContext()).expDao();
@@ -564,7 +571,7 @@ public class Main_Fragment extends Fragment {
                         }
                         DataTypesExpenses.adapter.notifyDataSetChanged();
                         break;
-                    case "Текущий месяц":
+                    case 3:
                         GregorianCalendar gregorianCalendarNM = new GregorianCalendar();
                         gregorianCalendarNM.set(Calendar.DAY_OF_MONTH, 0);
                         gregorianCalendarNM.set(Calendar.HOUR, 0);
@@ -584,7 +591,7 @@ public class Main_Fragment extends Fragment {
                         }
                         DataTypesExpenses.adapter.notifyDataSetChanged();
                         break;
-                    case "3 месяца":
+                    case 4:
                         GregorianCalendar gregorianCalendar3M = new GregorianCalendar();
                         gregorianCalendar3M.add(Calendar.MONTH, -3);
                         ExpDao expDao3M = DataBaseApp.getInstance(view.getContext()).expDao();
@@ -602,7 +609,7 @@ public class Main_Fragment extends Fragment {
                         }
                         DataTypesExpenses.adapter.notifyDataSetChanged();
                         break;
-                    case "1 год":
+                    case 5:
                         GregorianCalendar gregorianCalendar1Y = new GregorianCalendar();
                         gregorianCalendar1Y.add(Calendar.YEAR, -1);
                         ExpDao expDao1Y = DataBaseApp.getInstance(view.getContext()).expDao();
@@ -620,7 +627,7 @@ public class Main_Fragment extends Fragment {
                         }
                         DataTypesExpenses.adapter.notifyDataSetChanged();
                         break;
-                    case "3 года":
+                    case 6:
                         GregorianCalendar gregorianCalendar3Y = new GregorianCalendar();
                         gregorianCalendar3Y.add(Calendar.YEAR, -3);
                         ExpDao expDao3Y = DataBaseApp.getInstance(view.getContext()).expDao();

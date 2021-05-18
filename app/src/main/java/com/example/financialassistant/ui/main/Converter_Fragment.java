@@ -136,7 +136,7 @@ public class Converter_Fragment extends Fragment implements View.OnLongClickList
         return result;
     }
 
-    @SuppressLint("NonConstantResourceId")
+    @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -212,21 +212,19 @@ public class Converter_Fragment extends Fragment implements View.OnLongClickList
                     toConvert.setText(res);
                 }
                 if (enteredValue.equals("0") || enteredValue.equals("0.")) {
-                    toConvert.setText("0");
+                    toConvert.setText("0.00");
                 }
                 break;
         }
     }
 
-    @SuppressLint("NonConstantResourceId")
+    @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
     @Override
     public boolean onLongClick(View v) {
-        switch (v.getId()){
-            case R.id.calc_del_button:
-                enteredValue = "0";
-                fromConvert.setText(enteredValue);
-                toConvert.setText("0");
-                break;
+        if (v.getId() == R.id.calc_del_button) {
+            enteredValue = "0";
+            fromConvert.setText(enteredValue);
+            toConvert.setText("0.00");
         }
         return true;
     }

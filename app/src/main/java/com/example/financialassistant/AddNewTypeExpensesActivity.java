@@ -24,6 +24,7 @@ import com.example.financialassistant.dao.ScheduledPayDao;
 import com.example.financialassistant.dao.TypeOfExpDao;
 import com.example.financialassistant.data.DataAccounts;
 import com.example.financialassistant.data.DataBaseApp;
+import com.example.financialassistant.data.DataCurrents;
 import com.example.financialassistant.data.DataExpenses;
 import com.example.financialassistant.data.DataScheduledPay;
 import com.example.financialassistant.data.DataTypesExpenses;
@@ -75,12 +76,12 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                         mDialogBuilder.setView(promptsView);
                         final EditText userInput = (EditText) promptsView.
                                 findViewById(R.id.new_type_exp_edit_text);
-                        mDialogBuilder.setCancelable(false).setPositiveButton("OK",
+                        mDialogBuilder.setCancelable(false).setPositiveButton(getResources().getString(R.string.ok),
                                 (dialog, id) -> {
                                     String new_name = userInput.getText().toString();
                                     for (int i = 0; i < DataTypesExpenses.typesOfExpenses.size(); i++) {
                                         if (DataTypesExpenses.typesOfExpenses.get(i).getName().toLowerCase().equals(new_name.toLowerCase()) && num != i) {
-                                            Toast.makeText(context, "Название должно быть индивидуальным",
+                                            Toast.makeText(context, getResources().getString(R.string.nameOfTypeExpUnique),
                                                     Toast.LENGTH_LONG).show();
                                             return;
                                         }
@@ -103,7 +104,7 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                                     types.set(num, new_name);
                                     adapter.notifyDataSetChanged();
                                 })
-                                .setNegativeButton("Отмена",
+                                .setNegativeButton(getResources().getString(R.string.cancel),
                                         (dialog, id) -> dialog.cancel());
                         AlertDialog alertDialog = mDialogBuilder.create();
                         alertDialog.show();
@@ -113,8 +114,8 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                     public void onLongItemClick(View view, int position) {
                         num = position;
                         new AlertDialog.Builder(context)
-                                .setMessage("Удалить категорию? Будут удалены все записи с данной категорией!")
-                                .setPositiveButton("Удалить", (dialogInterface, i) -> {
+                                .setMessage(getResources().getString(R.string.removeTypeOfExp))
+                                .setPositiveButton(getResources().getString(R.string.remove), (dialogInterface, i) -> {
                                     TypeOfExpenses typeOfExpense = DataTypesExpenses.typesOfExpenses.get(num);
                                     DataTypesExpenses.typesOfExpenses.remove(num);
                                     DataTypesExpenses.adapter.notifyDataSetChanged();
@@ -145,7 +146,7 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
                                         DataScheduledPay.adapter.notifyDataSetChanged();
                                     }
                                 })
-                                .setNegativeButton("Отмена", (dialogInterface, i) ->
+                                .setNegativeButton(getResources().getString(R.string.cancel), (dialogInterface, i) ->
                                 {
                                     dialogInterface.cancel();
                                 })
@@ -176,16 +177,16 @@ public class AddNewTypeExpensesActivity extends AppCompatActivity {
             if (action.equals("Create")) {
                 for (TypeOfExpenses expense : DataTypesExpenses.typesOfExpenses) {
                     if (expense.getName().toLowerCase().equals(name.toLowerCase())) {
-                        Toast.makeText(this, "Название должно быть индивидуальным",
+                        Toast.makeText(this, getResources().getString(R.string.nameOfTypeExpUnique),
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
                 TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
                 CurrentsDao currentsDao = DataBaseApp.getInstance(this).currentsDao();
-                long cur_id = currentsDao.getIdByAbr("BYN");
+                long cur_id = currentsDao.getIdByAbr(DataCurrents.mainCur);
                 int newId = (int)typeOfExpDao.insert(new TypeOfExpDB(name, 0, cur_id));
-                newExpense = new TypeOfExpenses(newId, name, 0, "BYN");
+                newExpense = new TypeOfExpenses(newId, name, 0, DataCurrents.mainCur);
                 DataTypesExpenses.typesOfExpenses.add(newExpense);
             }
             Intent answerIntent = new Intent();

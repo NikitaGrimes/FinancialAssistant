@@ -106,8 +106,8 @@ public class Accounts_Fragment extends Fragment{
                     public void onLongItemClick(View view, int position) {
                         int num = position;
                         new AlertDialog.Builder(context)
-                                .setMessage("Удалить счет? Будут удалены все записи с данным счетом!")
-                                .setPositiveButton("Удалить", (dialogInterface, i) -> {
+                                .setMessage(getResources().getString(R.string.removeAccQuestion))
+                                .setPositiveButton(getResources().getText(R.string.remove), (dialogInterface, i) -> {
                                     Accounts account = DataAccounts.accounts.get(num);
                                     DataAccounts.accounts.remove(account);
                                     DataAccounts.adapter.notifyItemRemoved(num);
@@ -136,7 +136,7 @@ public class Accounts_Fragment extends Fragment{
                                         DataScheduledPay.adapter.notifyDataSetChanged();
                                     }
                                 })
-                                .setNegativeButton("Отмена", (dialogInterface, i) ->
+                                .setNegativeButton(getResources().getText(R.string.cancel), (dialogInterface, i) ->
                                 {
                                     dialogInterface.cancel();
                                 })

@@ -53,12 +53,14 @@ public class TimeNotification extends BroadcastReceiver {
                     ", " + String.format("%.2f", scheduledPayNow.getValue() / 100.) + " " + scheduledPayNow.getCur_Abbreviation();
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "FAChannel")
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("У Вас есть запланированный платеж")
+                    .setContentTitle(context.getResources().getString(R.string.youHaveScheduledPay))
                     .setContentText(contentText)
                     .setPriority(PRIORITY_DEFAULT)
                     .setAutoCancel(true)
-                    .addAction(R.drawable.ic_launcher_foreground, "Confirm", confirmPendingIntent)
-                    .addAction(R.drawable.ic_launcher_foreground, "Delete", cancelPendingIntent);
+                    .addAction(R.drawable.ic_launcher_foreground, context.getResources().getString(R.string.confirm),
+                            confirmPendingIntent)
+                    .addAction(R.drawable.ic_launcher_foreground, context.getResources().getString(R.string.remove),
+                            cancelPendingIntent);
 
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
             notificationManagerCompat.notify(Id, builder.build());

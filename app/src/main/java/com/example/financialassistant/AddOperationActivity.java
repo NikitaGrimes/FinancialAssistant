@@ -318,11 +318,11 @@ public class AddOperationActivity extends AppCompatActivity {
                         TypeOfExpDao typeOfExpDao = DataBaseApp.getInstance(this).typeOfExpDao();
                         CurrentsDao currentsDao = DataBaseApp.getInstance(this).currentsDao();
                         long acc_id = account.id;
-                        long exp_type_id = typeOfExpDao.getIdByName("Доход");
+                        long exp_type_id = typeOfExpDao.getIdByName(getResources().getString(R.string.income));
                         long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
                         GregorianCalendar gregorianCalendar = (GregorianCalendar) dateAndTimeIn;
                         gregorianCalendar.set(Calendar.SECOND, 0);
-                        ScheduledPay scheduledPay = new ScheduledPay("Доход", addValue,
+                        ScheduledPay scheduledPay = new ScheduledPay(getResources().getString(R.string.income), addValue,
                                 account.getCur_Abbreviation(), account.getName_acc(), gregorianCalendar);
                         scheduledPay.id = (int) scheduledPayDao.insert(new ScheduledPayDB(exp_type_id,
                                 addValue, addValue, cur_id, acc_id, gregorianCalendar));
@@ -385,10 +385,10 @@ public class AddOperationActivity extends AppCompatActivity {
                         ExpDao expDao = DataBaseApp.getInstance(this).expDao();
 
                         long acc_id = account.id;
-                        long exp_type_id = typeOfExpDao.getIdByName("Доход");
+                        long exp_type_id = typeOfExpDao.getIdByName(getResources().getString(R.string.income));
                         long cur_id = currentsDao.getIdByAbr(account.getCur_Abbreviation());
 
-                        Expenses newExp = new Expenses("Доход", addValue, account.getCur_Abbreviation(), account.getName_acc());
+                        Expenses newExp = new Expenses(getResources().getString(R.string.income), addValue, account.getCur_Abbreviation(), account.getName_acc());
                         newExp.id = (int) expDao.insert(new ExpDB(exp_type_id, addValue, addValue, cur_id, acc_id, newExp.getDate_operation()));
                         DataExpenses.expenses.add(0, newExp);
                         if (DataExpenses.expenses.size() >= 20) {
@@ -532,8 +532,8 @@ public class AddOperationActivity extends AppCompatActivity {
                     Expenses toExp = new Expenses();
                     fromExp.setDate_operation(gregorianCalendar);
                     toExp.setDate_operation(gregorianCalendar);
-                    fromExp.setName("Перевод");
-                    toExp.setName("Перевод");
+                    fromExp.setName(getResources().getString(R.string.exChange));
+                    toExp.setName(getResources().getString(R.string.exChange));
 
                     Accounts account = DataAccounts.accounts.get(posFrom);
                     int fromAccValue = account.getValue();
@@ -585,7 +585,7 @@ public class AddOperationActivity extends AppCompatActivity {
                         toExp.setName_acc(nameToAcc);
 
                         ExpDao expDao = DataBaseApp.getInstance(this).expDao();
-                        long exp_type_id = typeOfExpDao.getIdByName("Перевод");
+                        long exp_type_id = typeOfExpDao.getIdByName(getResources().getString(R.string.exChange));
                         ExpDB expDB = new ExpDB(exp_type_id, toExp.getValue(), toExp.getRealValue(), cur_to_id, acc_to_id, toExp.getDate_operation());
                         toExp.id = (int) expDao.insert(expDB);
                         expDB = new ExpDB(exp_type_id, fromExp.getValue(), fromExp.getRealValue(), cur_from_id, acc_from_id, fromExp.getDate_operation());

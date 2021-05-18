@@ -130,8 +130,8 @@ public class AddDebtsActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void setInitialDateTime() {
-        deadlineTextView.setText( "Дедлайн: " + DateUtils.formatDateTime(this,
-                chosenDate.getTimeInMillis(),
+        deadlineTextView.setText( getResources().getString(R.string.deadline) +
+                DateUtils.formatDateTime(this, chosenDate.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
     }
 
@@ -147,20 +147,20 @@ public class AddDebtsActivity extends AppCompatActivity {
         if (chosenDate.after(Calendar.getInstance())) {
             int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
             if (checkedRadioButtonId == -1) {
-                Toast.makeText(this, "Пожалуйста, выберите, кто должник",
+                Toast.makeText(this, getResources().getString(R.string.chooseWhoIsDebtor),
                         Toast.LENGTH_LONG).show();
                 return;
             }
             RadioButton myRadioButton = (RadioButton) findViewById(checkedRadioButtonId);
             boolean isDebtor = false;
-            if (myRadioButton.getText().toString().equals("Я должен")) {
+            if (myRadioButton.getText().toString().equals(getResources().getString(R.string.i_am_debtor))) {
                 isDebtor = true;
             }
             String name = nameText.getText().toString();
             if (action.equals("Create")) {
                 for (Debts debt : DataDebts.debts) {
                     if (debt.getName().toLowerCase().equals(name.toLowerCase())) {
-                        Toast.makeText(this, "Название должно быть индивидуальным",
+                        Toast.makeText(this, getResources().getString(R.string.nameOfDebtIsUnique),
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -169,7 +169,7 @@ public class AddDebtsActivity extends AppCompatActivity {
             else {
                 for (Debts debt : DataDebts.debts) {
                     if (debt.getName().toLowerCase().equals(name.toLowerCase()) && debt.id != oldDebt.id) {
-                        Toast.makeText(this, "Название должно быть индивидуальным",
+                        Toast.makeText(this, getResources().getString(R.string.nameOfDebtIsUnique),
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -217,7 +217,8 @@ public class AddDebtsActivity extends AppCompatActivity {
             finish();
         }
         else {
-            Toast.makeText(view.getContext(), "Неверный делайн", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), getResources().getString(R.string.incorrectDeadline),
+                    Toast.LENGTH_LONG).show();
         }
     }
 }

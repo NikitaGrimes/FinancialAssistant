@@ -1,16 +1,25 @@
 <resources>
     <string name="app_name">Финансовый помощник</string>
+
+    <!-- Меню, Табы, общее -->
     <string name="tab_text_1">Главная</string>
     <string name="tab_text_2">Счета</string>
     <string name="tab_text_3">Конвертер</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_new_type">Управление типами расходов</string>
-
+    <string name="currencies_updated">Курс валют обновлен.</string>
+    <string name="Internet_out">Отсутствует подключение к Интернету.</string>
     <string name="income">Доход</string>
     <string name="exChange">Перевод</string>
-    <string name="out_acc">Отсутствуют счета!</string>
-    <string name="out_type_of_exp">Отсутствуют категории расходов!</string>
-    <string name="currencies_updated">Курс валют обновлен.</string>
+    <string name="remove">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="chooseAction">Выберите действие</string>
+    <string name="change">Изменить</string>
+    <string name="notEnoughMoney">Недостаточно средств.</string>
+    <string name="ok">ОК</string>
+
+    <!-- Главная страница -->
+    <string name="filter">Фильтр</string>
     <string-array name="exp_filters">
         <item>Нет</item>
         <item>7 дней</item>
@@ -20,27 +29,43 @@
         <item>1 год</item>
         <item>3 года</item>
     </string-array>
-    <string name="filter">Фильтр</string>
-    <string name="enter_new_name_of_type_exp">Введите новое название</string>
-    <string name="enter_name_of_debts">Введите название долга</string>
-    <string name="enter_start_debts_value">Введите значение долга</string>
-    <string name="enter_date_debts">Введите дедлайн долга</string>
-    <string name="i_am_debtor">Я должен</string>
-    <string name="someone_are_debtor">Мне должны</string>
-    <string name="enter_value_of_pay_debt">Введите размер погашения</string>
-    <string name="you_have_not_exp_type">У Вас нет категорий расходов :(</string>
-    <string name="you_have_not_exp">У Вас нет операций :)</string>
-    <string name="you_have_not_debts">У Вас нет долгов :)</string>
-    <string name="you_have_not_scheduled_pay">У Вас нет запланированных операций :)</string>
     <string name="expenses_type">Категории расходов</string>
+    <string name="you_have_not_exp_type">У Вас нет категорий расходов :(</string>
     <string name="last_expenses">Последние операции</string>
+    <string name="you_have_not_exp">У Вас нет операций :)</string>
     <string name="scheduled_pay">Запланированные операции</string>
-    <string name="schedule">Запланировать</string>
-    <string name="setDateTime">Задать дату и время</string>
-    <string name="mainCur">Основная валюта</string>
-    <string name="changeMainCur">Изменить основную валюту</string>
-    <string name="Internet_out">Отсутствует подключение к Интернету.</string>
+    <string name="you_have_not_scheduled_pay">У Вас нет запланированных операций :)</string>
     <string name="debts">Долги</string>
+    <string name="addDebts">Добавить долг</string>
+    <string name="you_have_not_debts">У Вас нет долгов :)</string>
+    <string name="out_acc">Отсутствуют счета!</string>
+    <string name="out_type_of_exp">Отсутствуют категории расходов!</string>
+
+    <!-- Удаление записи -->
+    <string name="removeOperation">Удалить запись?</string>
+
+    <!-- Работа с запланированными операциями -->
+    <string name="commitOperation">Совершить операцию?</string>
+    <string name="commit">Совершить</string>
+
+    <!-- Работа с долгами -->
+    <string name="rePayPartDebt">Погасить (частично)</string>
+    <string name="rePayDebt">Погасить</string>
+    <string name="incorrectAcc">Неверный счет для оплаты</string>
+
+    <!-- Страница счетов -->
+    <string name="addAccountRadioTextCash">Наличные</string>
+    <string name="addAccountRadioTextCard">Карта</string>
+    <string name="addAccountRadioTextElectronic">Электронные</string>
+    <string name="addAccountType">Тип счета</string>
+    <string name="addAccountEnterNameAccount">Название счета</string>
+    <string name="addAccountEnterValue">Начальный размер счета</string>
+    <string name="addAccountAddButton">Сохранить</string>
+    <string name="removeAccQuestion">Удалить счет? Будут удалены все записи с данным счетом!</string>
+    <string name="chooseTypeOfAcc">Пожалуйста, заполните поле "Тип счета".</string>
+    <string name="nameAccIsUnique">Название счета должно быть индивидуальным.</string>
+
+    <!-- Страница конвертера -->
     <string name="calc_1">1</string>
     <string name="calc_2">2</string>
     <string name="calc_3">3</string>
@@ -53,21 +78,25 @@
     <string name="calc_0">0</string>
     <string name="calc_.">.</string>
     <string name="backSpace">⌫</string>
-    <string name="addAccountType">Тип счета</string>
-    <string name="addAccountAddButton">Сохранить</string>
-    <string name="addDebtsAddButton">Сохранить</string>
-    <string name="addDebts">Добавить долг</string>
-    <string name="addAccountRadioTextCash">Наличные</string>
-    <string name="addAccountRadioTextCard">Карта</string>
-    <string name="addAccountRadioTextElectronic">Электронные</string>
-    <string name="addAccountEnterNameAccount">Название счета</string>
-    <string name="addAccountEnterValue">Начальный размер счета</string>
-    <string name="addNewTypeExpensesName">Название расходов</string>
-    <string name="addNewTypeExpensesButtonAdd">Сохранить</string>
+
+    <!-- Настройки -->
+    <string name="mainCur">Основная валюта</string>
     <string name="settingsNullifyDB">Обнулять данные о расходах</string>
     <string name="settingsNullifyEveryMonth">Раз в месяц следующего числа</string>
     <string name="settingsNullifyEveryDayOfWeek">Раз в неделю следующего дня</string>
     <string name="settingsNullifyDBNowButton">Обнулить данные о расходах</string>
+    <string name="changeMainCur">Изменить основную валюту</string>
+    <string name="removeOperations">Удалить данные об операциях?</string>
+    <string name="changeMainCurAlert">Изменить основную валюту? Произойдет удаление всех данных о расходах!</string>
+
+    <!-- Управление типами расходов -->
+    <string name="addNewTypeExpensesName">Название расходов</string>
+    <string name="addNewTypeExpensesButtonAdd">Сохранить</string>
+    <string name="enter_new_name_of_type_exp">Введите новое название</string>
+    <string name="nameOfTypeExpUnique">Название должно быть индивидуальным.</string>
+    <string name="removeTypeOfExp">Удалить категорию? Будут удалены все записи с данной категорией!</string>
+
+    <!-- Добавление операции -->
     <string name="addOperationIncomeRB">Доходы</string>
     <string name="addOperationIncomeValueHint">Размер дохода</string>
     <string name="addOperationCostsRB">Расходы</string>
@@ -78,8 +107,30 @@
     <string name="addOperationExChangeValueFromAcc">Размер перевода</string>
     <string name="addOperationExchangeRates">По курсу</string>
     <string name="addOperationExchangeRatesHint">Курс валюты</string>
-    <string name="searchCurrency">Введите название валюты</string>
     <string name="saveOperation">Сохранить операцию</string>
     <string name="fromAccExChange">С</string>
     <string name="toAccExChange">На</string>
+    <string name="schedule">Запланировать</string>
+    <string name="setDateTime">Задать дату и время</string>
+
+    <!-- Добавление долга -->
+    <string name="enter_name_of_debts">Введите название долга</string>
+    <string name="enter_start_debts_value">Введите значение долга</string>
+    <string name="enter_date_debts">Введите дедлайн долга</string>
+    <string name="i_am_debtor">Я должен</string>
+    <string name="someone_are_debtor">Мне должны</string>
+    <string name="enter_value_of_pay_debt">Введите размер погашения</string>
+    <string name="addDebtsAddButton">Сохранить</string>
+    <string name="deadline">Дедлайн: </string>
+    <string name="chooseWhoIsDebtor">Пожалуйста, выберите, кто должник.</string>
+    <string name="nameOfDebtIsUnique">Название должно быть индивидуальным.</string>
+    <string name="incorrectDeadline">Неверный дедлайн.</string>
+
+    <!-- Поиск валюты -->
+    <string name="searchCurrency">Введите название валюты</string>
+
+    <!-- Уведомления -->
+    <string name="youHaveScheduledPay">У Вас есть запланированный платеж.</string>
+    <string name="confirm">Подтвердить</string>
+
 </resources>

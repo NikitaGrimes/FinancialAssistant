@@ -64,9 +64,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void onDeleteBDClick(View view) {
         new AlertDialog.Builder(view.getContext())
-                .setMessage("Удалить данные об операциях?")
-                .setPositiveButton("Отмена", (dialogInterface, i) -> dialogInterface.cancel())
-                .setNegativeButton("Удалить", (dialogInterface, i) -> {
+                .setMessage(getResources().getString(R.string.removeOperation))
+                .setPositiveButton(getResources().getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.cancel())
+                .setNegativeButton(getResources().getString(R.string.remove), (dialogInterface, i) -> {
                     ExpDao expDao = DataBaseApp.getInstance(view.getContext()).expDao();
                     expDao.deleteAll();
                     DataExpenses.expenses.clear();
@@ -78,9 +78,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void onChangeMainCurClick(View view) {
         new AlertDialog.Builder(view.getContext())
-                .setMessage("Изменить основную валюту? Произойдет удаление всех данных о расходах.")
-                .setPositiveButton("Отмена", (dialogInterface, i) -> dialogInterface.cancel())
-                .setNegativeButton("Изменить", (dialogInterface, i) -> {
+                .setMessage(getResources().getString(R.string.changeMainCurAlert))
+                .setPositiveButton(getResources().getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.cancel())
+                .setNegativeButton(getResources().getString(R.string.change), (dialogInterface, i) -> {
                     Intent intent = new Intent(SettingsActivity.this, CurrenciesActivity.class);
                     intent.putExtra("Who", 5);
                     startActivityForResult(intent, 0);

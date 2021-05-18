@@ -128,14 +128,14 @@ public class NotificationConfirm extends BroadcastReceiver {
                     if (DataScheduledPay.scheduledPays.size() == 0) {
                         DataViews.emptyScheduledPay.setVisibility(View.VISIBLE);
                         if (DataScheduledPay.recyclerView != null) {
-                            DataScheduledPay.recyclerView.setVisibility(View.GONE);
+                            DataScheduledPay.recyclerView.setVisibility(View.INVISIBLE);
                         }
                     }
                 }
                 cancelNotification(context, Id);
             }
             else {
-                Toast.makeText(context, "На счете недостаточно средств",
+                Toast.makeText(context, context.getResources().getString(R.string.notEnoughMoney),
                         Toast.LENGTH_LONG).show();
             }
         }

@@ -128,7 +128,7 @@ public class AddAccountActivity extends AppCompatActivity {
         if (action.equals("Create") || (action.equals("Remake") && isChanged())) {
             int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
             if (checkedRadioButtonId == -1) {
-                Toast.makeText(this, "Пожалуйста, заполните поле 'Тип счета'",
+                Toast.makeText(this, getResources().getString(R.string.chooseTypeOfAcc),
                         Toast.LENGTH_LONG).show();
                 return;
             }
@@ -151,7 +151,7 @@ public class AddAccountActivity extends AppCompatActivity {
                     continue;
                 account = DataAccounts.accounts.get(i);
                 if (nameAccount.toLowerCase().equals(account.getName_acc().toLowerCase())) {
-                    Toast.makeText(this, "Название счета должно быть индивидуальным",
+                    Toast.makeText(this, getResources().getString(R.string.nameAccIsUnique),
                             Toast.LENGTH_LONG).show();
                     return;
                 }

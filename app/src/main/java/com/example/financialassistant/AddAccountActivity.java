@@ -144,6 +144,9 @@ public class AddAccountActivity extends AppCompatActivity {
                     valueAccount.append(valueTempAccount.charAt(i));
                 }
             }
+            if (valueTempAccount.length() == 0) {
+                valueAccount.append('0');
+            }
             String nameAccount = nameText.getText().toString();
             Accounts account;
             for (int i = 0; i < DataAccounts.accounts.size(); i++) {

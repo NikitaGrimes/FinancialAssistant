@@ -296,10 +296,10 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("Action", "Create");
             startActivityForResult(intent, 0);
         }
-        else if (item.getItemId() == R.id.detailedStatistics) { //Нажатие на статистику
-            Intent intent = new Intent(MainActivity.this, DetailedStatistics.class);
-            startActivity(intent);
-        }
+        //else if (item.getItemId() == R.id.detailedStatistics) { //Нажатие на статистику
+        //    Intent intent = new Intent(MainActivity.this, DetailedStatistics.class);
+        //    startActivity(intent);
+        //}
         return super.onOptionsItemSelected(item);
     }
 
